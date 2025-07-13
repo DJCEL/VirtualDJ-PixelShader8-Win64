@@ -209,7 +209,7 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 	// Check if we need to update the pixel shader
 	if (current_FX != FX)
 	{
-		//SAFE_RELEASE(pPixelShader);
+		SAFE_RELEASE(pPixelShader);
 		hr = Create_PixelShader_D3D11(pDevice);
 		if (hr != S_OK) return S_FALSE;
 		current_FX = FX;
