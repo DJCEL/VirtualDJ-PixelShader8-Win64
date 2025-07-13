@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PixelShader8.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\resource.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PixelShader8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\VdjPlugin8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\VdjVideo8.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Shaders\PixelShaderImport.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{b2c91c54-db1a-48fd-a4e2-2e9acc8e3501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{20a18865-d087-4697-944b-0f912b21f52d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\Plugin.rc">
+      <Filter>src</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\Shaders\PixelShader1.cso">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\PixelShader2.cso">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\src\Shaders\PixelShader1.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\Shaders\PixelShader2.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
