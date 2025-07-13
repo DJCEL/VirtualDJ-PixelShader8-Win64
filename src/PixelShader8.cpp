@@ -177,16 +177,6 @@ HRESULT VDJ_API CPixelShader8::OnDraw()
 	pD3DDeviceContext->OMGetRenderTargets(1, &pD3DRenderTargetView, nullptr);
 	if (!pD3DRenderTargetView) return S_FALSE;
 
-
-	// Check if we need to update the pixel shader
-	if (current_FX != FX)
-	{
-		//SAFE_RELEASE(pPixelShader);
-		hr = Create_PixelShader_D3D11(pD3DDevice);
-		if (hr != S_OK) return S_FALSE;
-		current_FX = FX;
-	}
-
 	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTexture, vertices);
 	if (hr != S_OK) return S_FALSE;
 
@@ -215,6 +205,15 @@ HRESULT CPixelShader8::Initialize_D3D11(ID3D11Device* pDevice)
 HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
 {
 	HRESULT hr = S_FALSE;
+
+	// Check if we need to update the pixel shader
+	if (current_FX != FX)
+	{
+		//SAFE_RELEASE(pPixelShader);
+		hr = Create_PixelShader_D3D11(pDevice);
+		if (hr != S_OK) return S_FALSE;
+		current_FX = FX;
+	}
 
 	if (pRenderTargetView)
 	{
