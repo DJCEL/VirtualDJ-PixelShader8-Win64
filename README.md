@@ -1,6 +1,8 @@
-VirtualDJ-PixelShader8-PC
+##VirtualDJ-PixelShader8-PC
+
 DLL compilation (64bit):
 ⦁	Output filepath: C:\Users\{your_username}\AppData\Local\VirtualDJ\Plugins64\VideoEffect\PixelShader8.dll
+
 HLSL compilation:
 ⦁	Entrypoint Name: ps_main
 ⦁	Shader Type: Pixel Shader (/ps)
