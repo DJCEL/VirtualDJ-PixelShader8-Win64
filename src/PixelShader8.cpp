@@ -345,7 +345,7 @@ HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 			break;
 	}
 
-	SAFE_RELEASE(pPixelShader);
+	SAFE_RELEASE_CCOMPTR(pPixelShader);
 
 	hr = Create_PixelShaderFromResourceCSOFile_D3D11(pDevice, resourceType, resourceName);
 	//hr = Create_PixelShaderFromCSOFile_D3D11(pDevice, pShaderCSOFilepath);
