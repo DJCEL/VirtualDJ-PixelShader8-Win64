@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <d3d11.h>
 #include <d3dcompiler.h> // if we want to compile the shader with the code
-#include <atlbase.h>  // if we want to use CComPtr<XXXX>
+#include <atlbase.h> //we use atl for the CComPtr smart pointer, but this is optional
 #include <string_view>
 
 #pragma comment(lib, "d3d11.lib")
