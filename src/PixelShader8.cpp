@@ -136,7 +136,7 @@ HRESULT VDJ_API CPixelShader8::OnDeviceClose()
 	SAFE_RELEASE(pNewVertexBuffer);
 	SAFE_RELEASE(pPixelShader);
 	SAFE_RELEASE(pD3DRenderTargetView);
-	SAFE_RELEASE(pD3DDeviceContext);
+	SAFE_RELEASE_CCOMPTR(pD3DDeviceContext);
 	DirectX_On = false;
 	
 	return S_OK;
