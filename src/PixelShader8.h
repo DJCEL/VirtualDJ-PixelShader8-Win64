@@ -88,9 +88,9 @@ private:
 	
 	ID3D11Device* pD3DDevice;
 	CComPtr<ID3D11DeviceContext> pD3DDeviceContext;
-	ID3D11RenderTargetView* pD3DRenderTargetView;
-	ID3D11Buffer* pNewVertexBuffer;
-	ID3D11PixelShader* pPixelShader;
+	CComPtr<ID3D11RenderTargetView> pD3DRenderTargetView;
+	CComPtr<ID3D11Buffer> pNewVertexBuffer;
+	CComPtr<ID3D11PixelShader> pPixelShader;
 	
 	TLVERTEX pNewVertices[6];
 	UINT m_VertexCount;
