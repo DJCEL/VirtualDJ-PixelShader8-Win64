@@ -136,8 +136,8 @@ HRESULT VDJ_API CPixelShader8::OnDeviceClose()
 {
 	SAFE_RELEASE_CCOMPTR(pNewVertexBuffer);
 	SAFE_RELEASE_CCOMPTR(pPixelShader);
-	SAFE_RELEASE_CCOMPTR(pD3DRenderTargetView);
-	SAFE_RELEASE_CCOMPTR(pD3DDeviceContext);
+	SAFE_RELEASE(pD3DRenderTargetView);
+	SAFE_RELEASE(pD3DDeviceContext);
 	pD3DDevice = nullptr; //can no longer be used when device closed
 	DirectX_On = false;
 	
