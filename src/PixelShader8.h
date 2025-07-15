@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <d3d11.h>
 #include <d3dcompiler.h> // if we want to compile the shader with the code
-#include <atlbase.h> //we use atl for the CComPtr smart pointer, but this is optional
+#include <atlbase.h> //we use atl for the CComPtr<ID3D11xxxxxx> smart pointer, but this is optional
 #include <string_view>
 
 #pragma comment(lib, "d3d11.lib")
@@ -90,8 +90,8 @@ private:
 	ID3D11Device* pD3DDevice;
 	ID3D11DeviceContext* pD3DDeviceContext;
 	ID3D11RenderTargetView* pD3DRenderTargetView;
-	CComPtr<ID3D11Buffer> pNewVertexBuffer;
-	CComPtr<ID3D11PixelShader> pPixelShader;
+	ID3D11Buffer* pNewVertexBuffer;
+	ID3D11PixelShader* pPixelShader;
 	
 	TLVERTEX pNewVertices[6];
 	UINT m_VertexCount;
