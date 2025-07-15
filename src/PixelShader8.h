@@ -84,6 +84,7 @@ private:
 	HRESULT Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice);
 	HRESULT Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx);
 	HRESULT Update_Vertices_D3D11();
+	HRESULT GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView);
 
 	
 	ID3D11Device* pD3DDevice;
