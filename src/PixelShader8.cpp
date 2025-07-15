@@ -514,6 +514,8 @@ HRESULT CPixelShader8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* p
 	DXGI_FORMAT dxFormat1 = viewDesc.Format;
 	D3D11_SRV_DIMENSION ViewDimension = viewDesc.ViewDimension;
 
+	if (ViewDimension != D3D_SRV_DIMENSION_TEXTURE2D) return S_FALSE;
+
 	pShaderResourceView->GetResource(&pResource);
 	if (!pResource) return S_FALSE;
 
