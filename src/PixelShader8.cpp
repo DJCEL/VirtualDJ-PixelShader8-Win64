@@ -445,7 +445,7 @@ HRESULT CPixelShader8::Create_PixelShaderFromHeaderFile_D3D11(ID3D11Device* pDev
 HRESULT CPixelShader8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName)
 {
 	HRESULT hr = S_FALSE;
-	CComPtr<ID3DBlob> pPixelShaderBlob = nullptr;
+	ID3DBlob* pPixelShaderBlob = nullptr;
 	
 	hr = D3DXReadResourceToBlob(resourceType, resourceName, &pPixelShaderBlob);
 	if (hr != S_OK || !pPixelShaderBlob) return S_FALSE;
