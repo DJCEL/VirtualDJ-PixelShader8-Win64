@@ -7,7 +7,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h> // if we want to compile the shader with the code
 #include <atlbase.h> //we use atl for the CComPtr<ID3D11xxxxxx> smart pointer, but this is optional
-#include <string_view> // ISO C++20 Standard (/std:c++20)
+#include <string_view> // ISO C++17 Standard (/std:c++17)
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
