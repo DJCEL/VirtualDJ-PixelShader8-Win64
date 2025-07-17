@@ -291,15 +291,14 @@ HRESULT CPixelShader8::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx
 	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
 	ZeroMemory(&MappedSubResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-
-	hr = ctx->Map(pNewVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
+	hr = ctx->Map(pNewVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
 	if (hr != S_OK) return S_FALSE;
 
 	hr = Update_Vertices_D3D11();
 
 	memcpy(MappedSubResource.pData, pNewVertices, m_VertexCount * sizeof(TLVERTEX));
 
-	ctx->Unmap(pNewVertexBuffer, NULL);
+	ctx->Unmap(pNewVertexBuffer, 0);
 
 	return S_OK;
 }
