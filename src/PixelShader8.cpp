@@ -465,18 +465,18 @@ HRESULT CPixelShader8::D3DXReadResourceToBlob(const WCHAR* resourceType, const W
 {
 	HRESULT hr = S_FALSE;
 
-	std::string_view ShaderData = getResource(resourceType, resourceName);
+	std::string_view ResourceData = getResource(resourceType, resourceName);
 
-	const char* ShaderBytecode = ShaderData.data();
-	SIZE_T ShaderBytecodeLength = ShaderData.length();
+	const char* ResourceBytecode = ResourceData.data();
+	SIZE_T ResourceBytecodeLength = ResourceData.length();
 
-	hr = D3DCreateBlob(ShaderBytecodeLength, ppContents);
+	hr = D3DCreateBlob(ResourceBytecodeLength, ppContents);
 	if (hr != S_OK || !*ppContents)
 	{
 		return hr;
 	}
 
-	memcpy((*ppContents)->GetBufferPointer(), ShaderBytecode, ShaderBytecodeLength);
+	memcpy((*ppContents)->GetBufferPointer(), ResourceBytecode, ResourceBytecodeLength);
 
 	return S_OK;
 }
