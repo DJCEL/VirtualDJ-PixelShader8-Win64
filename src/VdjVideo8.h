@@ -47,8 +47,8 @@ enum EVdjVideoEngine
 #define VDJFLAG_VIDEO_OVERLAY			0x40000 // The effect is an overlay over the image already there. When this is set, you can't call DrawDeck in your plugin (it is already done before OnDraw())
 #define VDJFLAG_VIDEO_HASRESIZE			0x80000 // The effect knows how to resize itself when ctrl is pressed
 #define VDJFLAG_VIDEO_NOAUTOACTIVE		0x200000 // The video engine will not be automatically activated when activating this effect (for audio effects with a video option)
-#define VDJFLAG_VIDEO_OUTPUTRESOLUTION	0x400000 // If the effect is applied on deck, the effect will be applied onto the video output resolution instead of the video source resolution
-#define VDJFLAG_VIDEO_OUTPUTASPECTRATIO 0x800000  // If the effect is applied on deck, the effect will be applied in same aspect ratio as video output (and minimum resolution between video source and video output)
+#define VDJFLAG_VIDEO_OUTPUTRESOLUTION		0x400000 // If the effect is applied on deck, the effect will be applied onto the video output resolution instead of the video source resolution
+#define VDJFLAG_VIDEO_OUTPUTASPECTRATIO 	0x800000  // If the effect is applied on deck, the effect will be applied in same aspect ratio as video output (and minimum resolution between video source and video output)
 #define VDJFLAG_VIDEO_FORRECORDING		0x1000000 // If the effect is applied on the master, it will be rendered in the record resolution, and after videoskin
 
 // For transitions, you need to define in OnGetPluginInfo the behavior of the auto-videocrossfader:
