@@ -100,6 +100,11 @@ struct TVdjPluginInfo8
 	DWORD Flags;
 };
 
+struct TVdjPluginInfo8_Extension1
+{
+	TVdjPluginInfo8 info;
+	IVdjVideoMouseCallbacks8* mouseCallbacks;
+};
 
 // flags used for struct TVdjPluginInfo8
 #define VDJFLAG_NODOCK 0x1
@@ -142,12 +147,6 @@ struct TVdjPluginInterface8
 	int ImageSize;
 	// Type==VDJINTERFACE_DIALOG. HWND returned by CreateDialog or CreateWindow on Windows, or NSWindow pointer on mac
 	VDJ_WINDOW hWnd;
-};
-
-struct TVdjPluginInfo8_Extension1
-{
-	TVdjPluginInfo8 info;
-	IVdjVideoMouseCallbacks8* mouseCallbacks;
 };
 
 //////////////////////////////////////////////////////////////////////////
