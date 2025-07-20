@@ -114,9 +114,6 @@ private:
 	#define SAFE_RELEASE(x) { if (x!=nullptr) { x->Release(); x=nullptr; } }
 	#endif
 
-	#ifndef SAFE_RELEASE_CCOMPTR
-	#define SAFE_RELEASE_CCOMPTR(x) { if (x!=nullptr) { x.Release(); x=nullptr; } }
-	#endif
 };
 
 #endif
