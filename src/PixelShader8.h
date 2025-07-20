@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <d3d11.h>
 #include <d3dcompiler.h> // if we want to compile the shader with the code
-#include <atlbase.h> //we use atl for the CComPtr<ID3D11xxxxxx> smart pointer, but this is optional
-#include <string_view> // ISO C++17 Standard (/std:c++17)
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -71,8 +69,7 @@ private:
 	};
 	void OnResizeVideo();
 	void OnSlider(int id);
-	HRESULT D3DXReadResourceToBlob(const WCHAR* resourceType, const WCHAR* resourceName, ID3DBlob** ppContents);
-	std::string_view getResource(const WCHAR* resourceType, const WCHAR* resourceName);
+	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 
 	HRESULT Initialize_D3D11(ID3D11Device* pDevice);
 	HRESULT Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices);
