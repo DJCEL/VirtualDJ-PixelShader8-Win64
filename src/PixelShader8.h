@@ -93,8 +93,6 @@ private:
 	
 	TLVERTEX pNewVertices[6];
 	UINT m_VertexCount;
-	UINT m_VertexStride;
-	UINT m_VertexOffset;
 	bool DirectX_On;
 	int m_Width;
 	int m_Height;
