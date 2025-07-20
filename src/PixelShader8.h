@@ -72,6 +72,7 @@ private:
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 
 	HRESULT Initialize_D3D11(ID3D11Device* pDevice);
+	void Release_D3D11();
 	HRESULT Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices);
 	HRESULT Create_PixelShader_D3D11(ID3D11Device* pDevice);
 	HRESULT Create_PixelShaderFromCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* pShaderFilepath);
