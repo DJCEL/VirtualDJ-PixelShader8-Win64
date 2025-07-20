@@ -14,8 +14,6 @@ CPixelShader8::CPixelShader8()
 	m_Width = 0;
 	m_Height = 0;
 	m_VertexCount = 0;
-	m_VertexStride = 0;
-	m_VertexOffset = 0;
 	alpha = 1.0f;
 	FX = 0;
 	current_FX = 0;
