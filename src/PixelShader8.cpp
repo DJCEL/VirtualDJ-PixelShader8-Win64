@@ -1,8 +1,5 @@
 #include "PixelShader8.h"
 
-#include "Shaders/PixelShaderImport.h"
-
-
 //------------------------------------------------------------------------------------------
 CPixelShader8::CPixelShader8()
 {
@@ -350,27 +347,7 @@ HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 	SAFE_RELEASE(pPixelShader);
 
 	hr = Create_PixelShaderFromResourceCSOFile_D3D11(pDevice, resourceType, resourceName);
-	//hr = Create_PixelShaderFromCSOFile_D3D11(pDevice, pShaderCSOFilepath);
 	//hr = Create_PixelShaderFromHLSLFile_D3D11(pDevice, pShaderHLSLFilepath);
-	//hr = Create_PixelShaderFromHeaderFile_D3D11(pDevice, PixelShaderSrcData);
-
-	return hr;
-}
-//-----------------------------------------------------------------------
-HRESULT CPixelShader8::Create_PixelShaderFromCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* pShaderFilepath)
-{
-	HRESULT hr = S_FALSE;
-	ID3DBlob* = nullptr;
-
-	hr = D3DReadFileToBlob(pShaderFilepath, &pPixelShaderBlob);
-	if (hr != S_OK || !pPixelShaderBlob) return S_FALSE;
-
-	LPVOID PixelShaderBytecode = pPixelShaderBlob->GetBufferPointer();
-	SIZE_T PixelShaderBytecodeLength = pPixelShaderBlob->GetBufferSize();
-	
-	hr = pDevice->CreatePixelShader(PixelShaderBytecode, PixelShaderBytecodeLength, nullptr, &pPixelShader);
-
-	SAFE_RELEASE(pPixelShaderBlob);
 
 	return hr;
 }
@@ -408,95 +385,38 @@ HRESULT CPixelShader8::Create_PixelShaderFromHLSLFile_D3D11(ID3D11Device* pDevic
 	return hr;
 }
 //-----------------------------------------------------------------------
-HRESULT CPixelShader8::Create_PixelShaderFromHeaderFile_D3D11(ID3D11Device* pDevice, const char* PixelShaderData)
-{
-	HRESULT hr = S_FALSE;
-	ID3DBlob* pPixelShaderBlob = nullptr;
-	ID3DBlob* errorBlob = nullptr;
-	
-	if (!pDevice) return E_FAIL;
-	if (!PixelShaderData) return E_FAIL;
-	
-	SIZE_T PixelShaderDataSize = strlen(PixelShaderData);
-
-	hr = D3DCompile(PixelShaderData, PixelShaderDataSize, nullptr, nullptr, nullptr, "ps_main", "ps_5_0", 0, 0, &pPixelShaderBlob, &errorBlob);
-	if (FAILED(hr))
-	{
-		const char* errorString = NULL;
-		if (errorBlob) 
-		{
-			errorString = (const char*) errorBlob->GetBufferPointer();
-			SAFE_RELEASE(errorBlob);
-		}
-		MessageBoxA(NULL, errorString, "Shader Compiler Error", MB_ICONERROR | MB_OK);
-		return hr;
-	}
-
-	LPVOID PixelShaderBytecode = pPixelShaderBlob->GetBufferPointer();
-	SIZE_T PixelShaderBytecodeLength = pPixelShaderBlob->GetBufferSize();
-	
-	hr = pDevice->CreatePixelShader(PixelShaderBytecode, PixelShaderBytecodeLength, nullptr, &pPixelShader);
-
-	SAFE_RELEASE(pPixelShaderBlob);
-	
-	return hr;
-}
-//-----------------------------------------------------------------------
 HRESULT CPixelShader8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName)
 {
 	HRESULT hr = S_FALSE;
-	ID3DBlob* pPixelShaderBlob = nullptr;
-	
-	hr = D3DXReadResourceToBlob(resourceType, resourceName, &pPixelShaderBlob);
-	if (hr != S_OK || !pPixelShaderBlob) return S_FALSE;
-	
-	LPVOID PixelShaderBytecode = pPixelShaderBlob->GetBufferPointer();
-	SIZE_T PixelShaderBytecodeLength = pPixelShaderBlob->GetBufferSize();
-	
-	hr = pDevice->CreatePixelShader(PixelShaderBytecode, PixelShaderBytecodeLength, nullptr, &pPixelShader);
 
-	SAFE_RELEASE(pPixelShaderBlob);
-
+	void* pShaderBytecode = nullptr;
+	SIZE_T BytecodeLength = 0;
+	
+	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
+	if (hr != S_OK) return S_FALSE;
+	
+	hr = pDevice->CreatePixelShader(pShaderBytecode, BytecodeLength, nullptr, &pPixelShader);
+	
 	return hr;
 }
 //-----------------------------------------------------------------------
-HRESULT CPixelShader8::D3DXReadResourceToBlob(const WCHAR* resourceType, const WCHAR* resourceName, ID3DBlob** ppContents)
+HRESULT CPixelShader8::ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data)
 {
 	HRESULT hr = S_FALSE;
 
-	std::string_view ResourceData = getResource(resourceType, resourceName);
-
-	const char* ResourceBytecode = ResourceData.data();
-	SIZE_T ResourceBytecodeLength = ResourceData.length();
-
-	hr = D3DCreateBlob(ResourceBytecodeLength, ppContents);
-	if (hr != S_OK || !*ppContents)
-	{
-		return hr;
-	}
-
-	memcpy((*ppContents)->GetBufferPointer(), ResourceBytecode, ResourceBytecodeLength);
-
-	return S_OK;
-}
-//-----------------------------------------------------------------------
-std::string_view CPixelShader8::getResource(const WCHAR* resourceType, const WCHAR* resourceName)
-{
 	HRSRC rc = FindResource(hInstance, resourceName, resourceType);
-	if (!rc)
-		return std::string_view("");
+	if (!rc) return S_FALSE;
 
 	HGLOBAL rcData = LoadResource(hInstance, rc);
-	if (!rcData)
-		return std::string_view("");
+	if (!rcData) return S_FALSE;
 
-	DWORD size = SizeofResource(hInstance, rc);
+	*size = (SIZE_T)SizeofResource(hInstance, rc);
+	if (*size == 0) return S_FALSE;
 
-	char* data = (char*)LockResource(rcData);
-	if (!data)
-		return std::string_view("");
+	*data = LockResource(rcData);
+	if (*data == nullptr) return S_FALSE;
 
-	return std::string_view(data, size);
+	return S_OK;
 }
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView)
