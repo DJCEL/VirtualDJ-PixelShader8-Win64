@@ -131,8 +131,7 @@ HRESULT VDJ_API CPixelShader8::OnDeviceInit()
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnDeviceClose()
 {
-	SAFE_RELEASE(pNewVertexBuffer);
-	SAFE_RELEASE(pPixelShader);
+	Release_D3D11();
 	SAFE_RELEASE(pD3DRenderTargetView);
 	SAFE_RELEASE(pD3DDeviceContext);
 	pD3DDevice = nullptr; //can no longer be used when device closed
@@ -200,6 +199,12 @@ HRESULT CPixelShader8::Initialize_D3D11(ID3D11Device* pDevice)
 
 	return S_OK;
 }
+//-----------------------------------------------------------------------
+void CPixelShader8::Release_D3D11()
+{
+	SAFE_RELEASE(pNewVertexBuffer);
+	SAFE_RELEASE(pPixelShader);
+}
 // -----------------------------------------------------------------------
 HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
 {
@@ -242,6 +247,8 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 
 	if (pNewVertexBuffer)
 	{
+		UINT m_VertexStride = sizeof(TLVERTEX);
+		UINT m_VertexOffset = 0;
 		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		pDeviceContext->IASetVertexBuffers(0, 1, &pNewVertexBuffer, &m_VertexStride, &m_VertexOffset);
 	}
