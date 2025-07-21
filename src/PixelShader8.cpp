@@ -316,7 +316,7 @@ HRESULT CPixelShader8::Update_Vertices_D3D11()
 		P2 = { 0.0f, frameHeight, 0.0f }, // Bottom Left
 		P3 = { frameWidth, 0.0f, 0.0f }, // Top Right
 		P4 = { frameWidth, frameHeight, 0.0f }; // Bottom Right
-	D3DXCOLOR color_vertex = D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha); // White color with alpha layer
+	D3DXCOLOR color_vertex = D3DXCOLOR(1.0f, 1.0f, 1.0f, m_alpha); // White color with alpha layer
 	D3DXTEXCOORD T1 = { 0.0f , 0.0f }, T2 = { 0.0f , 1.0f }, T3 = { 1.0f , 0.0f }, T4 = { 1.0f , 1.0f };
 
 	// Triangle n°1 (Bottom Right)
