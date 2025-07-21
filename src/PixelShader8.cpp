@@ -214,9 +214,6 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 	hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
 #endif
 
-	hr = DrawDeck();
-	if (hr != S_OK) return S_FALSE;
-
 	// Check if we need to update the pixel shader
 	if (m_current_FX != m_FX)
 	{
@@ -225,6 +222,9 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 		if (hr != S_OK) return S_FALSE;
 		m_current_FX = m_FX;
 	}
+
+	hr = DrawDeck();
+	if (hr != S_OK) return S_FALSE;
 
 	if (pRenderTargetView)
 	{
