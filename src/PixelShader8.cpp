@@ -359,6 +359,7 @@ HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 	return hr;
 }
 //-----------------------------------------------------------------------
+/*
 HRESULT CPixelShader8::Create_PixelShaderFromHLSLFile_D3D11(ID3D11Device* pDevice, const WCHAR* pShaderFilepath)
 {
 	HRESULT hr = S_FALSE;
@@ -391,6 +392,7 @@ HRESULT CPixelShader8::Create_PixelShaderFromHLSLFile_D3D11(ID3D11Device* pDevic
 
 	return hr;
 }
+*/
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName)
 {
