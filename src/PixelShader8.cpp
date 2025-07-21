@@ -230,7 +230,6 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 	{
 		//FLOAT backgroundColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		//pDeviceContext->ClearRenderTargetView(pRenderTargetView, backgroundColor);
-
 		//pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
 	}
 
