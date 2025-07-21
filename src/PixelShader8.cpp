@@ -10,13 +10,13 @@ CPixelShader8::CPixelShader8()
 	pD3DRenderTargetView = nullptr;
 	ZeroMemory(pNewVertices, 6 * sizeof(TVertex8));
 	ZeroMemory(SliderValue, 2 * sizeof(float));
-	DirectX_On = false;
+	m_DirectX_On = false;
 	m_Width = 0;
 	m_Height = 0;
 	m_VertexCount = 0;
-	alpha = 1.0f;
-	FX = 0;
-	current_FX = 0;
+	m_alpha = 1.0f;
+	m_FX = 0;
+	m_current_FX = 0;
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -28,8 +28,8 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 {
 	HRESULT hr = S_FALSE;
 
-	DeclareParameterSlider(&SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
-	DeclareParameterSlider(&SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
+	DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
+	DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
 	
 	OnParameter(ID_INIT);
 	return S_OK;
@@ -70,14 +70,14 @@ void CPixelShader8::OnSlider(int id)
 	switch (id)
 	{
 		case ID_SLIDER_1:
-			alpha = SliderValue[0];
+			m_alpha = m_SliderValue[0];
 			break;
 
 		case ID_SLIDER_2:
-			if (SliderValue[1] >= 0.0f && SliderValue[1] < 0.5f)
-				FX = 1;
-			else if (SliderValue[1] >= 0.5f && SliderValue[1] <= 1.0f)
-				FX = 2;
+			if (m_SliderValue[1] >= 0.0f && m_SliderValue[1] < 0.5f)
+				m_FX = 1;
+			else if (m_SliderValue[1] >= 0.5f && m_SliderValue[1] <= 1.0f)
+				m_FX = 2;
 			break;
 	}
 
@@ -88,7 +88,7 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 	switch (id)
 	{
 		case ID_SLIDER_1:
-			sprintf_s(outParam, outParamSize, "%.0f%%", SliderValue[0] * 100);
+			sprintf_s(outParam, outParamSize, "%.0f%%", m_SliderValue[0] * 100);
 			break;
 
 		case ID_SLIDER_2:
@@ -114,7 +114,7 @@ HRESULT VDJ_API CPixelShader8::OnDeviceInit()
 {
 	HRESULT hr = S_FALSE;
 
-	DirectX_On = true;
+	m_DirectX_On = true;
 	m_Width = width;
 	m_Height = height;
 
@@ -133,14 +133,14 @@ HRESULT VDJ_API CPixelShader8::OnDeviceClose()
 	SAFE_RELEASE(pD3DRenderTargetView);
 	SAFE_RELEASE(pD3DDeviceContext);
 	pD3DDevice = nullptr; //can no longer be used when device closed
-	DirectX_On = false;
+	m_DirectX_On = false;
 	
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnStart() 
 {
-	current_FX = FX;
+	m_current_FX = m_FX;
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 		SAFE_RELEASE(pPixelShader);
 		hr = Create_PixelShader_D3D11(pDevice);
 		if (hr != S_OK) return S_FALSE;
-		current_FX = FX;
+		m_current_FX = m_FX;
 	}
 
 	if (pRenderTargetView)
@@ -269,8 +269,6 @@ HRESULT CPixelShader8::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 
 	// Set the number of vertices in the vertex array.
 	m_VertexCount = 6; // = ARRAYSIZE(pNewVertices);
-	m_VertexStride = sizeof(TLVERTEX);
-	m_VertexOffset = 0;
 
 	// Fill in a buffer description.
 	D3D11_BUFFER_DESC VertexBufferDesc;
