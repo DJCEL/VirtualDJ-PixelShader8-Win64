@@ -102,13 +102,13 @@ private:
 	
 	TLVERTEX pNewVertices[6];
 	UINT m_VertexCount;
-	bool DirectX_On;
+	bool m_DirectX_On;
 	int m_Width;
 	int m_Height;
-	float SliderValue[2];
-	float alpha;
-	int FX;
-	int current_FX;
+	float m_SliderValue[2];
+	float m_alpha;
+	int m_FX;
+	int m_current_FX;
 
 	typedef enum _ID_Interface
 	{
