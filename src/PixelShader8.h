@@ -83,9 +83,7 @@ private:
 	void Release_D3D11();
 	HRESULT Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices);
 	HRESULT Create_PixelShader_D3D11(ID3D11Device* pDevice);
-	HRESULT Create_PixelShaderFromCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* pShaderFilepath);
 	HRESULT Create_PixelShaderFromHLSLFile_D3D11(ID3D11Device* pDevice, const WCHAR* pShaderFilepath);
-	HRESULT Create_PixelShaderFromHeaderFile_D3D11(ID3D11Device* pDevice, const char* PixelShaderData);
 	HRESULT Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName);
 	HRESULT Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice);
 	HRESULT Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx);
