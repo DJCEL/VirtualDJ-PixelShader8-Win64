@@ -155,7 +155,7 @@ HRESULT VDJ_API CPixelShader8::OnDraw()
 	ID3D11ShaderResourceView *pTextureView = nullptr;
 	TVertex8* vertices = nullptr;
 
-	if (width != m_Width || height != m_Height)
+	if ( m_Width != width || m_Height != height)
 	{
 		OnResizeVideo();
 	}
@@ -216,7 +216,7 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 #endif
 
 	// Check if we need to update the pixel shader
-	if (current_FX != FX)
+	if (m_current_FX != m_FX)
 	{
 		SAFE_RELEASE(pPixelShader);
 		hr = Create_PixelShader_D3D11(pDevice);
