@@ -160,9 +160,6 @@ HRESULT VDJ_API CPixelShader8::OnDraw()
 		OnResizeVideo();
 	}
 
-	hr = DrawDeck();
-	if (hr != S_OK) return S_FALSE;
-
 	/// GetTexture() doesn't AddRef, so doesn't need to be released
 	hr = GetTexture(VdjVideoEngineDirectX11, (void**) &pTextureView, &vertices);
 	if (hr != S_OK) return S_FALSE;
@@ -214,6 +211,9 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 	hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
 	hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
 #endif
+
+	hr = DrawDeck();
+	if (hr != S_OK) return S_FALSE;
 
 	// Check if we need to update the pixel shader
 	if (m_current_FX != m_FX)
