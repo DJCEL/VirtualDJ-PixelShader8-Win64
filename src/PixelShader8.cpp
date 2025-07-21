@@ -208,8 +208,12 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 {
 	HRESULT hr = S_FALSE;
 	
-	//hr = GetInfoFromRenderTargetView(pRenderTargetView);
-	//hr = GetInfoFromShaderResourceView(pTextureView);
+#ifdef _DEBUG
+	InfoTexture2D InfoRTV = {};
+	InfoTexture2D InfoSRV = {};
+	hr = GetInfoFromRenderTargetView(pRenderTargetView, &InfoRTV);
+	hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
+#endif
 
 	// Check if we need to update the pixel shader
 	if (current_FX != FX)
@@ -424,7 +428,7 @@ HRESULT CPixelShader8::ReadResource(const WCHAR* resourceType, const WCHAR* reso
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CPixelShader8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView)
+HRESULT CPixelShader8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D* info)
 {
 	HRESULT hr = S_FALSE;
 
@@ -451,9 +455,9 @@ HRESULT CPixelShader8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* p
 	
 		pTexture->GetDesc(&textureDesc);
 	
-		DXGI_FORMAT dxFormat2 = textureDesc.Format;
-		UINT TextureWidth = textureDesc.Width;
-		UINT TextureHeight = textureDesc.Height;
+		info->Format = textureDesc.Format;
+		info->Width = textureDesc.Width;
+		info->Height = textureDesc.Height;
 	
 		SAFE_RELEASE(pTexture);
 	}
@@ -463,7 +467,7 @@ HRESULT CPixelShader8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* p
 	return S_OK;
 }
 //-----------------------------------------------------------------------
-HRESULT CPixelShader8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView)
+HRESULT CPixelShader8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D* info)
 {
 	HRESULT hr = S_FALSE;
 
@@ -490,9 +494,9 @@ HRESULT CPixelShader8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRend
 
 		pTexture->GetDesc(&textureDesc);
 
-		DXGI_FORMAT dxFormat2 = textureDesc.Format;
-		UINT TextureWidth = textureDesc.Width;
-		UINT TextureHeight = textureDesc.Height;
+		info->Format = textureDesc.Format;
+		info->Width = textureDesc.Width;
+		info->Height = textureDesc.Height;
 
 		SAFE_RELEASE(pTexture);
 	}
