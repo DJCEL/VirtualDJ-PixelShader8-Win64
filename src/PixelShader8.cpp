@@ -89,17 +89,19 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 			break;
 
 		case ID_SLIDER_2:
-			if (FX == 1)
+			switch(m_FX)
 			{
-				sprintf_s(outParam, outParamSize, "PixelsHide");
-			}
-			else if (FX == 2)
-			{
-				sprintf_s(outParam, outParamSize, "Blur");
-			}
-			else
-			{
-				sprintf_s(outParam, outParamSize, "Undefined");
+				case 1:
+					sprintf_s(outParam, outParamSize, "PixelsHide");
+					break;
+			
+				case 2:
+					sprintf_s(outParam, outParamSize, "Blur");
+					break;
+				
+				default:
+					sprintf_s(outParam, outParamSize, "Undefined");
+					break;
 			}
 			break;
 	}
