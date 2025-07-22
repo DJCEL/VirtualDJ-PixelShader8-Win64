@@ -340,17 +340,9 @@ HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 	const WCHAR* pShaderHLSLFilepath = L"PixelShader.hlsl";
 	const WCHAR* pShaderCSOFilepath = L"PixelShader.cso";
 	const WCHAR* resourceType = RT_RCDATA;
-	const WCHAR* resourceName = L"";
-
-	switch(FX)
-	{
-		case 1:
-			resourceName = L"PIXELSHADER1_CSO";
-			break;
-		case 2:
-			resourceName = L"PIXELSHADER2_CSO";
-			break;
-	}
+	
+	WCHAR resourceName[34];
+        wsprintf(resourceName, L"PIXELSHADER%d_CSO", m_FX);
 
 	SAFE_RELEASE(pPixelShader);
 
