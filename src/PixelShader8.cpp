@@ -74,10 +74,7 @@ void CPixelShader8::OnSlider(int id)
 			break;
 
 		case ID_SLIDER_2:
-			if (m_SliderValue[1] >= 0.0f && m_SliderValue[1] < 0.5f)
-				m_FX = 1;
-			else if (m_SliderValue[1] >= 0.5f && m_SliderValue[1] <= 1.0f)
-				m_FX = 2;
+			m_FX = 1 + (int)(m_SliderValue[1] * float(MAX_FX - 1)); // Values from 1 to MAX_FX
 			break;
 	}
 
