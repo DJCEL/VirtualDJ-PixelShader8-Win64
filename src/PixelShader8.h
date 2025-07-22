@@ -108,6 +108,8 @@ private:
 	int m_FX;
 	int m_current_FX;
 
+	const int MAX_FX = 2; // Number of effects available
+
 	typedef enum _ID_Interface
 	{
 		ID_INIT,
