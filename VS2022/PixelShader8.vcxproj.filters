@@ -61,4 +61,30 @@
       <Filter>src\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\Shaders\CenterBlur.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\GBR.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\GrayScale.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\HighContrast.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\HorizontalMirror.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Negative.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\PixelsHide.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Rotate180.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+  </ItemGroup>
 </Project>
