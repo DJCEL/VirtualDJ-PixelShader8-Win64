@@ -41,7 +41,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "1.0 (64-bit)";
+	info->Version = "1.4 (64-bit)";
 
 	return S_OK;
 }
@@ -74,7 +74,7 @@ void CPixelShader8::OnSlider(int id)
 			break;
 
 		case ID_SLIDER_2:
-			m_FX = 1 + (int)(m_SliderValue[1] * float(MAX_FX - 1)); // Values from 1 to MAX_FX
+			m_FX = (int)(m_SliderValue[1] * float(MAX_FX - 1)); // Integer from 0 to (MAX_FX - 1)
 			break;
 	}
 
@@ -89,19 +89,32 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 			break;
 
 		case ID_SLIDER_2:
-			switch(m_FX)
+			const WCHAR* FXName = m_FXList[m_FX];
+			if (FXName == nullptr)
 			{
-				case 1:
-					sprintf_s(outParam, outParamSize, "PixelsHide");
-					break;
-			
-				case 2:
-					sprintf_s(outParam, outParamSize, "Blur");
-					break;
-				
-				default:
-					sprintf_s(outParam, outParamSize, "Undefined");
-					break;
+				sprintf_s(outParam, outParamSize, "Error in the FX list.");
+			}
+			else
+			{
+				char FXNameChar[150] = { 0 };
+				int size_needed = WideCharToMultiByte(CP_UTF8, 0, FXName, -1, NULL, 0, NULL, NULL);
+				int max_size = outParamSize / sizeof(char);
+				if (size_needed > 0 && size_needed <= max_size)
+				{
+					int res = WideCharToMultiByte(CP_UTF8, 0, FXName, -1, FXNameChar, size_needed, NULL, NULL);
+					if (res >= 0)
+					{
+						sprintf_s(outParam, outParamSize, FXNameChar);
+					}
+					else
+					{
+						sprintf_s(outParam, outParamSize, "Error FXName");
+					}
+				}
+				else
+				{
+					sprintf_s(outParam, outParamSize, "FXName too long");
+				}
 			}
 			break;
 	}
@@ -336,12 +349,22 @@ HRESULT CPixelShader8::Update_Vertices_D3D11()
 HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
-	const WCHAR* pShaderHLSLFilepath = L"PixelShader.hlsl";
-	const WCHAR* pShaderCSOFilepath = L"PixelShader.cso";
-	const WCHAR* resourceType = RT_RCDATA;
+	WCHAR FXNameUpper[150] = L"";
+	WCHAR resourceName[150] = L"";
+	WCHAR pShaderHLSLFilepath[150] = L"";
+	WCHAR pShaderCSOFilepath[150] = L"";
 	
-	WCHAR resourceName[34];
-        wsprintf(resourceName, L"PIXELSHADER%d_CSO", m_FX);
+	const WCHAR* FXName = m_FXList[m_FX];
+	
+	if (FXName == nullptr) return E_FAIL;
+	
+	wcsncpy_s(FXNameUpper, FXName, _TRUNCATE);
+	CharUpperW(FXNameUpper);
+	
+	wsprintf(pShaderHLSLFilepath, L"%s.hlsl", FXName);
+	wsprintf(pShaderCSOFilepath, L"%s.cso", FXName);
+	wsprintf(resourceName, L"%s_CSO", FXNameUpper);
+	const WCHAR* resourceType = RT_RCDATA;
 
 	SAFE_RELEASE(pPixelShader);
 
