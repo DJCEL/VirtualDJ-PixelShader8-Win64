@@ -9,6 +9,4 @@ HLSL compilation:
 - Shader Model: Shader Model 5.0 (/5.0)
 - Output filepath: (.cso files) same folder as Plugin.rc as it is included in Resources
 
-Examples of Pixel Shaders are in the 'Shaders' subfolder.:
-- PixelShader1.hlsl : sort of black grid
-- PixelShader2.hlsl : Blur effect 
+Examples of Pixel Shaders are in the 'Shaders' subfolder.
