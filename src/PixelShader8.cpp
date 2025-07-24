@@ -9,7 +9,7 @@ CPixelShader8::CPixelShader8()
 	pPixelShader = nullptr;
 	pD3DRenderTargetView = nullptr;
 	ZeroMemory(pNewVertices, 6 * sizeof(TVertex8));
-	ZeroMemory(SliderValue, 2 * sizeof(float));
+	ZeroMemory(m_SliderValue, 2 * sizeof(float));
 	m_DirectX_On = false;
 	m_Width = 0;
 	m_Height = 0;
