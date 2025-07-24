@@ -394,7 +394,7 @@ HRESULT CPixelShader8::Create_PixelShaderFromHLSLFile_D3D11(ID3D11Device* pDevic
 			errorString = (const char*) errorBlob->GetBufferPointer();
 			SAFE_RELEASE(errorBlob);
 		}
-		MessageBoxA(NULL, errorString, "Shader Compiler Error", MB_ICONERROR | MB_OK);
+		MessageBoxA(NULL, errorString, "PixelShader8", MB_ICONERROR | MB_OK);
 		return hr;
 	}
 
