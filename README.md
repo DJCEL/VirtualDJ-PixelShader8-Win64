@@ -11,4 +11,4 @@ HLSL compilation:
 
 Examples of Pixel Shaders are in the 'Shaders' subfolder.
 
-Use 'View Code' on the 'Plugin.rc' file to add shaders in Resources
+Right click on 'Plugin.rc' file and select 'View Code' to add shaders in the file.
