@@ -105,14 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\PixelShader8.h" />
-    <ClInclude Include="..\src\Shaders\PixelShaderImport.h" />
     <ClInclude Include="..\src\VdjPlugin8.h" />
     <ClInclude Include="..\src\VdjVideo8.h" />
     <ClInclude Include="..\src\resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\src\Shaders\PixelShader1.cso" />
-    <None Include="..\src\Shaders\PixelShader2.cso" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\Plugin.rc" />
