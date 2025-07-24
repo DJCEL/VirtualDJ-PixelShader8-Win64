@@ -105,10 +105,8 @@ private:
 	int m_Height;
 	float m_SliderValue[2];
 	float m_alpha;
-	int m_FX;
-	int m_current_FX;
-
-	const int MAX_FX = 2; // Number of effects available
+	UINT m_FX;
+	UINT m_current_FX;
 
 	typedef enum _ID_Interface
 	{
@@ -120,6 +118,21 @@ private:
 	#ifndef SAFE_RELEASE
 	#define SAFE_RELEASE(x) { if (x!=nullptr) { x->Release(); x=nullptr; } }
 	#endif
+
+	// Number of FX available :
+	static const UINT MAX_FX = 8;
+
+	// Names of FX available :
+	const WCHAR* m_FXList[MAX_FX] = {
+		L"GrayScale",
+		L"GBR",
+		L"HighContrast",
+		L"Negative",
+		L"HorizontalMirror",
+		L"Rotate180",
+		L"PixelsHide",
+		L"CenterBlur"
+	};
 
 };
 
