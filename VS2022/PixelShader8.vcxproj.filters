@@ -26,7 +26,7 @@
     <Filter Include="src">
       <UniqueIdentifier>{b2c91c54-db1a-48fd-a4e2-2e9acc8e3501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
+    <Filter Include="src\Shaders">
       <UniqueIdentifier>{20a18865-d087-4697-944b-0f912b21f52d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -37,28 +37,28 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\src\Shaders\CenterBlur.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\GBR.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\GrayScale.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\HighContrast.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\HorizontalMirror.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\Negative.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\PixelsHide.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\Rotate180.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
