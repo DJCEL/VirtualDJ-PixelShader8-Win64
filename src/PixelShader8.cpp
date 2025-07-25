@@ -1,15 +1,18 @@
 #include "PixelShader8.h"
 
+
 //------------------------------------------------------------------------------------------
 CPixelShader8::CPixelShader8()
 {
 	pD3DDevice = nullptr; 
 	pD3DDeviceContext = nullptr;
+	pD3DRenderTargetView = nullptr;
 	pNewVertexBuffer = nullptr;
 	pPixelShader = nullptr;
-	pD3DRenderTargetView = nullptr;
+	pPSConstantBuffer = nullptr;
 	ZeroMemory(pNewVertices, 6 * sizeof(TVertex8));
-	ZeroMemory(m_SliderValue, 2 * sizeof(float));
+	ZeroMemory(m_SliderValue, 5 * sizeof(float));
+	ZeroMemory(&m_PSConstantBufferData, sizeof(PS_CONSTANTBUFFER));
 	m_DirectX_On = false;
 	m_Width = 0;
 	m_Height = 0;
@@ -17,6 +20,9 @@ CPixelShader8::CPixelShader8()
 	m_alpha = 1.0f;
 	m_FX = 0;
 	m_current_FX = 0;
+	m_FX_param1 = 0.0f;
+	m_FX_param2 = 0.0f;
+	m_FX_param3 = 0.0f;
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -28,10 +34,13 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 {
 	HRESULT hr = S_FALSE;
 
-	DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
-	DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
-	
-	OnParameter(ID_INIT);
+	hr = DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
+	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
+	hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "FX Param1", "FX_P1", 0.5f);
+	hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.10f);
+	hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.10f);
+
+	hr = OnParameter(ID_INIT);
 	return S_OK;
 }
 //------------------------------------------------------------------------------------------
@@ -41,7 +50,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "1.4 (64-bit)";
+	info->Version = "1.5 (64-bit)";
 
 	return S_OK;
 }
@@ -56,11 +65,13 @@ HRESULT VDJ_API CPixelShader8::OnParameter(int id)
 {
 	if (id == ID_INIT)
 	{
-		for (int i = ID_SLIDER_1; i <= ID_SLIDER_2; i++) OnSlider(i);
+		for (int i = ID_SLIDER_1; i <= ID_SLIDER_5; i++) OnSlider(i);
 	}
-
-	OnSlider(id);
-
+	else
+	{
+		OnSlider(id);
+	}
+	
 	return S_OK;
 }
 
@@ -76,20 +87,32 @@ void CPixelShader8::OnSlider(int id)
 		case ID_SLIDER_2:
 			m_FX = (int)(m_SliderValue[1] * float(MAX_FX - 1)); // Integer from 0 to (MAX_FX - 1)
 			break;
-	}
 
+		case ID_SLIDER_3:
+			m_FX_param1 = m_SliderValue[2] * 20.0f;
+			break;
+
+		case ID_SLIDER_4:
+			m_FX_param2 = m_SliderValue[3] * 2.0f;
+			break;
+
+		case ID_SLIDER_5:
+			m_FX_param3 = m_SliderValue[4] * 5.0f;
+			break;
+	}
 }
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int outParamSize)
 {
+	const WCHAR* FXName = m_FXList[m_FX];
+
 	switch (id)
 	{
 		case ID_SLIDER_1:
-			sprintf_s(outParam, outParamSize, "%.0f%%", m_SliderValue[0] * 100);
+			sprintf_s(outParam, outParamSize, "%.0f%%", m_alpha * 100);
 			break;
 
 		case ID_SLIDER_2:
-			const WCHAR* FXName = m_FXList[m_FX];
 			if (FXName == nullptr)
 			{
 				sprintf_s(outParam, outParamSize, "Error in the FX list.");
@@ -117,6 +140,18 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 				}
 			}
 			break;
+
+		case ID_SLIDER_3:
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param1);
+			break;
+
+		case ID_SLIDER_4:
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param2);
+			break;
+
+		case ID_SLIDER_5:
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param3);
+			break;
 	}
 
 	return S_OK;
@@ -129,8 +164,8 @@ HRESULT VDJ_API CPixelShader8::OnDeviceInit()
 	m_DirectX_On = true;
 	m_Width = width;
 	m_Height = height;
+	m_current_FX = m_FX;
 
-	// GetDevice() doesn't AddRef(), so we don't need to release pD3DDevice later
 	hr = GetDevice(VdjVideoEngineDirectX11, (void**)  &pD3DDevice);
 	if(hr!=S_OK || pD3DDevice==NULL) return E_FAIL;
 
@@ -144,7 +179,6 @@ HRESULT VDJ_API CPixelShader8::OnDeviceClose()
 	Release_D3D11();
 	SAFE_RELEASE(pD3DRenderTargetView);
 	SAFE_RELEASE(pD3DDeviceContext);
-	pD3DDevice = nullptr; //can no longer be used when device closed
 	m_DirectX_On = false;
 	
 	return S_OK;
@@ -152,7 +186,17 @@ HRESULT VDJ_API CPixelShader8::OnDeviceClose()
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnStart() 
 {
-	m_current_FX = m_FX;
+	HRESULT hr = S_FALSE;
+
+	// Check if we need to update the pixel shader
+	if (m_current_FX != m_FX && pD3DDevice != nullptr && pPixelShader != nullptr)
+	{
+		SAFE_RELEASE(pPixelShader);
+		hr = Create_PixelShader_D3D11(pD3DDevice);
+		if (hr != S_OK) return S_FALSE;
+		m_current_FX = m_FX;
+	}
+
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
@@ -164,10 +208,10 @@ HRESULT VDJ_API CPixelShader8::OnStop()
 HRESULT VDJ_API CPixelShader8::OnDraw()
 {
 	HRESULT hr = S_FALSE;
-	ID3D11ShaderResourceView *pTextureView = nullptr;
+	ID3D11ShaderResourceView *pTexture = nullptr;
 	TVertex8* vertices = nullptr;
 
-	if ( m_Width != width || m_Height != height)
+	if (m_Width != width || m_Height != height)
 	{
 		OnResizeVideo();
 	}
@@ -180,11 +224,11 @@ HRESULT VDJ_API CPixelShader8::OnDraw()
 	pD3DDeviceContext->OMGetRenderTargets(1, &pD3DRenderTargetView, nullptr);
 	if (!pD3DRenderTargetView) return S_FALSE;
 
-	// GetTexture() doesn't AddRef, so doesn't need to be released
-	hr = GetTexture(VdjVideoEngineDirectX11, (void**) &pTextureView, &vertices);
+	// We get current texture and vertices
+	hr = GetTexture(VdjVideoEngineDirectX11, (void**)&pTexture, &vertices);
 	if (hr != S_OK) return S_FALSE;
 
-	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTextureView, vertices);
+	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTexture, vertices);
 	if (hr != S_OK) return S_FALSE;
 
 	return S_OK;
@@ -206,6 +250,9 @@ HRESULT CPixelShader8::Initialize_D3D11(ID3D11Device* pDevice)
 	hr = Create_PixelShader_D3D11(pDevice);
 	if (hr != S_OK) return S_FALSE;
 
+	hr = Create_PSConstantBufferDynamic_D3D11(pDevice);
+	if (hr != S_OK) return S_FALSE;
+
 	return S_OK;
 }
 //-----------------------------------------------------------------------
@@ -213,12 +260,13 @@ void CPixelShader8::Release_D3D11()
 {
 	SAFE_RELEASE(pNewVertexBuffer);
 	SAFE_RELEASE(pPixelShader);
+	SAFE_RELEASE(pPSConstantBuffer);
 }
 // -----------------------------------------------------------------------
 HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext, ID3D11RenderTargetView* pRenderTargetView, ID3D11ShaderResourceView* pTextureView, TVertex8* pVertices)
 {
 	HRESULT hr = S_FALSE;
-	
+
 #ifdef _DEBUG
 	InfoTexture2D InfoRTV = {};
 	InfoTexture2D InfoSRV = {};
@@ -226,14 +274,16 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 	hr = GetInfoFromShaderResourceView(pTextureView, &InfoSRV);
 #endif
 
+
 	// Check if we need to update the pixel shader
 	if (m_current_FX != m_FX)
 	{
 		SAFE_RELEASE(pPixelShader);
-		hr = Create_PixelShader_D3D11(pDevice);
+		hr = Create_PixelShader_D3D11(pD3DDevice);
 		if (hr != S_OK) return S_FALSE;
 		m_current_FX = m_FX;
 	}
+
 
 	hr = DrawDeck();
 	if (hr != S_OK) return S_FALSE;
@@ -248,10 +298,17 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 	hr = Update_VertexBufferDynamic_D3D11(pDeviceContext);
 	if (hr != S_OK) return S_FALSE;
 
-	
+	hr = Update_PSConstantBufferDynamic_D3D11(pDeviceContext);
+	if (hr != S_OK) return S_FALSE;
+
 	if (pPixelShader)
 	{
 		pDeviceContext->PSSetShader(pPixelShader, nullptr, 0);
+	}
+
+	if (pPSConstantBuffer)
+	{
+		pDeviceContext->PSSetConstantBuffers(0, 1, &pPSConstantBuffer);
 	}
 	
 	if (pTextureView)
@@ -282,7 +339,7 @@ HRESULT CPixelShader8::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 
 	// Set the number of vertices in the vertex array.
 	m_VertexCount = 6; // = ARRAYSIZE(pNewVertices);
-
+	
 	// Fill in a buffer description.
 	D3D11_BUFFER_DESC VertexBufferDesc;
 	ZeroMemory(&VertexBufferDesc, sizeof(VertexBufferDesc));
@@ -308,14 +365,15 @@ HRESULT CPixelShader8::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx
 	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
 	ZeroMemory(&MappedSubResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	hr = ctx->Map(pNewVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
+
+	hr = ctx->Map(pNewVertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
 	if (hr != S_OK) return S_FALSE;
 
 	hr = Update_Vertices_D3D11();
 
 	memcpy(MappedSubResource.pData, pNewVertices, m_VertexCount * sizeof(TLVERTEX));
 
-	ctx->Unmap(pNewVertexBuffer, 0);
+	ctx->Unmap(pNewVertexBuffer, NULL);
 
 	return S_OK;
 }
@@ -349,21 +407,10 @@ HRESULT CPixelShader8::Update_Vertices_D3D11()
 HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
-	WCHAR FXNameUpper[150] = L"";
-	WCHAR resourceName[150] = L"";
-	WCHAR pShaderHLSLFilepath[150] = L"";
-	WCHAR pShaderCSOFilepath[150] = L"";
 	
-	const WCHAR* FXName = m_FXList[m_FX];
-	
-	if (FXName == nullptr) return E_FAIL;
-	
-	wcsncpy_s(FXNameUpper, FXName, _TRUNCATE);
-	CharUpperW(FXNameUpper);
-	
-	wsprintf(pShaderHLSLFilepath, L"%s.hlsl", FXName);
-	wsprintf(pShaderCSOFilepath, L"%s.cso", FXName);
-	wsprintf(resourceName, L"%s_CSO", FXNameUpper);
+	const WCHAR* pShaderHLSLFilepath = GetShaderName(1);
+	const WCHAR* pShaderCSOFilepath = GetShaderName(2);
+	const WCHAR* resourceName = GetShaderName(3);
 	const WCHAR* resourceType = RT_RCDATA;
 
 	SAFE_RELEASE(pPixelShader);
@@ -372,6 +419,41 @@ HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 	//hr = Create_PixelShaderFromHLSLFile_D3D11(pDevice, pShaderHLSLFilepath);
 
 	return hr;
+}
+//-----------------------------------------------------------------------
+const WCHAR* CPixelShader8::GetShaderName(int type)
+{
+	static WCHAR ShaderName[150] = L"";
+	WCHAR FXNameUpper[150] = L"";
+
+	const WCHAR* FXName = m_FXList[m_FX];
+
+	if (FXName == nullptr) return L"";
+
+	wcsncpy_s(FXNameUpper, FXName, _TRUNCATE);
+	CharUpperW(FXNameUpper);
+
+
+	switch (type)
+	{	
+		case 1:
+			swprintf_s(ShaderName, 150, L"%s.hlsl", FXName);
+			break;
+
+		case 2:
+			swprintf_s(ShaderName, 150, L"%s.cso", FXName);
+			break;
+
+		case 3:
+			swprintf_s(ShaderName, 150, L"%s_CSO", FXNameUpper);
+			break;
+
+		default:
+			swprintf_s(ShaderName, 150, L"");
+			break;
+	}
+
+	return ShaderName;
 }
 //-----------------------------------------------------------------------
 /*
@@ -415,13 +497,67 @@ HRESULT CPixelShader8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device*
 
 	void* pShaderBytecode = nullptr;
 	SIZE_T BytecodeLength = 0;
-	
+
 	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
 	if (hr != S_OK) return S_FALSE;
 	
 	hr = pDevice->CreatePixelShader(pShaderBytecode, BytecodeLength, nullptr, &pPixelShader);
-	
+
 	return hr;
+}
+//-----------------------------------------------------------------------
+HRESULT CPixelShader8::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice)
+{
+	HRESULT hr = S_FALSE;
+
+	if (!pDevice) return E_FAIL;
+
+	UINT SIZEOF_PS_CONSTANTBUFFER = sizeof(PS_CONSTANTBUFFER);
+	UINT CB_BYTEWIDTH = SIZEOF_PS_CONSTANTBUFFER + 0xf & 0xfffffff0;
+
+	D3D11_BUFFER_DESC ConstantBufferDesc = {};
+	ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;  // CPU_Access=Write_Only & GPU_Access=Read_Only
+	ConstantBufferDesc.ByteWidth = CB_BYTEWIDTH;
+	ConstantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	ConstantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;  // Allow CPU to write in buffer
+	ConstantBufferDesc.MiscFlags = 0;
+
+	// Create the constant buffer to send to the cbuffer in hlsl file
+	hr = pDevice->CreateBuffer(&ConstantBufferDesc, nullptr, &pPSConstantBuffer);
+	if (hr != S_OK || !pPSConstantBuffer) return S_FALSE;
+
+	return hr;
+}
+//-----------------------------------------------------------------------
+HRESULT CPixelShader8::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext* ctx)
+{
+	HRESULT hr = S_FALSE;
+
+	if (!ctx) return S_FALSE;
+	if (!pPSConstantBuffer) return S_FALSE;
+
+	hr = Update_PSConstantBufferData_D3D11();
+
+	D3D11_MAPPED_SUBRESOURCE MappedSubResource;
+	ZeroMemory(&MappedSubResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+
+	hr = ctx->Map(pPSConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedSubResource);
+	if (hr != S_OK) return S_FALSE;
+
+	memcpy(MappedSubResource.pData, &m_PSConstantBufferData, sizeof(PS_CONSTANTBUFFER));
+
+	ctx->Unmap(pPSConstantBuffer, 0);
+
+	return S_OK;
+}
+//-----------------------------------------------------------------------
+HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
+{
+	m_PSConstantBufferData.FX_param1 = m_FX_param1;
+	m_PSConstantBufferData.FX_param2 = m_FX_param2;
+	m_PSConstantBufferData.FX_param3 = m_FX_param3;
+
+	return S_OK;
 }
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data)
@@ -449,36 +585,36 @@ HRESULT CPixelShader8::GetInfoFromShaderResourceView(ID3D11ShaderResourceView* p
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
 	ZeroMemory(&viewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
-	
+
 	pShaderResourceView->GetDesc(&viewDesc);
-	
+
 	DXGI_FORMAT dxFormat1 = viewDesc.Format;
 	D3D11_SRV_DIMENSION ViewDimension = viewDesc.ViewDimension;
-	
+
 	ID3D11Resource* pResource = nullptr;
 	pShaderResourceView->GetResource(&pResource);
 	if (!pResource) return S_FALSE;
-	
+
 	if (ViewDimension == D3D11_SRV_DIMENSION_TEXTURE2D)
 	{
 		ID3D11Texture2D* pTexture = nullptr;
 		hr = pResource->QueryInterface(__uuidof(ID3D11Texture2D), (void**)&pTexture);
 		if (hr != S_OK || !pTexture) return S_FALSE;
-	
+
 		D3D11_TEXTURE2D_DESC textureDesc;
 		ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	
+
 		pTexture->GetDesc(&textureDesc);
-	
+
 		info->Format = textureDesc.Format;
 		info->Width = textureDesc.Width;
 		info->Height = textureDesc.Height;
-	
+
 		SAFE_RELEASE(pTexture);
 	}
-	
+
 	SAFE_RELEASE(pResource);
-	
+
 	return S_OK;
 }
 //-----------------------------------------------------------------------

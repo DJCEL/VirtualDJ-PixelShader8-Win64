@@ -7,6 +7,7 @@
 #include <d3d11.h>
 //#include <d3dcompiler.h> // if we want to compile the shader with the code by using D3DCompileFromFile()
 
+
 #pragma comment(lib, "d3d11.lib")
 //#pragma comment(lib, "d3dcompiler.lib")
 
@@ -75,9 +76,18 @@ private:
 		DXGI_FORMAT Format;
 	};
 
+	__declspec(align(16))
+		struct PS_CONSTANTBUFFER
+	{
+		float FX_param1;
+		float FX_param2;
+		float FX_param3;
+	};
+
 	void OnResizeVideo();
 	void OnSlider(int id);
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
+	const WCHAR* GetShaderName(int type);
 
 	HRESULT Initialize_D3D11(ID3D11Device* pDevice);
 	void Release_D3D11();
@@ -88,6 +98,9 @@ private:
 	HRESULT Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice);
 	HRESULT Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx);
 	HRESULT Update_Vertices_D3D11();
+	HRESULT Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice);
+	HRESULT Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext* ctx);
+	HRESULT Update_PSConstantBufferData_D3D11();
 	HRESULT GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D* info);
 	HRESULT GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D* info);
 
@@ -97,22 +110,31 @@ private:
 	ID3D11RenderTargetView* pD3DRenderTargetView;
 	ID3D11Buffer* pNewVertexBuffer;
 	ID3D11PixelShader* pPixelShader;
+	ID3D11Buffer* pPSConstantBuffer;
 	
+	PS_CONSTANTBUFFER m_PSConstantBufferData;
+
 	TLVERTEX pNewVertices[6];
 	UINT m_VertexCount;
 	bool m_DirectX_On;
 	int m_Width;
 	int m_Height;
-	float m_SliderValue[2];
+	float m_SliderValue[5];
 	float m_alpha;
 	UINT m_FX;
 	UINT m_current_FX;
+	float m_FX_param1;
+	float m_FX_param2;
+	float m_FX_param3;
 
 	typedef enum _ID_Interface
 	{
 		ID_INIT,
 		ID_SLIDER_1,
-		ID_SLIDER_2
+		ID_SLIDER_2,
+		ID_SLIDER_3,
+		ID_SLIDER_4,
+		ID_SLIDER_5,
 	} ID_Interface;
 
 	#ifndef SAFE_RELEASE
@@ -120,7 +142,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT MAX_FX = 8;
+	static const UINT MAX_FX = 16;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[MAX_FX] = {
@@ -131,9 +153,16 @@ private:
 		L"HorizontalMirror",
 		L"Rotate180",
 		L"PixelsHide",
-		L"CenterBlur"
+		L"CenterBlur",
+		L"ColorDistorsion",
+		L"SpatialDistorsion",
+		L"Displacement",
+		L"Patterns",
+		L"Quasicrystal",
+		L"Noise",
+		L"Wave",
+		L"Noise2",
 	};
-
 };
 
 #endif
