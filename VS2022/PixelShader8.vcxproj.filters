@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -26,7 +26,7 @@
     <Filter Include="src">
       <UniqueIdentifier>{b2c91c54-db1a-48fd-a4e2-2e9acc8e3501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
+    <Filter Include="src\Shaders">
       <UniqueIdentifier>{20a18865-d087-4697-944b-0f912b21f52d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -36,103 +36,29 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\Shaders\PixelsHide.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\CenterBlur.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\ColorDistorsion.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\SpatialDistorsion.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Displacement.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Patterns.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Quasicrystal.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\GrayScale.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\GBR.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\HighContrast.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Negative.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\HorizontalMirror.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Rotate180.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Noise.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Wave.cso">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="..\src\Shaders\Noise2.cso">
-      <Filter>Shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="..\src\Shaders\PixelsHide.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\CenterBlur.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\ColorDistorsion.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\SpatialDistorsion.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\Displacement.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\Patterns.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\Quasicrystal.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\GrayScale.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\GBR.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\HighContrast.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\Negative.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\HorizontalMirror.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\Rotate180.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\Noise.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\Wave.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="..\src\Shaders\Noise2.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>src\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
