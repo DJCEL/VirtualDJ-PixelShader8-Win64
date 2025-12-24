@@ -91,7 +91,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <OutputFile>$(LOCALAPPDATA)\VirtualDJ\Plugins64\VideoEffect\Dev\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(LOCALAPPDATA)\VirtualDJ\Plugins64\VideoEffect\VDJ8\$(TargetName)$(TargetExt)</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -113,7 +113,17 @@
     <ResourceCompile Include="..\src\Plugin.rc" />
   </ItemGroup>
   <ItemGroup>
-        <FxCompile Include="..\src\Shaders\PixelsHide.hlsl">
+    <FxCompile Include="..\src\Shaders\ColorDistorsion.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\Shaders\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\Shaders\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\src\Shaders\PixelsHide.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ps_main</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ps_main</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -193,6 +203,17 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\Shaders\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\Shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\Shaders\CenterBlur.cso" />
+    <None Include="..\src\Shaders\ColorDistorsion.cso" />
+    <None Include="..\src\Shaders\GBR.cso" />
+    <None Include="..\src\Shaders\GrayScale.cso" />
+    <None Include="..\src\Shaders\HighContrast.cso" />
+    <None Include="..\src\Shaders\HorizontalMirror.cso" />
+    <None Include="..\src\Shaders\Negative.cso" />
+    <None Include="..\src\Shaders\PixelsHide.cso" />
+    <None Include="..\src\Shaders\Rotate180.cso" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

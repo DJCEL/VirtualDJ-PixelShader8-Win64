@@ -36,9 +36,9 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 
 	hr = DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
 	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
-	hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "FX Param1", "FX_P1", 0.5f);
-	hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.10f);
-	hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.10f);
+	//hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "FX Param1", "FX_P1", 0.5f);
+	//hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.10f);
+	//hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.10f);
 
 	hr = OnParameter(ID_INIT);
 	return S_OK;
@@ -50,7 +50,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "1.5 (64-bit)";
+	info->Version = "1.6 (64-bit)";
 
 	return S_OK;
 }
