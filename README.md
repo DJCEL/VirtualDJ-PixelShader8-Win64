@@ -1,3 +1,4 @@
+![logo](https://github.com/djcel/VirtualDJ-PixelShader8-Win64/blob/main/PixelShader8_website.JPG?raw=true "")
 # VirtualDJ-PixelShader8-Win64
 
 DLL compilation (64bit):
