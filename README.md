@@ -14,10 +14,11 @@ Examples of Pixel Shaders are in the 'Shaders' subfolder.
 
 Right click on 'Plugin.rc' file and select 'View Code' to add shaders in Resources.
 
-If you know GLSL and want to use the syntax, you can also define in the HSLSL file:
+If you know GLSL and want to use the syntax, you can also define:
 - #define vec2 float2
 - #define vec3 float3
 - #define vec4 float4
 - #define mix lerp
 - #define fract frac
-
+- #define gl_FragCoord SV_Position
+- #define gl_FragColor SV_Target
