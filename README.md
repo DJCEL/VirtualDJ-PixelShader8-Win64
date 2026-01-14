@@ -20,5 +20,3 @@ If you know GLSL and want to use the syntax, you can also define:
 - #define vec4 float4
 - #define mix lerp
 - #define fract frac
-- #define gl_FragCoord SV_Position
-- #define gl_FragColor SV_Target
