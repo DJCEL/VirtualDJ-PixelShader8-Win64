@@ -180,12 +180,8 @@ float3 cmyk_to_rgb(float4 CMYK)
     return RGB;
 }
 //--------------------------------------------------------------------------------------
-// Pixel Shader
-//--------------------------------------------------------------------------------------
-PS_OUTPUT ps_main(PS_INPUT input)
+float4 ColorSpace(float2 texcoord)
 {
-    PS_OUTPUT output;
-    float2 texcoord = input.TexCoord;
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord);
     float3 RGB = color.rgb;
     
@@ -193,9 +189,60 @@ PS_OUTPUT ps_main(PS_INPUT input)
     //float3 YUV = rgb_to_yuv(RGB);
     //float4 CMYK = rgb_to_cmyk(RGB);
     
-    output.Color = float4(HSV.x, HSV.y, HSV.z, color.a);
-    //output.Color = float4(YUV.x, YUV.y, YUV.z, color.a);
-    //output.Color = float4(CMYK.x, CMYK.y, CMYK.z, CMYK.w);
+    float4 outcolor = float4(HSV.x, HSV.y, HSV.z, color.a);
+    //outcolor = float4(YUV.x, YUV.y, YUV.z, color.a);
+    //outcolor = float4(CMYK.x, CMYK.y, CMYK.z, CMYK.w);
+    
+    return outcolor;
+}
+//--------------------------------------------------------------------------------------
+float4 negative2(float2 texcoord)
+{
+    float OffX = 0.003; // from -0.1 to 0.1
+    float OffY = 0.003; // from -0.1 to 0.1
+    float Scale = 1.0; // from 0.95 to 1.05   
+    float Rot = 0.0f; // from -2 to 2
+    float Density = 1.0f; // from 0 to 1
+    
+    float r = radians(Rot);
+    float c = cos(r);
+    float s = sin(r);
+    float2 nuv = Scale * (texcoord.xy - float2(0.5, 0.5));
+    nuv = float2(c * nuv.x - s * nuv.y, c * nuv.y + s * nuv.x);
+    nuv += float2(0.5 + OffX, 0.5 + OffY);
+    float4 texCol0 = g_Texture2D.Sample(g_SamplerState, texcoord);
+    float4 texCol1 = g_Texture2D.Sample(g_SamplerState, nuv);
+    float3 result = saturate(texCol0.rgb - Density * (texCol1.rgb));
+    return float4(result, texCol0.w); // protect alpha
+}
+//--------------------------------------------------------------------------------------
+float4 sepia(float2 texcoord)
+{
+    float Desat = 0.5f; // [Desaturation] from 0 to 1
+    float Toned = 0.5f; // [Toning] from 0 to 1
+    float3 LightColor = float3(1, 0.9, 0.5); // Paper Tone
+    float3 DarkColor = float3(0.2, 0.05, 0); // Stain Tone
+        
+    float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord);
+    float3 scnColor = LightColor * texColor.xyz;
+    float3 grayXfer = float3(0.3, 0.59, 0.11);
+    float gray = dot(grayXfer, scnColor);
+    float3 muted = lerp(scnColor, gray.xxx, Desat);
+    float3 sepia = lerp(DarkColor, LightColor, gray);
+    float3 result = lerp(muted, sepia, Toned);
+    return float4(result, 1);
+}
+//--------------------------------------------------------------------------------------
+// Pixel Shader
+//--------------------------------------------------------------------------------------
+PS_OUTPUT ps_main(PS_INPUT input)
+{
+    PS_OUTPUT output;
+    float2 texcoord = input.TexCoord;
+    
+    //output.Color = ColorSpace(texcoord);
+    //output.Color = negative2(texcoord);
+    output.Color = sepia(texcoord);
     
     output.Color = output.Color * input.Color;
     
