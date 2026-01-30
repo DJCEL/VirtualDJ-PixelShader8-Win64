@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7 (2026-01-30)
+
+* Add HUV pixel shader (with color spaces functions)
+
 ## 1.6 (2025-12-24)
 
 * Some fixes and official release
