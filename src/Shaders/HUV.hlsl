@@ -261,11 +261,11 @@ float hue_lerp(float h1, float h2, float v)
 //--------------------------------------------------------------------------------------
 float4 polarize(float2 texcoord)
 {
-    float3 GuideHue = float3(0.0, 0.0, 1.0);
     float Amount = 0.2f; // [Strength of Effect] from to 0 to 1
     float Concentrate = 0.0f; // [Color Concentration] from 0.1 to 4 
     float DesatCorr = 0.0f; // [Desaturate Correction] from to 0 to 1
-    // #define FORCEHUE
+    float3 GuideHue = float3(0.0, 0.0, 1.0);
+    #define FORCEHUE
     
     
     float4 rgbaTex = g_Texture2D.Sample(g_SamplerState, texcoord);
