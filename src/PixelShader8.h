@@ -142,7 +142,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT MAX_FX = 9;
+	static const UINT MAX_FX = 10;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[MAX_FX] = {
@@ -154,7 +154,8 @@ private:
 		L"Rotate180",
 		L"PixelsHide",
 		L"CenterBlur",
-		L"ColorDistorsion"
+		L"ColorDistorsion",
+		L"HUV"
 	};
 };
 
