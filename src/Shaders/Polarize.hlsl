@@ -181,7 +181,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-    float Amount = 0.31f; // g_FX_param1 [Strength of Effect] from to 0 to 1
+    float Amount = 0.5f; // g_FX_param1 [Strength of Effect] from to 0 to 1
     float Concentrate = 1.44f; //  g_FX_param2 * 4 [Color Concentration] from 0.1 to 4 
     float DesatCorr = 0.12f; //  g_FX_param3 [Desaturate Correction] from to 0 to 1
     float3 GuideHueRGB = float3(0.0, 0.0, 1.0); // color blue
