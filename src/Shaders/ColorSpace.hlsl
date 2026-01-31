@@ -36,6 +36,11 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Additional functions
 //--------------------------------------------------------------------------------------
+float ParamAdjust(float value, float ValMin, float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
 float sRGBtoLin(float colorRGB)
 {
     // colorRGB : gamma-encoded R,G,B channel of RGB
@@ -332,6 +337,17 @@ float3 cmyk_to_rgb(float4 CMYK)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
+    float adjust_C1 = 1.0f;
+    float adjust_C2 = 1.0f;
+    float adjust_C3 = 1.0f;
+    
+    if (g_FX_params_on)
+    {
+        adjust_C1 = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
+        adjust_C2 = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
+        adjust_C3 = ParamAdjust(g_FX_param3, 0.0f, 1.0f);
+    }
+    
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
@@ -344,17 +360,17 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float4 CMYK = rgb_to_cmyk(RGB);
     
     
-    YUV.x *= g_FX_param1;
-    YUV.y *= g_FX_param2;
-    YUV.z *= g_FX_param3;
+    YUV.x *= adjust_C1;
+    YUV.y *= adjust_C2;
+    YUV.z *= adjust_C3;
     
-    YCbCr.x *= g_FX_param1;
-    YCbCr.y *= g_FX_param2;
-    YCbCr.z *= g_FX_param3;
+    YCbCr.x *= adjust_C1;
+    YCbCr.y *= adjust_C2;
+    YCbCr.z *= adjust_C3;
     
-    HSV.x *= g_FX_param1;
-    HSV.y *= g_FX_param2;
-    HSV.z *= g_FX_param3;
+    HSV.x *= adjust_C1;
+    HSV.y *= adjust_C2;
+    HSV.z *= adjust_C3;
     
     float3 outRGB = YCbCr_to_rgb(YCbCr);
     //float3 outRGB = yuv_to_rgb(YUV);

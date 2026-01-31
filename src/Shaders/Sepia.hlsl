@@ -52,8 +52,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     if (g_FX_params_on)
     {
-        Desat = ParamAdjust(g_FX_param1, 0.0f, 0.0f);
-        Toned = ParamAdjust(g_FX_param2, 0.0f, 0.0f);
+        Desat = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
+        Toned = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
     }
     
     PS_OUTPUT output;
