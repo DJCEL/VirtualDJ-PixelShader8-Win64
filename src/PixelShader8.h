@@ -89,10 +89,17 @@ private:
 
 	void OnResizeVideo();
 	void OnButton(int id);
+	float ParamAdjust(float value, float ValMin, float ValMax);
 	void OnSlider(int id);
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 	const WCHAR* GetShaderName(int type);
 	int GetShaderNumberParams();
+	void Display_FX_Param1(char* outParam, int outParamSize, float value, const WCHAR* FXName);
+	void Display_FX_Param2(char* outParam, int outParamSize, float value, const WCHAR* FXName);
+	void Display_FX_Param3(char* outParam, int outParamSize, float value, const WCHAR* FXName);
+	void Display_FX_Param4(char* outParam, int outParamSize, float value, const WCHAR* FXName);
+	void Display_FX_Param5(char* outParam, int outParamSize, float value, const WCHAR* FXName);
+
 
 	HRESULT Initialize_D3D11(ID3D11Device* pDevice);
 	void Release_D3D11();

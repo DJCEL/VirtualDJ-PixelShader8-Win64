@@ -114,6 +114,11 @@ void CPixelShader8::OnButton(int id)
 			break;
 	}
 }
+//-----------------------------------------------------------------------
+float CPixelShader8::ParamAdjust(float value, float ValMin, float ValMax)
+{
+	return ValMin + value * (ValMax - ValMin);
+}
 //------------------------------------------------------------------------------------------
 void CPixelShader8::OnSlider(int id)
 {
@@ -158,6 +163,7 @@ int CPixelShader8::GetShaderNumberParams()
 	if (wcscmp(FXName, L"Sepia") == 0) NumberParams = 2;
 	else if (wcscmp(FXName, L"Polarize") == 0) NumberParams = 3;
 	else if (wcscmp(FXName, L"ColorSpace") == 0) NumberParams = 5;
+	else if (wcscmp(FXName, L"Mask") == 0) NumberParams = 5;
 	
 	return NumberParams;
 }
@@ -202,97 +208,182 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 			break;
 
 		case ID_SLIDER_3:
-			if (GetShaderNumberParams() < 1)
-			{
-				sprintf_s(outParam, outParamSize, "N/A");
-			}
-			else
-			{
-				if (wcscmp(FXName, L"ColorSpace") == 0)
-				{
-					int ColorSpace_select = int(1.0f + m_FX_param[0] * (5.0f - 1.0f));
-					switch (ColorSpace_select)
-					{
-					case 1:
-						sprintf_s(outParam, outParamSize, "RGB");
-						break;
-					case 2:
-						sprintf_s(outParam, outParamSize, "YCbCr");
-						break;
-					case 3:
-						sprintf_s(outParam, outParamSize, "YUV");
-						break;
-					case 4:
-						sprintf_s(outParam, outParamSize, "HSV");
-						break;
-					case 5:
-						sprintf_s(outParam, outParamSize, "CMYK");
-						break;
-					}
-				}
-				else
-				{
-					sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[0]);
-				}
-			}
-			
+			Display_FX_Param1(outParam, outParamSize, m_FX_param[0], FXName);
 			break;
 
 		case ID_SLIDER_4:
-			if (GetShaderNumberParams() < 2 )
-			{
-				sprintf_s(outParam, outParamSize, "N/A");
-			}
-			else
-			{
-				sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[1]);
-			}
+			Display_FX_Param2(outParam, outParamSize, m_FX_param[1], FXName);
 			break;
 
 		case ID_SLIDER_5:
-			if (GetShaderNumberParams() < 3)
-			{
-				sprintf_s(outParam, outParamSize, "N/A");
-			}
-			else
-			{
-				sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[2]);
-			}
+			Display_FX_Param3(outParam, outParamSize, m_FX_param[2], FXName);
 			break;
 
 		case ID_SLIDER_6:
-			if (GetShaderNumberParams() < 4)
-			{
-				sprintf_s(outParam, outParamSize, "N/A");
-			}
-			else
-			{
-				sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[3]);
-			}
+			Display_FX_Param4(outParam, outParamSize, m_FX_param[3], FXName);
 			break;
 
 		case ID_SLIDER_7:
-			if (GetShaderNumberParams() < 5)
-			{
-				sprintf_s(outParam, outParamSize, "N/A");
-			}
-			else
-			{
-				if (wcscmp(FXName, L"ColorSpace") == 0)
-				{
-					int ColorSpace_select = int(1.0f + m_FX_param[0] * (5.0f - 1.0f));
-					if (ColorSpace_select == 5) sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[4]);
-					else sprintf_s(outParam, outParamSize, "N/A");
-				}
-				else
-				{
-					sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[4]);
-				}
-			}
+			Display_FX_Param5(outParam, outParamSize, m_FX_param[4], FXName);
 			break;
 	}
 
 	return S_OK;
+}
+//-------------------------------------------------------------------------------------------
+void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float value, const WCHAR* FXName)
+{
+	if (GetShaderNumberParams() < 1)
+	{
+		sprintf_s(outParam, outParamSize, "");
+	}
+	else
+	{
+		if (wcscmp(FXName, L"Sepia") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Desaturation)", value);
+		}
+		else if (wcscmp(FXName, L"Polarize") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Strength)", value);
+		}
+		else if (wcscmp(FXName, L"Mask") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (OffsetX)", value);
+		}
+		else if (wcscmp(FXName, L"ColorSpace") == 0)
+		{
+			int ColorSpace_select = int(ParamAdjust(value, 1.0f, 5.0f));
+			switch (ColorSpace_select)
+			{
+			case 1:
+				sprintf_s(outParam, outParamSize, "RGB");
+				break;
+			case 2:
+				sprintf_s(outParam, outParamSize, "YCbCr");
+				break;
+			case 3:
+				sprintf_s(outParam, outParamSize, "YUV");
+				break;
+			case 4:
+				sprintf_s(outParam, outParamSize, "HSV");
+				break;
+			case 5:
+				sprintf_s(outParam, outParamSize, "CMYK");
+				break;
+			}
+		}
+		else
+		{
+			sprintf_s(outParam, outParamSize, "%.2f", value);
+		}
+	}
+}
+//-------------------------------------------------------------------------------------------
+void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float value, const WCHAR* FXName)
+{
+	if (GetShaderNumberParams() < 2)
+	{
+		sprintf_s(outParam, outParamSize, "");
+	}
+	else
+	{
+		if (wcscmp(FXName, L"Sepia") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Toning)", value);
+		}
+		else if (wcscmp(FXName, L"Polarize") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Color Concentration)", value);
+		}
+		else if (wcscmp(FXName, L"Mask") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (OffsetY)", value);
+		}
+		else if (wcscmp(FXName, L"ColorSpace") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Component 1)", value);
+		}
+		else
+		{
+			sprintf_s(outParam, outParamSize, "%.2f", value);
+		}
+	}
+}
+//-------------------------------------------------------------------------------------------
+void  CPixelShader8::Display_FX_Param3(char* outParam, int outParamSize, float value, const WCHAR* FXName)
+{
+	if (GetShaderNumberParams() < 3)
+	{
+		sprintf_s(outParam, outParamSize, "");
+	}
+	else
+	{
+		if (wcscmp(FXName, L"Polarize") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Desaturate Correction)", value);
+		}
+		else if (wcscmp(FXName, L"Mask") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Scale)", value);
+		}
+		else if (wcscmp(FXName, L"ColorSpace") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Component 2)", value);
+		}
+		else
+		{
+			sprintf_s(outParam, outParamSize, "%.2f", value);
+		}
+	}
+}
+//-------------------------------------------------------------------------------------------
+void  CPixelShader8::Display_FX_Param4(char* outParam, int outParamSize, float value, const WCHAR* FXName)
+{
+	if (GetShaderNumberParams() < 4)
+	{
+		sprintf_s(outParam, outParamSize, "");
+	}
+	else
+	{
+		if (wcscmp(FXName, L"Mask") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Rotation)", value);
+		}
+		else if (wcscmp(FXName, L"ColorSpace") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Component 3)", value);
+		}
+		else
+		{
+			sprintf_s(outParam, outParamSize, "%.2f", value);
+		}
+	}
+}
+//-------------------------------------------------------------------------------------------
+void  CPixelShader8::Display_FX_Param5(char* outParam, int outParamSize, float value, const WCHAR* FXName)
+{
+	if (GetShaderNumberParams() < 5)
+	{
+		sprintf_s(outParam, outParamSize, "");
+	}
+	else
+	{
+		if (wcscmp(FXName, L"Mask") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (Density)", value);
+		}
+		else if (wcscmp(FXName, L"ColorSpace") == 0)
+		{
+			int ColorSpace_select = int(ParamAdjust(m_FX_param[0], 1.0f, 5.0f));
+			if (ColorSpace_select == 5) sprintf_s(outParam, outParamSize, "%.2f (Component 4)", value);
+			else sprintf_s(outParam, outParamSize, "");
+		}
+		else
+		{
+			sprintf_s(outParam, outParamSize, "%.2f", value);
+		}
+	}
 }
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnDeviceInit()
