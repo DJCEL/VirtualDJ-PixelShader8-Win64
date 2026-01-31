@@ -332,7 +332,7 @@ float4 sepia(float2 texcoord)
     float3 DarkColor = float3(0.2, 0.05, 0); // Stain Tone
         
     float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord);
-    float3 scnColor = LightColor * texColor.xyz;
+    float3 scnColor = LightColor * texColor.rgb;
     float3 grayXfer = float3(0.3, 0.59, 0.11);
     float gray = dot(grayXfer, scnColor);
     float3 muted = lerp(scnColor, gray.xxx, Desat);
