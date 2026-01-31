@@ -11,7 +11,8 @@ CPixelShader8::CPixelShader8()
 	pPixelShader = nullptr;
 	pPSConstantBuffer = nullptr;
 	ZeroMemory(pNewVertices, 6 * sizeof(TVertex8));
-	ZeroMemory(m_SliderValue, 5 * sizeof(float));
+	ZeroMemory(m_SliderValue, 6 * sizeof(float));
+	ZeroMemory(m_FX_param, 4 * sizeof(float));
 	ZeroMemory(&m_PSConstantBufferData, sizeof(PS_CONSTANTBUFFER));
 	m_DirectX_On = false;
 	m_Width = 0;
@@ -22,9 +23,6 @@ CPixelShader8::CPixelShader8()
 	m_current_FX = 0;
 	m_ButtonLeft = 0;
 	m_ButtonRight = 0;
-	m_FX_param1 = 0.0f;
-	m_FX_param2 = 0.0f;
-	m_FX_param3 = 0.0f;
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -43,6 +41,7 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 	//hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "FX Param1", "FX_P1", 0.5f);
 	//hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.5f);
 	//hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.5f);
+	//hr = DeclareParameterSlider(&m_SliderValue[5], ID_SLIDER_6, "FX Param4", "FX_P4", 0.5f);
 	
 	hr = OnParameter(ID_INIT);
 	return S_OK;
@@ -126,15 +125,19 @@ void CPixelShader8::OnSlider(int id)
 			break;
 
 		case ID_SLIDER_3:
-			m_FX_param1 = m_SliderValue[2];
+			m_FX_param[0] = m_SliderValue[2];
 			break;
 
 		case ID_SLIDER_4:
-			m_FX_param2 = m_SliderValue[3];
+			m_FX_param[1] = m_SliderValue[3];
 			break;
 
 		case ID_SLIDER_5:
-			m_FX_param3 = m_SliderValue[4];
+			m_FX_param[2] = m_SliderValue[4];
+			break;
+
+		case ID_SLIDER_6:
+			m_FX_param[3] = m_SliderValue[5];
 			break;
 	}
 }
@@ -179,15 +182,19 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 			break;
 
 		case ID_SLIDER_3:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param1);
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[0]);
 			break;
 
 		case ID_SLIDER_4:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param2);
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[1]);
 			break;
 
 		case ID_SLIDER_5:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param3);
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[2]);
+			break;
+
+		case ID_SLIDER_6:
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[3]);
 			break;
 	}
 
@@ -590,9 +597,10 @@ HRESULT CPixelShader8::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext*
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 {
-	m_PSConstantBufferData.FX_param1 = m_FX_param1;
-	m_PSConstantBufferData.FX_param2 = m_FX_param2;
-	m_PSConstantBufferData.FX_param3 = m_FX_param3;
+	m_PSConstantBufferData.FX_param1 = m_FX_param[0];
+	m_PSConstantBufferData.FX_param2 = m_FX_param[1];
+	m_PSConstantBufferData.FX_param3 = m_FX_param[2];
+	m_PSConstantBufferData.FX_param4 = m_FX_param[3];
 
 	return S_OK;
 }

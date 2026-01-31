@@ -15,6 +15,7 @@ cbuffer PS_CONSTANTBUFFER : register(b0)
     float g_FX_param1;
     float g_FX_param2;
     float g_FX_param3;
+    float g_FX_param4;
 };
 //--------------------------------------------------------------------------------------
 // Input structure
@@ -40,11 +41,11 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-    float OffX = 0.003; // from -0.1 to 0.1
+    float OffX = 0.003; //  from -0.1 to 0.1
     float OffY = 0.003; // from -0.1 to 0.1
-    float Scale = 1.0; // from 0.95 to 1.05   
-    float Rot = 0.0f; // from -2 to 2
-    float Density = 1.0f; // from 0 to 1
+    float Scale = 1.0; // g_FX_param1 [Scale] from 0.95 to 1.05   
+    float Rot = 0.0f; // g_FX_param2 [Rot] from -2 to 2
+    float Density = 1.0f; // g_FX_param3 [Density] from 0 to 1
     
     float r = radians(Rot);
     float c = cos(r);

@@ -82,6 +82,7 @@ private:
 		float FX_param1;
 		float FX_param2;
 		float FX_param3;
+		float FX_param4;
 	};
 
 	void OnResizeVideo();
@@ -120,15 +121,13 @@ private:
 	bool m_DirectX_On;
 	int m_Width;
 	int m_Height;
-	float m_SliderValue[5];
+	float m_SliderValue[6];
+	float m_FX_param[4];
 	float m_alpha;
 	UINT m_FX;
 	UINT m_current_FX;
 	int m_ButtonLeft;
 	int m_ButtonRight;
-	float m_FX_param1;
-	float m_FX_param2;
-	float m_FX_param3;
 
 	typedef enum _ID_Interface
 	{
@@ -138,6 +137,7 @@ private:
 		ID_SLIDER_3,
 		ID_SLIDER_4,
 		ID_SLIDER_5,
+		ID_SLIDER_6,
 		ID_SLIDER_MAX,
 		ID_BUTTON_1,
 		ID_BUTTON_2,
