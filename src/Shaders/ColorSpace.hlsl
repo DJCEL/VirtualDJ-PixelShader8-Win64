@@ -339,15 +339,15 @@ float3 cmyk_to_rgb(float4 CMYK)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float adjust_C1 = 1.0f;
+    float adjust_C1 = 0.0f;
     float adjust_C2 = 1.0f;
-    float adjust_C3 = 0.0f;
+    float adjust_C3 = 1.0f;
     float adjust_C4 = 0.0f;
-    int ColorSpace_select = 1;
+    int ColorSpace_select = 4;
     
     if (g_FX_params_on)
     {
-        ColorSpace_select = int(ParamAdjust(g_FX_param1, 0.0f, 4.0f));
+        ColorSpace_select = int(ParamAdjust(g_FX_param1, 1.0f, 5.0f));
         adjust_C1 = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
         adjust_C2 = ParamAdjust(g_FX_param3, 0.0f, 1.0f);
         adjust_C3 = ParamAdjust(g_FX_param4, 0.0f, 1.0f);
@@ -361,14 +361,14 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float3 RGB = TexColor.rgb;
     float3 outRGB = float3(1.0f, 1.0f, 1.0f);
     
-    if (ColorSpace_select == 0)
+    if (ColorSpace_select == 1)
     {
         outRGB = RGB;
         outRGB.r *= adjust_C1;
         outRGB.g *= adjust_C2;
         outRGB.b *= adjust_C3;
     }
-    else if (ColorSpace_select == 1)
+    else if (ColorSpace_select == 2)
     {
         float3 YCbCr = rgb_to_YCbCr(RGB);
         YCbCr.x *= adjust_C1;
@@ -376,7 +376,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         YCbCr.z *= adjust_C3;
         outRGB = YCbCr_to_rgb(YCbCr);
     }
-    else if (ColorSpace_select == 2)
+    else if (ColorSpace_select == 3)
     {
         float3 YUV = rgb_to_yuv(RGB);
         YUV.x *= adjust_C1;
@@ -384,7 +384,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         YUV.z *= adjust_C3;
         outRGB = yuv_to_rgb(YUV);
     }
-    else if (ColorSpace_select == 3)
+    else if (ColorSpace_select == 4)
     {
         float3 HSV = rgb_to_hsv(RGB);
         HSV.x *= adjust_C1;
@@ -392,7 +392,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         HSV.z *= adjust_C3;
         outRGB = hsv_to_rgb(HSV);
     }
-    else if (ColorSpace_select == 4)
+    else if (ColorSpace_select == 5)
     {
         float4 CMYK = rgb_to_cmyk(RGB);
         CMYK.x *= adjust_C1;

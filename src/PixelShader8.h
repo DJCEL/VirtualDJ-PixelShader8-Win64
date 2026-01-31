@@ -92,6 +92,7 @@ private:
 	void OnSlider(int id);
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 	const WCHAR* GetShaderName(int type);
+	int GetShaderNumberParams();
 
 	HRESULT Initialize_D3D11(ID3D11Device* pDevice);
 	void Release_D3D11();

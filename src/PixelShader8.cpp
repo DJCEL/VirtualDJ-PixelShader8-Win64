@@ -148,6 +148,19 @@ void CPixelShader8::OnSlider(int id)
 			break;
 	}
 }
+//-----------------------------------------------------------------------
+int CPixelShader8::GetShaderNumberParams()
+{
+	int NumberParams = 0;
+
+	const WCHAR* FXName = m_FXList[m_FX];
+
+	if (wcscmp(FXName, L"Sepia") == 0) NumberParams = 2;
+	else if (wcscmp(FXName, L"Polarize") == 0) NumberParams = 3;
+	else if (wcscmp(FXName, L"ColorSpace") == 0) NumberParams = 5;
+	
+	return NumberParams;
+}
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int outParamSize)
 {
@@ -174,7 +187,7 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 					int res = WideCharToMultiByte(CP_UTF8, 0, FXName, -1, FXNameChar, size_needed, NULL, NULL);
 					if (res >= 0)
 					{
-						sprintf_s(outParam, outParamSize,"%i-%s", m_FX+1, FXNameChar);
+						sprintf_s(outParam, outParamSize, "%i-%s", m_FX + 1, FXNameChar);
 					}
 					else
 					{
@@ -189,23 +202,93 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 			break;
 
 		case ID_SLIDER_3:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[0]);
+			if (GetShaderNumberParams() < 1)
+			{
+				sprintf_s(outParam, outParamSize, "N/A");
+			}
+			else
+			{
+				if (wcscmp(FXName, L"ColorSpace") == 0)
+				{
+					int ColorSpace_select = int(1.0f + m_FX_param[0] * (5.0f - 1.0f));
+					switch (ColorSpace_select)
+					{
+					case 1:
+						sprintf_s(outParam, outParamSize, "RGB");
+						break;
+					case 2:
+						sprintf_s(outParam, outParamSize, "YCbCr");
+						break;
+					case 3:
+						sprintf_s(outParam, outParamSize, "YUV");
+						break;
+					case 4:
+						sprintf_s(outParam, outParamSize, "HSV");
+						break;
+					case 5:
+						sprintf_s(outParam, outParamSize, "CMYK");
+						break;
+					}
+				}
+				else
+				{
+					sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[0]);
+				}
+			}
+			
 			break;
 
 		case ID_SLIDER_4:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[1]);
+			if (GetShaderNumberParams() < 2 )
+			{
+				sprintf_s(outParam, outParamSize, "N/A");
+			}
+			else
+			{
+				sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[1]);
+			}
 			break;
 
 		case ID_SLIDER_5:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[2]);
+			if (GetShaderNumberParams() < 3)
+			{
+				sprintf_s(outParam, outParamSize, "N/A");
+			}
+			else
+			{
+				sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[2]);
+			}
 			break;
 
 		case ID_SLIDER_6:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[3]);
+			if (GetShaderNumberParams() < 4)
+			{
+				sprintf_s(outParam, outParamSize, "N/A");
+			}
+			else
+			{
+				sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[3]);
+			}
 			break;
 
 		case ID_SLIDER_7:
-			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[4]);
+			if (GetShaderNumberParams() < 5)
+			{
+				sprintf_s(outParam, outParamSize, "N/A");
+			}
+			else
+			{
+				if (wcscmp(FXName, L"ColorSpace") == 0)
+				{
+					int ColorSpace_select = int(1.0f + m_FX_param[0] * (5.0f - 1.0f));
+					if (ColorSpace_select == 5) sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[4]);
+					else sprintf_s(outParam, outParamSize, "N/A");
+				}
+				else
+				{
+					sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[4]);
+				}
+			}
 			break;
 	}
 
