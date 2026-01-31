@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.7 (2026-01-31)
+## 2.0 (2026-02-01)
 
 * New pixels shaders: 'Sepia', 'Polarize', 'Mask' and 'ColorSpace'
 * New buttons: 'FX Select-' and 'FX Select+'
