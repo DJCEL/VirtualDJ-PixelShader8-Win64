@@ -2,9 +2,10 @@
 
 ## 1.7 (2026-01-31)
 
-* Add Sepia pixel shader
-* Add ColorSpace pixel shader
-* Add FX Select -/+ buttons
+* New pixels shaders: 'Sepia', 'Polarize', 'Mask' and 'ColorSpace'
+* New buttons: 'FX Select-' and 'FX Select+'
+* New sliders: 'FX ParamX' to customize the parameters of the pixel shader
+* New button: 'FX Params' to activate the 'FX ParamX' sliders
 
 ## 1.6 (2025-12-24)
 
