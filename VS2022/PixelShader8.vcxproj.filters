@@ -69,6 +69,9 @@
     <FxCompile Include="..\src\Shaders\Sepia.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\Shaders\Polarize.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Shaders\CenterBlur.cso">
@@ -102,6 +105,9 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Sepia.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Polarize.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>

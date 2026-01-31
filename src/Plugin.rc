@@ -100,6 +100,7 @@ PIXELSHIDE_CSO          RCDATA                  ".\\Shaders\\PixelsHide.cso"
 ROTATE180_CSO           RCDATA                  ".\\Shaders\\Rotate180.cso"
 COLORDISTORSION_CSO     RCDATA                  ".\\Shaders\\ColorDistorsion.cso"
 SEPIA_CSO               RCDATA                  ".\\Shaders\\Sepia.cso"
+POLARIZE_CSO            RCDATA                  ".\\Shaders\\Polarize.cso"
 COLORSPACE_CSO          RCDATA                  ".\\Shaders\\ColorSpace.cso"
 
 #endif    // Anglais (États-Unis) resources

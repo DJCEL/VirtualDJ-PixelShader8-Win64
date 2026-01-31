@@ -148,7 +148,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT NUMBER_FX = 11;
+	static const UINT NUMBER_FX = 12;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {
@@ -162,6 +162,7 @@ private:
 		L"CenterBlur",
 		L"ColorDistorsion",
 		L"Sepia",
+		L"Polarize",
 		L"ColorSpace"
 	};
 };

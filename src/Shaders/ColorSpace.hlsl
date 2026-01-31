@@ -324,69 +324,6 @@ float4 negative2(float2 texcoord)
     return float4(result, texCol0.w); // protect alpha
 }
 //--------------------------------------------------------------------------------------
-float hue_lerp(float h1, float h2, float v)
-{
-    float d = abs(h1 - h2);
-    if (d <= 0.5)
-    {
-        return (float) lerp(h1, h2, v);
-    }
-    else if (h1 < h2)
-    {
-        return (float) frac(lerp((h1 + 1.0), h2, v));
-    }
-    else
-        return (float) frac(lerp(h1, (h2 + 1.0), v));
-}
-//--------------------------------------------------------------------------------------
-float4 polarize(float2 texcoord)
-{
-    float Amount = 0.2f; // [Strength of Effect] from to 0 to 1
-    float Concentrate = 0.0f; // [Color Concentration] from 0.1 to 4 
-    float DesatCorr = 0.0f; // [Desaturate Correction] from to 0 to 1
-    float3 GuideHue = float3(0.0, 0.0, 1.0);
-    #define FORCEHUE
-    
-    
-    float4 rgbaTex = g_Texture2D.Sample(g_SamplerState, texcoord);
-    float3 hsvTex = rgb_to_hsv(rgbaTex.rgb);
-    float3 huePole1 = rgb_to_hsv(GuideHue);
-    float3 huePole2 = hsv_complement(huePole1);
-    float dist1 = abs(hsvTex.x - huePole1.x);
-    if (dist1 > 0.5)
-        dist1 = 1.0 - dist1;
-    float dist2 = abs(hsvTex.x - huePole2.x);
-    if (dist2 > 0.5)
-        dist2 = 1.0 - dist2;
-    float dsc = smoothstep(0, DesatCorr, hsvTex.y);
-    float3 newHsv = hsvTex;
-#ifdef FORCEHUE
-    if (dist1 < dist2) {
-	newHsv = huePole1;
-    } else {
-	newHsv = huePole2;
-    }
-#else /* ! FORCEHUE */
-    if (dist1 < dist2)
-    {
-        float c = dsc * Amount * (1.0 - pow((dist1 * 2.0), 1.0 / Concentrate));
-        newHsv.x = hue_lerp(hsvTex.x, huePole1.x, c);
-        newHsv.y = lerp(hsvTex.y, huePole1.y, c);
-    }
-    else
-    {
-        float c = dsc * Amount * (1.0 - pow((dist2 * 2.0), 1.0 / Concentrate));
-        newHsv.x = hue_lerp(hsvTex.x, huePole2.x, c);
-        newHsv.y = lerp(hsvTex.y, huePole1.y, c);
-    }
-#endif /* ! FORCEHUE */
-    float3 newRGB = hsv_to_rgb(newHsv);
-#ifdef FORCEHUE
-    newRGB = lerp(rgbaTex.rgb,newRGB,Amount);
-#endif /* FORCEHUE */
-    return float4(newRGB.rgb, rgbaTex.a);
-}
-//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
@@ -395,9 +332,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     
     //output.Color = ColorSpace(texcoord);
-    //output.Color = negative2(texcoord);
-    output.Color = polarize(texcoord);
-    
+    output.Color = negative2(texcoord);
+
     output.Color = output.Color * input.Color;
     
     return output;
