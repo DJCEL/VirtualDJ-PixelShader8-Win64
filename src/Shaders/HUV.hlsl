@@ -33,22 +33,88 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Additional functions
 //--------------------------------------------------------------------------------------
+float sRGBtoLin(float colorRGB)
+{
+    // colorRGB : gamma-encoded R,G,B channel of RGB
+    float lin = 0.0f;
+    
+    if (colorRGB <= 0.04045)
+    {
+        lin = colorRGB / 12.92f;
+    }
+    else
+    {
+        lin = (colorRGB + 0.055) / 1.055;
+        lin = pow(lin, 2.4);
+    }
+       
+    return lin;
+}
+//--------------------------------------------------------------------------------------
+float get_luminance(float3 RGB)
+{
+    float r = RGB.r;
+    float g = RGB.g;
+    float b = RGB.b;
+    
+    // In 8-bit RGB (255) : red=90 / green=115 / blue=51
+    float luminance_1 = 0.353 * r + 0.451 * g + 0.196 * b;
+ 
+    // Perceived
+    float luminance_2 = 0.299 * r + 0.587 * g + 0.114 * b;
+    
+    // Standard
+    float luminance_3 = 0.2126 * sRGBtoLin(r) + 0.7152 * sRGBtoLin(g) + 0.0722 * sRGBtoLin(b);
+    
+    return luminance_1;
+}
+//--------------------------------------------------------------------------------------
+float get_brightness(float3 RGB)
+{
+    return get_luminance(RGB);
+}
+//--------------------------------------------------------------------------------------
+float get_perceptual_lightness(float luminance)
+{
+    // CIE standard : 0.008856 = 216 / 24389
+    // CIE standard : 903.3 = 24389 / 27
+    
+    float lightness = 0.0f;
+    
+    if (luminance <= 0.008856)
+    {
+        lightness = luminance * 903.3;
+    }
+    else
+    {
+        lightness = pow(luminance, (1 / 3)) * 116  - 16;
+    }
+    
+    return lightness;
+}
+//--------------------------------------------------------------------------------------
 float3 rgb_to_yuv(float3 RGB)
 {
-    float y = 0.299 * RGB.r + 0.587 * RGB.g + 0.114 * RGB.b;
-    float u = 0.565 * (RGB.b - y);
-    float v = 0.713 * (RGB.r - y);
-    
+    // y : luminance (linear) => brightness (greyscale) or luma (gamma-corrected) => intensity
+    // u (Cb) and v (Cr) : chrominance components => color information
+    float r = RGB.r;
+    float g = RGB.g;
+    float b = RGB.b;
+    float y = 0.299 * r + 0.587 * g + 0.114 * b;
+    float u = 0.565 * (b - y);
+    float v = 0.713 * (r - y);
     float3 YUV = float3(y, u, v);
     return YUV;
 }
 //--------------------------------------------------------------------------------------
 float3 yuv_to_rgb(float3 YUV)
 {
-    float r = YUV.x + 1.403 * YUV.z;
-    float g = YUV.x - 0.344 * YUV.y - 1.403 * YUV.z;
-    float b = YUV.x + 1.770 * YUV.y;
-    
+    float y = YUV.x;
+    float u = YUV.y;
+    float v = YUV.z;
+    float r = y + 1.403 * v;
+    float g = y - 0.344 * u - 1.403 * v;
+    float b = y + 1.770 * u;
     float3 RGB = float3(r, g, b);
     return RGB;
 }
