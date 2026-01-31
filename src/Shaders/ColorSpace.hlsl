@@ -16,6 +16,8 @@ cbuffer PS_CONSTANTBUFFER : register(b0)
     float g_FX_param1;
     float g_FX_param2;
     float g_FX_param3;
+    float g_FX_param4;
+    float g_FX_param5;
 };
 //--------------------------------------------------------------------------------------
 // Input structure
@@ -339,13 +341,17 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     float adjust_C1 = 1.0f;
     float adjust_C2 = 1.0f;
-    float adjust_C3 = 1.0f;
+    float adjust_C3 = 0.0f;
+    float adjust_C4 = 0.0f;
+    int ColorSpace_select = 1;
     
     if (g_FX_params_on)
     {
-        adjust_C1 = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
-        adjust_C2 = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
-        adjust_C3 = ParamAdjust(g_FX_param3, 0.0f, 1.0f);
+        ColorSpace_select = int(ParamAdjust(g_FX_param2, 0.0f, 4.0f));
+        adjust_C1 = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
+        adjust_C2 = ParamAdjust(g_FX_param3, 0.0f, 1.0f);
+        adjust_C3 = ParamAdjust(g_FX_param4, 0.0f, 1.0f);
+        adjust_C4 = ParamAdjust(g_FX_param5, 0.0f, 1.0f);
     }
     
     PS_OUTPUT output;
@@ -353,30 +359,48 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     float4 TexColor = g_Texture2D.Sample(g_SamplerState, texcoord);
     float3 RGB = TexColor.rgb;
+    float3 outRGB = float3(1.0f, 1.0f, 1.0f);
     
-    float3 YUV = rgb_to_yuv(RGB);
-    float3 YCbCr = rgb_to_YCbCr(RGB);
-    float3 HSV = rgb_to_hsv(RGB);
-    float4 CMYK = rgb_to_cmyk(RGB);
-    
-    
-    YUV.x *= adjust_C1;
-    YUV.y *= adjust_C2;
-    YUV.z *= adjust_C3;
-    
-    YCbCr.x *= adjust_C1;
-    YCbCr.y *= adjust_C2;
-    YCbCr.z *= adjust_C3;
-    
-    HSV.x *= adjust_C1;
-    HSV.y *= adjust_C2;
-    HSV.z *= adjust_C3;
-    
-    float3 outRGB = YCbCr_to_rgb(YCbCr);
-    //float3 outRGB = yuv_to_rgb(YUV);
-    //float3 outRGB = hsv_to_rgb(HSV);
-    //float3 outRGB = cmyk_to_rgb(CMYK);
-    
+    if (ColorSpace_select == 0)
+    {
+        outRGB.r *= adjust_C1;
+        outRGB.g *= adjust_C2;
+        outRGB.b *= adjust_C3;
+    }
+    else if (ColorSpace_select == 1)
+    {
+        float3 YCbCr = rgb_to_YCbCr(RGB);
+        YCbCr.x *= adjust_C1;
+        YCbCr.y *= adjust_C2;
+        YCbCr.z *= adjust_C3;
+        outRGB = YCbCr_to_rgb(YCbCr);
+    }
+    else if (ColorSpace_select == 2)
+    {
+        float3 YUV = rgb_to_yuv(RGB);
+        YUV.x *= adjust_C1;
+        YUV.y *= adjust_C2;
+        YUV.z *= adjust_C3;
+        outRGB = yuv_to_rgb(YUV);
+    }
+    else if (ColorSpace_select == 3)
+    {
+        float3 HSV = rgb_to_hsv(RGB);
+        HSV.x *= adjust_C1;
+        HSV.y *= adjust_C2;
+        HSV.z *= adjust_C3;
+        outRGB = hsv_to_rgb(HSV);
+    }
+    else if (ColorSpace_select == 4)
+    {
+        float4 CMYK = rgb_to_cmyk(RGB);
+        CMYK.x *= adjust_C1;
+        CMYK.y *= adjust_C2;
+        CMYK.z *= adjust_C3;
+        CMYK.w *= adjust_C4;
+        outRGB = cmyk_to_rgb(CMYK);
+    }
+   
     output.Color = float4(outRGB.r, outRGB.g, outRGB.b, 1.0f);
 
     output.Color = output.Color * input.Color;
