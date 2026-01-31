@@ -1,8 +1,10 @@
 # Changelog
 
-## 1.7 (2026-01-30)
+## 1.7 (2026-01-31)
 
-* Add HUV pixel shader (with color spaces functions)
+* Add Sepia pixel shader
+* Add ColorSpace pixel shader
+* Add FX Select -/+ buttons
 
 ## 1.6 (2025-12-24)
 
