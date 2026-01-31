@@ -363,6 +363,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     if (ColorSpace_select == 0)
     {
+        outRGB = RGB;
         outRGB.r *= adjust_C1;
         outRGB.g *= adjust_C2;
         outRGB.b *= adjust_C3;
