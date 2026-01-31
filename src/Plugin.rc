@@ -101,7 +101,7 @@ ROTATE180_CSO           RCDATA                  ".\\Shaders\\Rotate180.cso"
 COLORDISTORSION_CSO     RCDATA                  ".\\Shaders\\ColorDistorsion.cso"
 SEPIA_CSO               RCDATA                  ".\\Shaders\\Sepia.cso"
 POLARIZE_CSO            RCDATA                  ".\\Shaders\\Polarize.cso"
-EDGE_CSO                RCDATA                  ".\\Shaders\\Edge.cso"
+MASK_CSO                RCDATA                  ".\\Shaders\\Mask.cso"
 COLORSPACE_CSO          RCDATA                  ".\\Shaders\\ColorSpace.cso"
 
 #endif    // Anglais (États-Unis) resources

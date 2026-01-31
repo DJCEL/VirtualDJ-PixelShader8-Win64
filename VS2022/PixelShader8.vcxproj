@@ -133,7 +133,7 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\Shaders\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\Shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="..\src\Shaders\Edge.hlsl">
+    <FxCompile Include="..\src\Shaders\Mask.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
@@ -252,7 +252,7 @@
     <None Include="..\src\Shaders\GrayScale.cso" />
     <None Include="..\src\Shaders\HighContrast.cso" />
     <None Include="..\src\Shaders\HorizontalMirror.cso" />
-    <None Include="..\src\Shaders\Edge.cso" />
+    <None Include="..\src\Shaders\Mask.cso" />
     <None Include="..\src\Shaders\Negative.cso" />
     <None Include="..\src\Shaders\PixelsHide.cso" />
     <None Include="..\src\Shaders\Polarize.cso" />

@@ -168,7 +168,7 @@ private:
 		L"ColorDistorsion",
 		L"Sepia",
 		L"Polarize",
-		L"Edge",
+		L"Mask",
 		L"ColorSpace"
 	};
 };
