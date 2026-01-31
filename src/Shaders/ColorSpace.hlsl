@@ -347,7 +347,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     if (g_FX_params_on)
     {
-        ColorSpace_select = int(ParamAdjust(g_FX_param2, 0.0f, 4.0f));
+        ColorSpace_select = int(ParamAdjust(g_FX_param1, 0.0f, 4.0f));
         adjust_C1 = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
         adjust_C2 = ParamAdjust(g_FX_param3, 0.0f, 1.0f);
         adjust_C3 = ParamAdjust(g_FX_param4, 0.0f, 1.0f);
