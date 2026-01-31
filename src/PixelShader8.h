@@ -155,7 +155,7 @@ private:
 		L"PixelsHide",
 		L"CenterBlur",
 		L"ColorDistorsion",
-		L"HUV"
+		L"ColorSpace"
 	};
 };
 

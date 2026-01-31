@@ -108,7 +108,7 @@ ROTATE180_CSO           RCDATA                  ".\\Shaders\\Rotate180.cso"
 
 COLORDISTORSION_CSO     RCDATA                  ".\\Shaders\\ColorDistorsion.cso"
 
-HUV_CSO                 RCDATA                  ".\\Shaders\\HUV.cso"
+COLORSPACE_CSO          RCDATA                  ".\\Shaders\\ColorSpace.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////

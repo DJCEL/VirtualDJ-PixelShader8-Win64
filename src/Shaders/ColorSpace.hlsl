@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Filter.hlsl
+// File: ColorSpace.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ float get_perceptual_lightness(float luminance)
 {
     // CIE standard : 0.008856 = 216 / 24389
     // CIE standard : 903.3 = 24389 / 27
-    
+        
     float lightness = 0.0f;
     
     if (luminance <= 0.008856)
@@ -119,85 +119,116 @@ float3 yuv_to_rgb(float3 YUV)
     return RGB;
 }
 //--------------------------------------------------------------------------------------
-float __min_channel(float3 v)
+float min_RGB(float3 RGB)
 {
-    float t = (v.x < v.y) ? v.x : v.y;
-    t = (t < v.z) ? t : v.z;
+    float t = (RGB.r < RGB.g) ? RGB.r : RGB.g;
+    t = (t < RGB.b) ? t : RGB.b;
     return t;
 }
 //--------------------------------------------------------------------------------------
-float __max_channel(float3 v)
+float max_RGB(float3 RGB)
 {
-    float t = (v.x > v.y) ? v.x : v.y;
-    t = (t > v.z) ? t : v.z;
+    float t = (RGB.r > RGB.g) ? RGB.r : RGB.g;
+    t = (t > RGB.b) ? t : RGB.b;
     return t;
 }
 //--------------------------------------------------------------------------------------
 float3 rgb_to_hsv(float3 RGB)
 {
-    float3 HSV = float3(0,0,0);
-    float minVal = __min_channel(RGB);
-    float maxVal = __max_channel(RGB);
-    float delta = maxVal - minVal; // Delta RGB value 
-    HSV.z = maxVal;
+    float r = RGB.r;
+    float g = RGB.g;
+    float b = RGB.b;
+    float h = 0.0f;
+    float s = 0.0f;
+    float v = 0.0f;
+    
+    float minValRGB = min_RGB(RGB);
+    float maxValRGB = max_RGB(RGB);
+    float delta = maxValRGB - minValRGB;
     if (delta != 0)
-    { // If gray, leave H & S at zero
-        HSV.y = delta / maxVal;
-        float3 delRGB;
-        delRGB = (((maxVal.xxx - RGB) / 6.0) + (delta / 2.0)) / delta;
-        if (RGB.x == maxVal)
-            HSV.x = delRGB.z - delRGB.y;
-        else if (RGB.y == maxVal)
-            HSV.x = (1.0 / 3.0) + delRGB.x - delRGB.z;
-        else if (RGB.z == maxVal)
-            HSV.x = (2.0 / 3.0) + delRGB.y - delRGB.x;
-        if (HSV.x < 0.0)
+    {
+        v = maxValRGB;
+        s = delta / maxValRGB;
+        float3 maxRGB = float3(maxValRGB,maxValRGB,maxValRGB);
+        float3 deltaRGB = (((maxRGB - RGB) / 6.0) + (delta / 2.0)) / delta;
+        float dr = deltaRGB.x;
+        float dg = deltaRGB.y;
+        float db = deltaRGB.z;
+        if (r == maxValRGB)
+            h = db - dg;
+        else if (g == maxValRGB)
+            h = (1.0 / 3.0) + dr - db;
+        else if (b == maxValRGB)
+            h = (2.0 / 3.0) + dg - dr;
+        if (h < 0.0)
         {
-            HSV.x += 1.0;
+            h += 1.0;
         }
-        if (HSV.x > 1.0)
+        if (h > 1.0)
         {
-            HSV.x -= 1.0;
+            h -= 1.0;
         }
     }
+    
+    float3 HSV = float3(h, s, v);
     return HSV;
 }
 //--------------------------------------------------------------------------------------
 float3 hsv_to_rgb(float3 HSV)
 {
-    float3 RGB = HSV.z;
-    if (HSV.y != 0)
+    float h = HSV.x;
+    float s = HSV.y;
+    float v = HSV.z;
+    float r = 0.0f;
+    float g = 0.0f;
+    float b = 0.0f;
+    
+    if (s != 0)
     {
-        float var_h = HSV.x * 6;
-        float var_i = floor(var_h);
-        float var_1 = HSV.z * (1.0 - HSV.y);
-        float var_2 = HSV.z * (1.0 - HSV.y * (var_h - var_i));
-        float var_3 = HSV.z * (1.0 - HSV.y * (1 - (var_h - var_i)));
+        float var_j = h * 6;
+        float var_i = floor(var_j);
+        float var_1 = v * (1.0 - s);
+        float var_2 = v * (1.0 - s * (var_j - var_i));
+        float var_3 = v * (1.0 - s * (1 - (var_j - var_i)));
         if (var_i == 0)
         {
-            RGB = float3(HSV.z, var_3, var_1);
+            r = v;
+            g = var_3;
+            b = var_1;
         }
         else if (var_i == 1)
         {
-            RGB = float3(var_2, HSV.z, var_1);
+            r = var_2;
+            g = v;
+            b = var_1;;
         }
         else if (var_i == 2)
         {
-            RGB = float3(var_1, HSV.z, var_3);
+            r = var_1;
+            g = v;
+            b = var_3;
         }
         else if (var_i == 3)
         {
-            RGB = float3(var_1, var_2, HSV.z);
+            r = var_1;
+            g = var_2;
+            b = v;
         }
         else if (var_i == 4)
         {
-            RGB = float3(var_3, var_1, HSV.z);
+            r = var_3;
+            g = var_1;
+            b = v;
         }
         else
         {
-            RGB = float3(HSV.z, var_1, var_2);
+            r = v;
+            g = var_1;
+            b = var_2;
         }
     }
+    
+    float3 RGB = float3(r, g, b);
     return RGB;
 }
 //--------------------------------------------------------------------------------------
