@@ -182,11 +182,23 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-    float Amount = 0.5f; // g_FX_param1 [Strength of Effect] from to 0 to 1
-    float Concentrate = 1.44f; //  g_FX_param2 * 4 [Color Concentration] from 0.1 to 4 
+    float Amount = 0.5f; // [Strength of Effect] from to 0 to 1
+    float Concentrate = 1.44f; // [Color Concentration] from 0.1 to 4 
     float DesatCorr = 0.12f; //  g_FX_param3 [Desaturate Correction] from to 0 to 1
     float3 GuideHueRGB = float3(0.0, 0.0, 1.0); // color blue
 //#define FORCEHUE
+    
+    if (g_FX_params_on)
+    {
+        Amount = g_FX_param1;
+        Concentrate = g_FX_param2 * 4;
+        DesatCorr = g_FX_param3;
+        
+        if (Concentrate < 0.1f)
+        {
+            Concentrate = 0.1f;
+        }
+    }
     
     float4 rgbaTex = g_Texture2D.Sample(g_SamplerState, texcoord);
     float3 hsvTex = rgb_to_hsv(rgbaTex.rgb);
@@ -211,11 +223,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
         newHsv = huePole2;
     }
 #else
-    if (Concentrate < 0.1f)
-    {
-        Concentrate = 0.1f;
-    }
-
     float e = 1.0 / Concentrate;
     if (dist1 < dist2)
     {
