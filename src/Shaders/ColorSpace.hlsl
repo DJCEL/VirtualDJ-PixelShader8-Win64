@@ -344,9 +344,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     //YUV.y = 0;
     //YUV.z = 0;
-    YCbCr.x = g_FX_param1;
-    YCbCr.y = g_FX_param2;
-    YCbCr.z = g_FX_param3;
+    YCbCr.x *= g_FX_param1;
+    YCbCr.y *= g_FX_param2;
+    YCbCr.z *= g_FX_param3;
     
     float3 outRGB = YCbCr_to_rgb(YCbCr);
     //float3 outRGB = yuv_to_rgb(YUV);
