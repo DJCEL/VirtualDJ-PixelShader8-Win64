@@ -20,6 +20,8 @@ CPixelShader8::CPixelShader8()
 	m_alpha = 1.0f;
 	m_FX = 0;
 	m_current_FX = 0;
+	m_ButtonLeft = 0;
+	m_ButtonRight = 0;
 	m_FX_param1 = 0.0f;
 	m_FX_param2 = 0.0f;
 	m_FX_param3 = 0.0f;
@@ -36,10 +38,12 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 
 	hr = DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
 	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
+	hr = DeclareParameterButton(&m_ButtonLeft, ID_BUTTON_1, "FX Select-", "FX-");
+	hr = DeclareParameterButton(&m_ButtonRight, ID_BUTTON_2, "FX Select+", "FX+");
 	//hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "FX Param1", "FX_P1", 0.5f);
-	//hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.10f);
-	//hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.10f);
-
+	//hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.5f);
+	//hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.5f);
+	
 	hr = OnParameter(ID_INIT);
 	return S_OK;
 }
@@ -65,16 +69,49 @@ HRESULT VDJ_API CPixelShader8::OnParameter(int id)
 {
 	if (id == ID_INIT)
 	{
-		for (int i = ID_SLIDER_1; i <= ID_SLIDER_5; i++) OnSlider(i);
+		for (int i = ID_SLIDER_1; i < ID_SLIDER_MAX; i++) OnSlider(i);
 	}
 	else
 	{
+		OnButton(id);
 		OnSlider(id);
 	}
 	
 	return S_OK;
 }
+//------------------------------------------------------------------------------------------
+void CPixelShader8::OnButton(int id)
+{
+	float min_step = 0.0f;
+	float new_pos = 0.0f;
 
+	switch (id)
+	{
+		case ID_BUTTON_1:
+			if (m_ButtonLeft == 1)
+			{
+				if (NUMBER_FX <= 1) min_step = 0.0f;
+				else min_step = 1.0f / float(NUMBER_FX-1);
+				new_pos = m_SliderValue[1] - min_step;
+				if (new_pos < 0.0f) m_SliderValue[1] = 0;
+				else m_SliderValue[1] = new_pos;
+				OnParameter(ID_SLIDER_2);
+			}
+			break;
+
+		case ID_BUTTON_2:
+			if (m_ButtonRight == 1)
+			{
+				if (NUMBER_FX <= 1) min_step = 0.0f;
+				else min_step = 1.0f / float(NUMBER_FX - 1);
+				new_pos = m_SliderValue[1] + min_step;
+				if (new_pos > 1.0f) m_SliderValue[1] = 1.0f;
+				else m_SliderValue[1] = new_pos;
+				OnParameter(ID_SLIDER_2);
+			}
+			break;
+	}
+}
 //------------------------------------------------------------------------------------------
 void CPixelShader8::OnSlider(int id)
 {
@@ -85,19 +122,19 @@ void CPixelShader8::OnSlider(int id)
 			break;
 
 		case ID_SLIDER_2:
-			m_FX = (int)(m_SliderValue[1] * float(MAX_FX - 1)); // Integer from 0 to (MAX_FX - 1)
+			m_FX = (int)(m_SliderValue[1] * float(NUMBER_FX - 1)); // Integer from 0 to (NUMBER_FX - 1)
 			break;
 
 		case ID_SLIDER_3:
-			m_FX_param1 = m_SliderValue[2] * 20.0f;
+			m_FX_param1 = m_SliderValue[2];
 			break;
 
 		case ID_SLIDER_4:
-			m_FX_param2 = m_SliderValue[3] * 2.0f;
+			m_FX_param2 = m_SliderValue[3];
 			break;
 
 		case ID_SLIDER_5:
-			m_FX_param3 = m_SliderValue[4] * 5.0f;
+			m_FX_param3 = m_SliderValue[4];
 			break;
 	}
 }
@@ -127,7 +164,7 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 					int res = WideCharToMultiByte(CP_UTF8, 0, FXName, -1, FXNameChar, size_needed, NULL, NULL);
 					if (res >= 0)
 					{
-						sprintf_s(outParam, outParamSize, FXNameChar);
+						sprintf_s(outParam, outParamSize,"%i-%s", m_FX+1, FXNameChar);
 					}
 					else
 					{

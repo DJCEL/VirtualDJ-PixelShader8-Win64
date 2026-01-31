@@ -324,23 +324,6 @@ float4 negative2(float2 texcoord)
     return float4(result, texCol0.w); // protect alpha
 }
 //--------------------------------------------------------------------------------------
-float4 sepia(float2 texcoord)
-{
-    float Desat = 0.5f; // [Desaturation] from 0 to 1
-    float Toned = 0.5f; // [Toning] from 0 to 1
-    float3 LightColor = float3(1, 0.9, 0.5); // Paper Tone
-    float3 DarkColor = float3(0.2, 0.05, 0); // Stain Tone
-        
-    float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord);
-    float3 scnColor = LightColor * texColor.rgb;
-    float3 grayXfer = float3(0.3, 0.59, 0.11);
-    float gray = dot(grayXfer, scnColor);
-    float3 muted = lerp(scnColor, gray.xxx, Desat);
-    float3 sepia = lerp(DarkColor, LightColor, gray);
-    float3 result = lerp(muted, sepia, Toned);
-    return float4(result, 1);
-}
-//--------------------------------------------------------------------------------------
 float hue_lerp(float h1, float h2, float v)
 {
     float d = abs(h1 - h2);
@@ -413,7 +396,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     //output.Color = ColorSpace(texcoord);
     //output.Color = negative2(texcoord);
-    //output.Color = sepia(texcoord);
     output.Color = polarize(texcoord);
     
     output.Color = output.Color * input.Color;

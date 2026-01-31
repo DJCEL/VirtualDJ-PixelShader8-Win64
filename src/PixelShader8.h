@@ -85,6 +85,7 @@ private:
 	};
 
 	void OnResizeVideo();
+	void OnButton(int id);
 	void OnSlider(int id);
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 	const WCHAR* GetShaderName(int type);
@@ -123,6 +124,8 @@ private:
 	float m_alpha;
 	UINT m_FX;
 	UINT m_current_FX;
+	int m_ButtonLeft;
+	int m_ButtonRight;
 	float m_FX_param1;
 	float m_FX_param2;
 	float m_FX_param3;
@@ -135,6 +138,9 @@ private:
 		ID_SLIDER_3,
 		ID_SLIDER_4,
 		ID_SLIDER_5,
+		ID_SLIDER_MAX,
+		ID_BUTTON_1,
+		ID_BUTTON_2,
 	} ID_Interface;
 
 	#ifndef SAFE_RELEASE
@@ -142,10 +148,10 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT MAX_FX = 10;
+	static const UINT NUMBER_FX = 11;
 
 	// Names of FX available :
-	const WCHAR* m_FXList[MAX_FX] = {
+	const WCHAR* m_FXList[NUMBER_FX] = {
 		L"GrayScale",
 		L"GBR",
 		L"HighContrast",
@@ -155,6 +161,7 @@ private:
 		L"PixelsHide",
 		L"CenterBlur",
 		L"ColorDistorsion",
+		L"Sepia",
 		L"ColorSpace"
 	};
 };
