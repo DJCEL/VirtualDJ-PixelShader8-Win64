@@ -181,13 +181,11 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-
-    float Amount = 0.2f; // [Strength of Effect] from to 0 to 1
-    float Concentrate = 0.1f; // [Color Concentration] from 0.1 to 4 
-    float DesatCorr = 0.1f; // [Desaturate Correction] from to 0 to 1
+    float Amount = 0.2f; // g_FX_param1 [Strength of Effect] from to 0 to 1
+    float Concentrate = 2.0f; //  g_FX_param2 [Color Concentration] from 0.1 to 4 
+    float DesatCorr = 0.1f; //  g_FX_param3 [Desaturate Correction] from to 0 to 1
     float3 GuideHue = float3(0.0, 0.0, 1.0);
-//#define FORCEHUE
-    
+#define FORCEHUE
     
     float4 rgbaTex = g_Texture2D.Sample(g_SamplerState, texcoord);
     float3 hsvTex = rgb_to_hsv(rgbaTex.rgb);
@@ -201,6 +199,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         dist2 = 1.0 - dist2;
     float dsc = smoothstep(0, DesatCorr, hsvTex.y);
     float3 newHsv = hsvTex;
+
 #ifdef FORCEHUE
     if (dist1 < dist2)
     {
@@ -210,30 +209,37 @@ PS_OUTPUT ps_main(PS_INPUT input)
     {
         newHsv = huePole2;
     }
-#else /* ! FORCEHUE */
-    float p = 1.0 / Concentrate;
+#else
+    if (Concentrate == 0)
+    {
+        Concentrate = 0.0001f;
+    }
+
+    float e = 1.0 / Concentrate;
     if (dist1 < dist2)
     {
-        float c = dsc * Amount * (1.0 - pow((dist1 * 2.0), p));
+        float f = dist1 * 2.0;
+        float c = dsc * Amount * (1.0 - pow(abs(f), e));
         newHsv.x = hue_lerp(hsvTex.x, huePole1.x, c);
         newHsv.y = lerp(hsvTex.y, huePole1.y, c);
     }
     else
     {
-        float c = dsc * Amount * (1.0 - pow((dist2 * 2.0), p));
+        float f = dist2 * 2.0;
+        float c = dsc * Amount * (1.0 - pow(abs(f), e));
         newHsv.x = hue_lerp(hsvTex.x, huePole2.x, c);
         newHsv.y = lerp(hsvTex.y, huePole1.y, c);
     }
-#endif /* ! FORCEHUE */
+#endif
+    
     float3 newRGB = hsv_to_rgb(newHsv);
+
 #ifdef FORCEHUE
     newRGB = lerp(rgbaTex.rgb, newRGB, Amount);
-#endif /* FORCEHUE */
-    
-    
+#endif
+        
     output.Color = float4(newRGB.rgb, rgbaTex.a);
     
-
     output.Color = output.Color * input.Color;
     
     return output;
