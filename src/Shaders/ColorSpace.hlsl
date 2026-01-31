@@ -48,14 +48,14 @@ float sRGBtoLin(float colorRGB)
     // colorRGB : gamma-encoded R,G,B channel of RGB
     float lin = 0.0f;
     
-    if (colorRGB <= 0.04045)
+    if (colorRGB <= 0.04045f)
     {
         lin = colorRGB / 12.92f;
     }
     else
     {
-        lin = (colorRGB + 0.055) / 1.055;
-        lin = pow(lin, 2.4);
+        lin = (colorRGB + 0.055f) / 1.055f;
+        lin = pow(lin, 2.4f);
     }
        
     return lin;
@@ -63,18 +63,18 @@ float sRGBtoLin(float colorRGB)
 //--------------------------------------------------------------------------------------
 float get_luminance(float3 RGB)
 {
-    float r = RGB.r;
-    float g = RGB.g;
-    float b = RGB.b;
+    float R = RGB.r;
+    float G = RGB.g;
+    float B = RGB.b;
     
     // In 8-bit RGB (255) : red=90 / green=115 / blue=51
-    float luminance_1 = 0.353 * r + 0.451 * g + 0.196 * b;
+    float luminance_1 = 0.353f * R + 0.451f * G + 0.196f * B;
  
     // Perceived
-    float luminance_2 = 0.299 * r + 0.587 * g + 0.114 * b;
+    float luminance_2 = 0.299f * R + 0.587f * G + 0.114f * B;
     
     // Standard
-    float luminance_3 = 0.2126 * sRGBtoLin(r) + 0.7152 * sRGBtoLin(g) + 0.0722 * sRGBtoLin(b);
+    float luminance_3 = 0.2126f * sRGBtoLin(R) + 0.7152f * sRGBtoLin(G) + 0.0722f * sRGBtoLin(B);
     
     return luminance_1;
 }
@@ -107,31 +107,36 @@ float3 rgb_to_yuv(float3 RGB)
 {
     // y : luminance (linear) => brightness (greyscale) or luma (gamma-corrected) => intensity
     // u (Cb) and v (Cr) : chrominance components => color information
-    float r = RGB.r;
-    float g = RGB.g;
-    float b = RGB.b;
+    float R = RGB.r;
+    float G = RGB.g;
+    float B = RGB.b;
     
-    float y = 0.299f * r + 0.587f * g + 0.114f * b;
-    float u = (0.492f * (b - y)) + 0.5f;
-    float v = (0.877f * (r - y)) + 0.5f;
-
-    float3 YUV = float3(y, u, v);
+    float Y = 0.299f * R + 0.587f * G + 0.114f * B;
+    float U = 0.492f * (B - Y); // = -0.147f * R  -0.289f * G + 0.436f * B
+    float V = 0.877f * (R - Y); // = 0.615f * R - 0.515f * G - 0.01 * B
+    
+    float3 YUV = float3(Y, U, V);
     return YUV;
 }
 //--------------------------------------------------------------------------------------
 float3 yuv_to_rgb(float3 YUV)
 {
-    float y = YUV.x;
-    float u = YUV.y;
-    float v = YUV.z;
+    float Y = YUV.x;
+    float U = YUV.y;
+    float V = YUV.z;
     
-    float nU = u - 0.5f;
-    float nV = v - 0.5f;
-    float r = y + 1.140f * nV;
-    float g = y - 0.394f * nU - 0.581f * nV;
-    float b = y + 2.032f * nU;
-   
-    float3 RGB = float3(r, g, b);
+    float R = Y + 1.140f * V;
+    float G = Y - 0.394f * U - 0.581f * V;
+    float B = Y + 2.032f * U;
+    
+    if (R > 1.0f)
+        R = 1.0f;
+    if (G > 1.0f)
+        G = 1.0f;
+    if (B > 1.0f)
+        B = 1.0f;
+    
+    float3 RGB = float3(R, G, B);
     return RGB;
 }
 //--------------------------------------------------------------------------------------
@@ -139,13 +144,13 @@ float3 rgb_to_YCbCr(float3 RGB)
 {
     // y : luminance (linear) => brightness (greyscale) or luma (gamma-corrected) => intensity
     // u (Cb) and v (Cr) : chrominance components => color information
-    float r = RGB.r;
-    float g = RGB.g;
-    float b = RGB.b;
+    float R = RGB.r;
+    float G = RGB.g;
+    float B = RGB.b;
     
-    float Y = 0.257f * r + 0.504f * g + 0.098f * b + 0.0625f;
-    float Cb = -0.148f * r - 0.291f * g + 0.439f * b + 0.5f;
-    float Cr = 0.439f * r - 0.368f * g - 0.071f * b + 0.5f;
+    float Y = 0.257f * R + 0.504f * G + 0.098f * B;
+    float Cb = -0.148f * R - 0.291f * G + 0.439f * B;
+    float Cr = 0.439f * R - 0.368f * G - 0.071f * B;
    
     float3 YCbCr = float3(Y, Cb, Cr);
     return YCbCr;
@@ -157,21 +162,18 @@ float3 YCbCr_to_rgb(float3 YCbCr)
     float Cb = YCbCr.y;
     float Cr = YCbCr.z;
     
-    float nY = 1.164f * (Y - 0.0625f);
-    float nR = Cr - 0.5f;
-    float nB = Cb - 0.5f;
-    float r = nY + 1.596f * nR;
-    float g = nY - 0.813f * nR - 0.392f * nB;
-    float b = nY + 2.017f * nB;
+    float R = 1.164f * Y + 1.596f * Cr;
+    float G = 1.164f * Y - 0.813f * Cr - 0.392f * Cb;
+    float B = 1.164f * Y + 2.017f * Cb;
     
-    if (r > 1.0f)
-        r = 1.0f;
-    if (g > 1.0f)
-        g = 1.0f;
-    if (b > 1.0f)
-        b = 1.0f;
+    if (R > 1.0f)
+        R = 1.0f;
+    if (G > 1.0f)
+        G = 1.0f;
+    if (B > 1.0f)
+        B = 1.0f;
     
-    float3 RGB = float3(r, g, b);
+    float3 RGB = float3(R, G, B);
     return RGB;
 }
 //--------------------------------------------------------------------------------------
