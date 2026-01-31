@@ -111,9 +111,9 @@ float3 rgb_to_yuv(float3 RGB)
     float G = RGB.g;
     float B = RGB.b;
     
-    float Y = 0.299f * R + 0.587f * G + 0.114f * B;
-    float U = 0.492f * (B - Y); // = -0.147f * R  -0.289f * G + 0.436f * B
-    float V = 0.877f * (R - Y); // = 0.615f * R - 0.515f * G - 0.01 * B
+    float Y = 0.299 * R + 0.587 * G + 0.114 * B;
+    float U = -0.14714119 * R - 0.28886916 * G + 0.43601035 * B; // = (B - Y) * 0.565;
+    float V = 0.61497538 * R - 0.51496512 * G - 0.10001026 * B; //  = (R - Y) * 0.713;
     
     float3 YUV = float3(Y, U, V);
     return YUV;
@@ -125,9 +125,9 @@ float3 yuv_to_rgb(float3 YUV)
     float U = YUV.y;
     float V = YUV.z;
     
-    float R = Y + 1.140f * V;
-    float G = Y - 0.394f * U - 0.581f * V;
-    float B = Y + 2.032f * U;
+    float R = Y + 1.403f * V;
+    float G = Y - 0.344f * U - 0.714f * V;
+    float B = Y + 1.770f * U;
     
     if (R > 1.0f)
         R = 1.0f;
@@ -193,6 +193,8 @@ float max_RGB(float3 RGB)
 //--------------------------------------------------------------------------------------
 float3 rgb_to_hsv(float3 RGB)
 {
+    // HSV: hue, saturation, and value
+    
     float r = RGB.r;
     float g = RGB.g;
     float b = RGB.b;
