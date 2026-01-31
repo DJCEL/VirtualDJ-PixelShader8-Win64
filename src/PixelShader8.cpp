@@ -158,6 +158,8 @@ int CPixelShader8::GetShaderNumberParams()
 {
 	int NumberParams = 0;
 
+	if (m_FX_params_on == 0) return NumberParams;
+		 
 	const WCHAR* FXName = m_FXList[m_FX];
 
 	if (wcscmp(FXName, L"Sepia") == 0) NumberParams = 2;
@@ -519,7 +521,7 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 
 	if (pRenderTargetView)
 	{
-		//FLOAT backgroundColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		FLOAT backgroundColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		//pDeviceContext->ClearRenderTargetView(pRenderTargetView, backgroundColor);
 		//pDeviceContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
 	}

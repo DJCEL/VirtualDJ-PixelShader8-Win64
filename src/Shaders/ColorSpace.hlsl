@@ -143,7 +143,6 @@ float3 rgb_to_YCbCr(float3 RGB)
     float g = RGB.g;
     float b = RGB.b;
     
-    // CUDA - NPP:
     float Y = 0.257f * r + 0.504f * g + 0.098f * b + 0.0625f;
     float Cb = -0.148f * r - 0.291f * g + 0.439f * b + 0.5f;
     float Cr = 0.439f * r - 0.368f * g - 0.071f * b + 0.5f;
@@ -158,7 +157,6 @@ float3 YCbCr_to_rgb(float3 YCbCr)
     float Cb = YCbCr.y;
     float Cr = YCbCr.z;
     
-    // CUDA - NPP:
     float nY = 1.164f * (Y - 0.0625f);
     float nR = Cr - 0.5f;
     float nB = Cb - 0.5f;
@@ -402,7 +400,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         outRGB = cmyk_to_rgb(CMYK);
     }
    
-    output.Color = float4(outRGB.r, outRGB.g, outRGB.b, 1.0f);
+    output.Color = float4(outRGB.r, outRGB.g, outRGB.b, TexColor.a);
 
     output.Color = output.Color * input.Color;
     
