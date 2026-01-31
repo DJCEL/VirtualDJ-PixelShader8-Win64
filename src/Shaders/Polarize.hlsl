@@ -210,9 +210,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
         newHsv = huePole2;
     }
 #else
-    if (Concentrate == 0)
+    if (Concentrate < 0.1f)
     {
-        Concentrate = 0.0001f;
+        Concentrate = 0.1f;
     }
 
     float e = 1.0 / Concentrate;
