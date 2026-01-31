@@ -12,7 +12,7 @@ CPixelShader8::CPixelShader8()
 	pPSConstantBuffer = nullptr;
 	ZeroMemory(pNewVertices, 6 * sizeof(TVertex8));
 	ZeroMemory(m_SliderValue, 6 * sizeof(float));
-	ZeroMemory(m_FX_param, 4 * sizeof(float));
+	ZeroMemory(m_FX_param, 5 * sizeof(float));
 	ZeroMemory(&m_PSConstantBufferData, sizeof(PS_CONSTANTBUFFER));
 	m_DirectX_On = false;
 	m_Width = 0;
@@ -44,6 +44,7 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 	hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.5f);
 	hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.5f);
 	hr = DeclareParameterSlider(&m_SliderValue[5], ID_SLIDER_6, "FX Param4", "FX_P4", 0.5f);
+	hr = DeclareParameterSlider(&m_SliderValue[6], ID_SLIDER_7, "FX Param5", "FX_P5", 0.5f);
 	
 	hr = OnParameter(ID_INIT);
 	return S_OK;
@@ -141,6 +142,10 @@ void CPixelShader8::OnSlider(int id)
 		case ID_SLIDER_6:
 			m_FX_param[3] = m_SliderValue[5];
 			break;
+
+		case ID_SLIDER_7:
+			m_FX_param[4] = m_SliderValue[6];
+			break;
 	}
 }
 //-------------------------------------------------------------------------------------------
@@ -197,6 +202,10 @@ HRESULT VDJ_API CPixelShader8::OnGetParameterString(int id, char* outParam, int 
 
 		case ID_SLIDER_6:
 			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[3]);
+			break;
+
+		case ID_SLIDER_7:
+			sprintf_s(outParam, outParamSize, "%.2f", m_FX_param[4]);
 			break;
 	}
 
@@ -604,6 +613,7 @@ HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 	m_PSConstantBufferData.FX_param2 = m_FX_param[1];
 	m_PSConstantBufferData.FX_param3 = m_FX_param[2];
 	m_PSConstantBufferData.FX_param4 = m_FX_param[3];
+	m_PSConstantBufferData.FX_param5 = m_FX_param[4];
 
 	return S_OK;
 }

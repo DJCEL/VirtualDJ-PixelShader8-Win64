@@ -84,6 +84,7 @@ private:
 		float FX_param2;
 		float FX_param3;
 		float FX_param4;
+		float FX_param5;
 	};
 
 	void OnResizeVideo();
@@ -122,9 +123,9 @@ private:
 	bool m_DirectX_On;
 	int m_Width;
 	int m_Height;
-	float m_SliderValue[6];
+	float m_SliderValue[7];
 	int m_FX_params_on;
-	float m_FX_param[4];
+	float m_FX_param[5];
 	float m_alpha;
 	UINT m_FX;
 	UINT m_current_FX;
@@ -140,6 +141,7 @@ private:
 		ID_SLIDER_4,
 		ID_SLIDER_5,
 		ID_SLIDER_6,
+		ID_SLIDER_7,
 		ID_SLIDER_MAX,
 		ID_SWITCH_1,
 		ID_BUTTON_1,
