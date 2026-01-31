@@ -13,15 +13,17 @@ SamplerState g_SamplerState : register(s0);
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
     float g_FX_param1;
+    float g_FX_param2;
+    float g_FX_param3;
 };
 //--------------------------------------------------------------------------------------
 // Input structure
 //--------------------------------------------------------------------------------------
 struct PS_INPUT
 {
-	float4 Position : SV_Position;
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
+    float4 Position : SV_Position;
+    float4 Color : COLOR0;
+    float2 TexCoord : TEXCOORD0;
 };
 //--------------------------------------------------------------------------------------
 // Output structure
@@ -87,7 +89,7 @@ float get_perceptual_lightness(float luminance)
     }
     else
     {
-        lightness = pow(luminance, (1 / 3)) * 116  - 16;
+        lightness = pow(luminance, (1 / 3)) * 116 - 16;
     }
     
     return lightness;
@@ -100,9 +102,11 @@ float3 rgb_to_yuv(float3 RGB)
     float r = RGB.r;
     float g = RGB.g;
     float b = RGB.b;
-    float y = 0.299 * r + 0.587 * g + 0.114 * b;
-    float u = 0.565 * (b - y);
-    float v = 0.713 * (r - y);
+    
+    float y = 0.299f * r + 0.587f * g + 0.114f * b;
+    float u = (0.492f * (b - y)) + 0.5f;
+    float v = (0.877f * (r - y)) + 0.5f;
+
     float3 YUV = float3(y, u, v);
     return YUV;
 }
@@ -112,9 +116,55 @@ float3 yuv_to_rgb(float3 YUV)
     float y = YUV.x;
     float u = YUV.y;
     float v = YUV.z;
-    float r = y + 1.403 * v;
-    float g = y - 0.344 * u - 1.403 * v;
-    float b = y + 1.770 * u;
+    
+    float nU = u - 0.5f;
+    float nV = v - 0.5f;
+    float r = y + 1.140f * nV;
+    float g = y - 0.394f * nU - 0.581f * nV;
+    float b = y + 2.032f * nU;
+   
+    float3 RGB = float3(r, g, b);
+    return RGB;
+}
+//--------------------------------------------------------------------------------------
+float3 rgb_to_YCbCr(float3 RGB)
+{
+    // y : luminance (linear) => brightness (greyscale) or luma (gamma-corrected) => intensity
+    // u (Cb) and v (Cr) : chrominance components => color information
+    float r = RGB.r;
+    float g = RGB.g;
+    float b = RGB.b;
+    
+    // CUDA - NPP:
+    float Y = 0.257f * r + 0.504f * g + 0.098f * b + 0.0625f;
+    float Cb = -0.148f * r - 0.291f * g + 0.439f * b + 0.5f;
+    float Cr = 0.439f * r - 0.368f * g - 0.071f * b + 0.5f;
+   
+    float3 YCbCr = float3(Y, Cb, Cr);
+    return YCbCr;
+}
+//--------------------------------------------------------------------------------------
+float3 YCbCr_to_rgb(float3 YCbCr)
+{
+    float Y = YCbCr.x;
+    float Cb = YCbCr.y;
+    float Cr = YCbCr.z;
+    
+    // CUDA - NPP:
+    float nY = 1.164f * (Y - 0.0625f);
+    float nR = Cr - 0.5f;
+    float nB = Cb - 0.5f;
+    float r = nY + 1.596f * nR;
+    float g = nY - 0.813f * nR - 0.392f * nB;
+    float b = nY + 2.017f * nB;
+    
+    if (r > 1.0f)
+        r = 1.0f;
+    if (g > 1.0f)
+        g = 1.0f;
+    if (b > 1.0f)
+        b = 1.0f;
+    
     float3 RGB = float3(r, g, b);
     return RGB;
 }
@@ -149,7 +199,7 @@ float3 rgb_to_hsv(float3 RGB)
     {
         v = maxValRGB;
         s = delta / maxValRGB;
-        float3 maxRGB = float3(maxValRGB,maxValRGB,maxValRGB);
+        float3 maxRGB = float3(maxValRGB, maxValRGB, maxValRGB);
         float3 deltaRGB = (((maxRGB - RGB) / 6.0) + (delta / 2.0)) / delta;
         float dr = deltaRGB.x;
         float dg = deltaRGB.y;
@@ -232,17 +282,6 @@ float3 hsv_to_rgb(float3 HSV)
     return RGB;
 }
 //--------------------------------------------------------------------------------------
-float3 hsv_complement(float3 InColor)
-{
-    float3 complement = InColor;
-    complement.x -= 0.5;
-    if (complement.x < 0.0)
-    {
-        complement.x += 1.0;
-    }
-    return complement;
-}
-//--------------------------------------------------------------------------------------
 float3 rgb_to_cmy(float3 RGB)
 {
     float3 CMY = float3(1, 1, 1) - RGB;
@@ -288,22 +327,6 @@ float3 cmyk_to_rgb(float4 CMYK)
     return RGB;
 }
 //--------------------------------------------------------------------------------------
-float4 ColorSpace(float2 texcoord)
-{
-    float4 color = g_Texture2D.Sample(g_SamplerState, texcoord);
-    float3 RGB = color.rgb;
-    
-    float3 HSV = rgb_to_hsv(RGB);
-    //float3 YUV = rgb_to_yuv(RGB);
-    //float4 CMYK = rgb_to_cmyk(RGB);
-    
-    float4 outcolor = float4(HSV.x, HSV.y, HSV.z, color.a);
-    //outcolor = float4(YUV.x, YUV.y, YUV.z, color.a);
-    //outcolor = float4(CMYK.x, CMYK.y, CMYK.z, CMYK.w);
-    
-    return outcolor;
-}
-//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
@@ -311,7 +334,26 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-    output.Color = ColorSpace(texcoord);
+    float4 TexColor = g_Texture2D.Sample(g_SamplerState, texcoord);
+    float3 RGB = TexColor.rgb;
+    
+    float3 YUV = rgb_to_yuv(RGB);
+    float3 YCbCr = rgb_to_YCbCr(RGB);
+    float3 HSV = rgb_to_hsv(RGB);
+    float4 CMYK = rgb_to_cmyk(RGB);
+    
+    //YUV.y = 0;
+    //YUV.z = 0;
+    YCbCr.x = g_FX_param1;
+    YCbCr.y = g_FX_param2;
+    YCbCr.z = g_FX_param3;
+    
+    float3 outRGB = YCbCr_to_rgb(YCbCr);
+    //float3 outRGB = yuv_to_rgb(YUV);
+    //float3 outRGB = hsv_to_rgb(HSV);
+    //float3 outRGB = cmyk_to_rgb(CMYK);
+    
+    output.Color = float4(outRGB.r, outRGB.g, outRGB.b, 1.0f);
 
     output.Color = output.Color * input.Color;
     
