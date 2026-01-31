@@ -36,6 +36,11 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Additional functions
 //--------------------------------------------------------------------------------------
+float ParamAdjust(float value, float ValMin, float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
 float min_RGB(float3 RGB)
 {
     float t = (RGB.r < RGB.g) ? RGB.r : RGB.g;
@@ -190,14 +195,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     if (g_FX_params_on)
     {
-        Amount = g_FX_param1;
-        Concentrate = g_FX_param2 * 4;
-        DesatCorr = g_FX_param3;
-        
-        if (Concentrate < 0.1f)
-        {
-            Concentrate = 0.1f;
-        }
+        Amount = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
+        Concentrate = ParamAdjust(g_FX_param2, 0.1f, 4.0f);
+        DesatCorr = ParamAdjust(g_FX_param3, 0.0f, 1.0f); 
     }
     
     float4 rgbaTex = g_Texture2D.Sample(g_SamplerState, texcoord);
@@ -223,6 +223,10 @@ PS_OUTPUT ps_main(PS_INPUT input)
         newHsv = huePole2;
     }
 #else
+    if (Concentrate < 0.1f)
+    {
+        Concentrate = 0.1f;
+    }
     float e = 1.0 / Concentrate;
     if (dist1 < dist2)
     {

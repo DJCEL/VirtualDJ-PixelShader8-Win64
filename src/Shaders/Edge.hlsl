@@ -35,6 +35,13 @@ struct PS_OUTPUT
     float4 Color : SV_TARGET;
 };
 //--------------------------------------------------------------------------------------
+// Additional functions
+//--------------------------------------------------------------------------------------
+float ParamAdjust(float value,float ValMin,float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
@@ -47,6 +54,13 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float Scale = 1.0; // g_FX_param1 [Scale] from 0.95 to 1.05   
     float Rot = 0.0f; // g_FX_param2 [Rot] from -2 to 2
     float Density = 1.0f; // g_FX_param3 [Density] from 0 to 1
+    
+    if (g_FX_params_on)
+    {
+        Scale = ParamAdjust(g_FX_param1, 0.95f, 1.0f);
+        Rot = ParamAdjust(g_FX_param2, -2.0f, 2.0f);
+        Density = ParamAdjust(g_FX_param3, 0.0f, 1.0f);
+    }
     
     float r = radians(Rot);
     float c = cos(r);
