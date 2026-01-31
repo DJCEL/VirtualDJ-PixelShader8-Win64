@@ -79,6 +79,7 @@ private:
 	__declspec(align(16))
 		struct PS_CONSTANTBUFFER
 	{
+		bool  FX_params_on;
 		float FX_param1;
 		float FX_param2;
 		float FX_param3;
@@ -122,6 +123,7 @@ private:
 	int m_Width;
 	int m_Height;
 	float m_SliderValue[6];
+	int m_FX_params_on;
 	float m_FX_param[4];
 	float m_alpha;
 	UINT m_FX;
@@ -139,6 +141,7 @@ private:
 		ID_SLIDER_5,
 		ID_SLIDER_6,
 		ID_SLIDER_MAX,
+		ID_SWITCH_1,
 		ID_BUTTON_1,
 		ID_BUTTON_2,
 	} ID_Interface;

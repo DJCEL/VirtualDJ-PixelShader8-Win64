@@ -12,6 +12,7 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
+    bool  g_FX_params_on;
     float g_FX_param1;
     float g_FX_param2;
     float g_FX_param3;
@@ -342,11 +343,18 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float3 HSV = rgb_to_hsv(RGB);
     float4 CMYK = rgb_to_cmyk(RGB);
     
-    //YUV.y = 0;
-    //YUV.z = 0;
+    
+    YUV.x *= g_FX_param1;
+    YUV.y *= g_FX_param2;
+    YUV.z *= g_FX_param3;
+    
     YCbCr.x *= g_FX_param1;
     YCbCr.y *= g_FX_param2;
     YCbCr.z *= g_FX_param3;
+    
+    HSV.x *= g_FX_param1;
+    HSV.y *= g_FX_param2;
+    HSV.z *= g_FX_param3;
     
     float3 outRGB = YCbCr_to_rgb(YCbCr);
     //float3 outRGB = yuv_to_rgb(YUV);

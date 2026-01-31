@@ -23,6 +23,7 @@ CPixelShader8::CPixelShader8()
 	m_current_FX = 0;
 	m_ButtonLeft = 0;
 	m_ButtonRight = 0;
+	m_FX_params_on = 0;
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -38,6 +39,7 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
 	hr = DeclareParameterButton(&m_ButtonLeft, ID_BUTTON_1, "FX Select-", "FX-");
 	hr = DeclareParameterButton(&m_ButtonRight, ID_BUTTON_2, "FX Select+", "FX+");
+	hr = DeclareParameterSwitch(&m_FX_params_on, ID_SWITCH_1, "FX Params", "FX_P", 0.0f);
 	hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "FX Param1", "FX_P1", 0.5f);
 	hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.5f);
 	hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.5f);
@@ -597,6 +599,7 @@ HRESULT CPixelShader8::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext*
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 {
+	m_PSConstantBufferData.FX_params_on = m_FX_params_on ? true: false;
 	m_PSConstantBufferData.FX_param1 = m_FX_param[0];
 	m_PSConstantBufferData.FX_param2 = m_FX_param[1];
 	m_PSConstantBufferData.FX_param3 = m_FX_param[2];
