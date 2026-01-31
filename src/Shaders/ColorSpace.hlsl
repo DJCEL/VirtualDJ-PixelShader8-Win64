@@ -304,26 +304,6 @@ float4 ColorSpace(float2 texcoord)
     return outcolor;
 }
 //--------------------------------------------------------------------------------------
-float4 negative2(float2 texcoord)
-{
-    float OffX = 0.003; // from -0.1 to 0.1
-    float OffY = 0.003; // from -0.1 to 0.1
-    float Scale = 1.0; // from 0.95 to 1.05   
-    float Rot = 0.0f; // from -2 to 2
-    float Density = 1.0f; // from 0 to 1
-    
-    float r = radians(Rot);
-    float c = cos(r);
-    float s = sin(r);
-    float2 nuv = Scale * (texcoord.xy - float2(0.5, 0.5));
-    nuv = float2(c * nuv.x - s * nuv.y, c * nuv.y + s * nuv.x);
-    nuv += float2(0.5 + OffX, 0.5 + OffY);
-    float4 texCol0 = g_Texture2D.Sample(g_SamplerState, texcoord);
-    float4 texCol1 = g_Texture2D.Sample(g_SamplerState, nuv);
-    float3 result = saturate(texCol0.rgb - Density * (texCol1.rgb));
-    return float4(result, texCol0.w); // protect alpha
-}
-//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
@@ -331,8 +311,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-    //output.Color = ColorSpace(texcoord);
-    output.Color = negative2(texcoord);
+    output.Color = ColorSpace(texcoord);
 
     output.Color = output.Color * input.Color;
     

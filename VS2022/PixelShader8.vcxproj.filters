@@ -63,13 +63,16 @@
     <FxCompile Include="..\src\Shaders\ColorDistorsion.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\src\Shaders\ColorSpace.hlsl">
+    <FxCompile Include="..\src\Shaders\Edge.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\Sepia.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\src\Shaders\Polarize.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\Shaders\ColorSpace.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
@@ -101,13 +104,16 @@
     <None Include="..\src\Shaders\Rotate180.cso">
       <Filter>src\Shaders</Filter>
     </None>
-    <None Include="..\src\Shaders\ColorSpace.cso">
+    <None Include="..\src\Shaders\Edge.cso">
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Sepia.cso">
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Polarize.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\ColorSpace.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>

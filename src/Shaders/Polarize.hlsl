@@ -181,15 +181,15 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-    float Amount = 0.2f; // g_FX_param1 [Strength of Effect] from to 0 to 1
-    float Concentrate = 2.0f; //  g_FX_param2 [Color Concentration] from 0.1 to 4 
-    float DesatCorr = 0.1f; //  g_FX_param3 [Desaturate Correction] from to 0 to 1
-    float3 GuideHue = float3(0.0, 0.0, 1.0);
-#define FORCEHUE
+    float Amount = 0.31f; // g_FX_param1 [Strength of Effect] from to 0 to 1
+    float Concentrate = 1.44f; //  g_FX_param2 * 4 [Color Concentration] from 0.1 to 4 
+    float DesatCorr = 0.12f; //  g_FX_param3 [Desaturate Correction] from to 0 to 1
+    float3 GuideHueRGB = float3(0.0, 0.0, 1.0); // color blue
+//#define FORCEHUE
     
     float4 rgbaTex = g_Texture2D.Sample(g_SamplerState, texcoord);
     float3 hsvTex = rgb_to_hsv(rgbaTex.rgb);
-    float3 huePole1 = rgb_to_hsv(GuideHue);
+    float3 huePole1 = rgb_to_hsv(GuideHueRGB);
     float3 huePole2 = hsv_complement(huePole1);
     float dist1 = abs(hsvTex.x - huePole1.x);
     if (dist1 > 0.5)
