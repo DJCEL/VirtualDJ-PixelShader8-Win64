@@ -8,7 +8,7 @@ HLSL compilation:
 - Entrypoint Name: ps_main
 - Shader Type: Pixel Shader (/ps)
 - Shader Model: Shader Model 5.0 (/5.0)
-- Output filepath: (.cso files) in the 'Shaders' subfolder as they are included in Resources (Plugin.rc).
+- Output filepath: (.cso files) in the 'Shaders' subfolder as they are included in Resources (Plugin.rc). So use "..\src\Shaders\%(Filename).cso"
 
 Examples of Pixel Shaders are in the 'Shaders' subfolder.
 
