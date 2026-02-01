@@ -755,7 +755,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 	}
 	else
 	{
-		if (wcscmp(m_FX_Name, L"CenterBlur") == 0)
+		if (wcscmp(m_FX_Name, L"PixelsHide") == 0)
+		{
+			sprintf_s(outParam, outParamSize, "%.2f (step)", value);
+			}
+		else if (wcscmp(m_FX_Name, L"CenterBlur") == 0)
 		{
 			sprintf_s(outParam, outParamSize, "%.2f (BlurAmount)", value);
 		}
