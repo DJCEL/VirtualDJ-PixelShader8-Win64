@@ -15,9 +15,12 @@ Examples of Pixel Shaders are in the 'Shaders' subfolder.
 During compilation the .cso files are saved the 'Shaders' subfolder as they are included in Resources (Plugin.rc).
 Right click on 'Plugin.rc' file and select 'View Code' to add new shaders in Resources.
 
-If you know GLSL and want to use the syntax, you can also define:
-- #define vec2 float2
-- #define vec3 float3
-- #define vec4 float4
-- #define mix lerp
-- #define fract frac
+//--------------------------------------------------------------------------------------
+// Shadertoy compatibilities
+//--------------------------------------------------------------------------------------
+#define vec2 float2
+#define vec3 float3
+#define vec4 float4
+#define mix lerp
+#define fract frac
+vec3 iResolution = float3(float(iResolutionWidth), float(iResolutionHeight), 0.0f);
