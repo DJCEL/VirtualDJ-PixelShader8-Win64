@@ -839,6 +839,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 					break;
 			}
 		}
+		else if (wcscmp(m_FX_Name, L"Wave") == 0)
+		{
+			float Speed = ParamAdjust(value, 0.0f, 2.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
