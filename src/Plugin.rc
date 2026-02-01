@@ -105,6 +105,7 @@ SEPIA_CSO               RCDATA                  ".\\Shaders\\Sepia.cso"
 POLARIZE_CSO            RCDATA                  ".\\Shaders\\Polarize.cso"
 MASK_CSO                RCDATA                  ".\\Shaders\\Mask.cso"
 COLORSPACE_CSO          RCDATA                  ".\\Shaders\\ColorSpace.cso"
+WAVE_CSO                RCDATA                  ".\\Shaders\\Wave.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////

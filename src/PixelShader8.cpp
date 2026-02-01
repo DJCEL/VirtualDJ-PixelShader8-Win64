@@ -26,6 +26,7 @@ CPixelShader8::CPixelShader8()
 	m_FX_params_on = 0;
 	wsprintf(m_FX_Name, L"");
 	m_Time = 0.0f;
+	m_TimeInit = 0.0f;
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -219,10 +220,28 @@ HRESULT VDJ_API CPixelShader8::OnDeviceClose()
 	
 	return S_OK;
 }
+//-----------------------------------------------------------------------
+long long CPixelShader8::GetCurrentTimeMilliseconds()
+{
+	std::chrono::time_point time = std::chrono::system_clock::now();
+	std::chrono::duration since_epoch = time.time_since_epoch();
+	long long milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(since_epoch).count();
+
+	return milliseconds;
+}
+//-----------------------------------------------------------------------
+void CPixelShader8::setShaderPlaybackTime()
+{
+	long long TimeNow = GetCurrentTimeMilliseconds();
+
+	m_Time = (TimeNow - m_TimeInit) / 1000.0f;
+}
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnStart() 
 {
 	HRESULT hr = S_FALSE;
+	
+	m_TimeInit = GetCurrentTimeMilliseconds();
 
 	// Check if we need to update the pixel shader
 	if (m_current_FX != m_FX && pD3DDevice != nullptr && pPixelShader != nullptr)
@@ -238,6 +257,9 @@ HRESULT VDJ_API CPixelShader8::OnStart()
 //-------------------------------------------------------------------------------------------
 HRESULT VDJ_API CPixelShader8::OnStop() 
 {
+	m_Time = 0.0f;
+	m_TimeInit = 0.0f;
+
 	return S_OK;
 }
 //-------------------------------------------------------------------------------------------
@@ -246,6 +268,8 @@ HRESULT VDJ_API CPixelShader8::OnDraw()
 	HRESULT hr = S_FALSE;
 	ID3D11ShaderResourceView *pTexture = nullptr;
 	TVertex8* vertices = nullptr;
+
+	setShaderPlaybackTime();
 
 	if (m_Width != width || m_Height != height)
 	{
@@ -591,7 +615,7 @@ HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 {
 	m_PSConstantBufferData.iResolutionWidth = m_Width;
 	m_PSConstantBufferData.iResolutionHeight = m_Height;
-	m_PSConstantBufferData.iTime = m_Time;
+	m_PSConstantBufferData.iTime = float(m_Time);
 	m_PSConstantBufferData.FX_params_on = m_FX_params_on ? true: false;
 	m_PSConstantBufferData.FX_param1 = m_FX_param[0];
 	m_PSConstantBufferData.FX_param2 = m_FX_param[1];
@@ -748,6 +772,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"CenterBlur") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"PixelsHide") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Rotate") == 0) NumberParams = 1;
+	else if (wcscmp(m_FX_Name, L"Wave") == 0) NumberParams = 1;
 	else NumberParams = 0;
 
 	return NumberParams;

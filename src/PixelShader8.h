@@ -4,6 +4,7 @@
 
 #include "vdjVideo8.h"
 #include <stdio.h>
+#include <chrono>
 #include <d3d11.h>
 //#include <d3dcompiler.h> // if we want to compile the shader with the code by using D3DCompileFromFile()
 
@@ -81,7 +82,7 @@ private:
 	{
 		int   iResolutionWidth;
 		int	  iResolutionHeight;
-		float iTime; // shader playback time (in seconds)
+		float iTime; // shader playback time (in seconds), elapsed time value.
 		bool  FX_params_on;
 		float FX_param1;
 		float FX_param2;
@@ -97,6 +98,8 @@ private:
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 	const WCHAR* GetShaderName(int type);
 	void Display_FX_Name(char* outParam, int outParamSize);
+	long long GetCurrentTimeMilliseconds();
+	void setShaderPlaybackTime();
 
 	// Customize params for each shader
 	int	Get_FX_Params_Number();
@@ -137,9 +140,10 @@ private:
 	bool m_DirectX_On;
 	int m_Width;
 	int m_Height;
+	long long m_TimeInit;
+	float m_Time;
 	float m_SliderValue[7];
 	WCHAR m_FX_Name[150];
-	float m_Time;
 	int m_FX_params_on;
 	float m_FX_param[5];
 	float m_alpha;
@@ -169,7 +173,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT NUMBER_FX = 15;
+	static const UINT NUMBER_FX = 16;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {
@@ -187,7 +191,8 @@ private:
 		L"Sepia",
 		L"Polarize",
 		L"Mask",
-		L"ColorSpace"
+		L"ColorSpace",
+		L"Wave",
 	};
 };
 
