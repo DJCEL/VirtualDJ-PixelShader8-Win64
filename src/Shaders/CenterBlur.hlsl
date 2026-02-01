@@ -52,7 +52,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     
     PS_OUTPUT output;
-    float Center = 0.5;
+    float2 Center = float2(0.5, 0.5);
     float4 rgbaAvgValue = 0;
     float scale = 0;
     int SAMPLECOUNT = 15;

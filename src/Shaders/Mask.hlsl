@@ -65,17 +65,19 @@ PS_OUTPUT ps_main(PS_INPUT input)
         Density = ParamAdjust(g_FX_param5, 0.0f, 1.0f);
     }
     
+    float2 Center = float2(0.5, 0.5);
     float r = radians(Rot);
     float c = cos(r);
     float s = sin(r);
-    float2 nuv = Scale * (texcoord.xy - float2(0.5, 0.5));
+    float2 nuv = Scale * (texcoord.xy - Center);
     nuv = float2(c * nuv.x - s * nuv.y, c * nuv.y + s * nuv.x);
     nuv += float2(0.5 + OffX, 0.5 + OffY);
     float4 texCol0 = g_Texture2D.Sample(g_SamplerState, texcoord);
     float4 texCol1 = g_Texture2D.Sample(g_SamplerState, nuv);
-    float3 result = saturate(texCol0.rgb - Density * (texCol1.rgb));
+    float3 mix_texCol = texCol0.rgb - Density * (texCol1.rgb);
+    float3 result = saturate(mix_texCol);
     
-    output.Color = float4(result, texCol0.w); // protect alpha
+    output.Color = float4(result, texCol0.a); // protect alpha
 
     output.Color = output.Color * input.Color;
     
