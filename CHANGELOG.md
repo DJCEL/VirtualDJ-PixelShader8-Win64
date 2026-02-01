@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1 (2026-02-01)
+
+* New pixels shader: 'Wave'
+* New parameters added to the ConstantBuffer: iResolutionWidth, iResolutionHeight and iTime
+
 ## 2.0 (2026-02-01)
 
 * New pixels shaders: 'Sepia', 'Polarize', 'Mask' and 'ColorSpace'
