@@ -26,7 +26,7 @@ CPixelShader8::CPixelShader8()
 	m_FX_params_on = 0;
 	wsprintf(m_FX_Name, L"");
 	m_Time = 0.0f;
-	m_TimeInit = 0.0f;
+	m_TimeInit = 0;
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -258,7 +258,7 @@ HRESULT VDJ_API CPixelShader8::OnStart()
 HRESULT VDJ_API CPixelShader8::OnStop() 
 {
 	m_Time = 0.0f;
-	m_TimeInit = 0.0f;
+	m_TimeInit = 0;
 
 	return S_OK;
 }

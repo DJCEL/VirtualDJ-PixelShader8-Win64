@@ -46,19 +46,19 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float fTime = iTime;
+    float fAdjust = 1.0f;
     
     if (g_FX_params_on)
     {
-        fTime = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
+        fAdjust = ParamAdjust(g_FX_param1, 0.0f, 2.0f);
     }
     
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
         
     float2 texcoord2 = texcoord;
-    texcoord2.x += sin(fTime + texcoord2.x * 10) * 0.01f;
-    texcoord2.y += cos(fTime + texcoord2.y * 10) * 0.01f;
+    texcoord2.x += sin(iTime * fAdjust + texcoord2.x * 10) * 0.01f;
+    texcoord2.y += cos(iTime * fAdjust + texcoord2.y * 10) * 0.01f;
 
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
     
