@@ -8,3 +8,5 @@
 #define mix lerp
 #define fract frac
 vec3 iResolution = float3(float(iResolutionWidth), float(iResolutionHeight), 0.0f);
+#define fragCoord input.TexCoord * iResolution.xy
+#define fragColor output.Color
