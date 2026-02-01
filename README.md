@@ -8,11 +8,12 @@ HLSL compilation:
 - Entrypoint Name: ps_main
 - Shader Type: Pixel Shader (/ps)
 - Shader Model: Shader Model 5.0 (/5.0)
-- Output filepath: (.cso files) in the 'Shaders' subfolder as they are included in Resources (Plugin.rc). So use "..\src\Shaders\%(Filename).cso"
+- Output filepath: "..\src\Shaders\%(Filename).cso"   
 
 Examples of Pixel Shaders are in the 'Shaders' subfolder.
 
-Right click on 'Plugin.rc' file and select 'View Code' to add shaders in Resources.
+During compilation the .cso files are saved the 'Shaders' subfolder as they are included in Resources (Plugin.rc).
+Right click on 'Plugin.rc' file and select 'View Code' to add new shaders in Resources.
 
 If you know GLSL and want to use the syntax, you can also define:
 - #define vec2 float2
