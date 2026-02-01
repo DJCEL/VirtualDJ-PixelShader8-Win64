@@ -25,6 +25,7 @@ CPixelShader8::CPixelShader8()
 	m_ButtonRight = 0;
 	m_FX_params_on = 0;
 	wsprintf(m_FX_Name, L"");
+	m_Time = 0.0f;
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -588,6 +589,9 @@ HRESULT CPixelShader8::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext*
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 {
+	m_PSConstantBufferData.iResolutionWidth = m_Width;
+	m_PSConstantBufferData.iResolutionHeight = m_Height;
+	m_PSConstantBufferData.iTime = m_Time;
 	m_PSConstantBufferData.FX_params_on = m_FX_params_on ? true: false;
 	m_PSConstantBufferData.FX_param1 = m_FX_param[0];
 	m_PSConstantBufferData.FX_param2 = m_FX_param[1];
@@ -716,7 +720,8 @@ void  CPixelShader8::Display_FX_Name(char* outParam, int outParamSize)
 			int res = WideCharToMultiByte(CP_UTF8, 0, m_FX_Name, -1, FXNameChar, size_needed, NULL, NULL);
 			if (res >= 0)
 			{
-				sprintf_s(outParam, outParamSize, "%i-%s", m_FX + 1, FXNameChar);
+				//sprintf_s(outParam, outParamSize, "%i-%s", m_FX + 1, FXNameChar);
+				sprintf_s(outParam, outParamSize, "%s", FXNameChar);
 			}
 			else
 			{
@@ -742,6 +747,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"Mask") == 0) NumberParams = 5;
 	else if (wcscmp(m_FX_Name, L"CenterBlur") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"PixelsHide") == 0) NumberParams = 1;
+	else if (wcscmp(m_FX_Name, L"Rotate") == 0) NumberParams = 1;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -755,46 +761,57 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 	}
 	else
 	{
-		if (wcscmp(m_FX_Name, L"PixelsHide") == 0)
+		if (wcscmp(m_FX_Name, L"Rotate") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (step)", value);
-			}
+			int Angle = int(ParamAdjust(value, 0.0f, 360.0f));
+			const char *ch = "°";
+			sprintf_s(outParam, outParamSize, "%d%s (Angle)", Angle, ch);
+		}
+		else if (wcscmp(m_FX_Name, L"PixelsHide") == 0)
+		{
+			int step = int(ParamAdjust(value, 2.0f, 8.0f));
+			sprintf_s(outParam, outParamSize, "%d (Step)", step);
+		}
 		else if (wcscmp(m_FX_Name, L"CenterBlur") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (BlurAmount)", value);
+			float BlurAmount = ParamAdjust(value, 0.0f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (BlurAmount)", BlurAmount);
 		}
 		else if (wcscmp(m_FX_Name, L"Sepia") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Desaturation)", value);
+			float Desaturation = ParamAdjust(value, 0.0f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Desaturation)", Desaturation);
 		}
 		else if (wcscmp(m_FX_Name, L"Polarize") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Strength)", value);
+			float Amount = ParamAdjust(value, 0.0f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Strength)", Amount);
 		}
 		else if (wcscmp(m_FX_Name, L"Mask") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (OffsetX)", value);
+			float OffX = ParamAdjust(value, -0.1f, 0.1f);
+			sprintf_s(outParam, outParamSize, "%.2f (OffsetX)", OffX);
 		}
 		else if (wcscmp(m_FX_Name, L"ColorSpace") == 0)
 		{
 			int ColorSpace_select = int(ParamAdjust(value, 1.0f, 5.0f));
 			switch (ColorSpace_select)
 			{
-			case 1:
-				sprintf_s(outParam, outParamSize, "RGB");
-				break;
-			case 2:
-				sprintf_s(outParam, outParamSize, "YCbCr");
-				break;
-			case 3:
-				sprintf_s(outParam, outParamSize, "YUV");
-				break;
-			case 4:
-				sprintf_s(outParam, outParamSize, "HSV");
-				break;
-			case 5:
-				sprintf_s(outParam, outParamSize, "CMYK");
-				break;
+				case 1:
+					sprintf_s(outParam, outParamSize, "RGB");
+					break;
+				case 2:
+					sprintf_s(outParam, outParamSize, "YCbCr");
+					break;
+				case 3:
+					sprintf_s(outParam, outParamSize, "YUV");
+					break;
+				case 4:
+					sprintf_s(outParam, outParamSize, "HSV");
+					break;
+				case 5:
+					sprintf_s(outParam, outParamSize, "CMYK");
+					break;
 			}
 		}
 		else
@@ -814,19 +831,32 @@ void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float v
 	{
 		if (wcscmp(m_FX_Name, L"Sepia") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Toning)", value);
+			float Toning = ParamAdjust(value, 0.0f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Toning)", Toning);
 		}
 		else if (wcscmp(m_FX_Name, L"Polarize") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Color Concentration)", value);
+			float Concentrate = ParamAdjust(value, 0.1f, 4.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Color Concentration)", Concentrate);
 		}
 		else if (wcscmp(m_FX_Name, L"Mask") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (OffsetY)", value);
+			float OffY = ParamAdjust(value, -0.1f, 0.1f);
+			sprintf_s(outParam, outParamSize, "%.2f (OffsetY)", OffY);
 		}
 		else if (wcscmp(m_FX_Name, L"ColorSpace") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Component 1)", value);
+			int ColorSpace_select = int(ParamAdjust(m_FX_param[0], 1.0f, 5.0f));
+			if (ColorSpace_select == 1)
+			{
+				int R = int(ParamAdjust(value, 0.0f, 255.0f));
+				sprintf_s(outParam, outParamSize, "%d (Red)", R);
+			}
+			else
+			{
+				float Component1 = ParamAdjust(value, 0.0f, 1.0f);
+				sprintf_s(outParam, outParamSize, "%.2f (Component 1)", Component1);
+			}
 		}
 		else
 		{
@@ -845,15 +875,27 @@ void  CPixelShader8::Display_FX_Param3(char* outParam, int outParamSize, float v
 	{
 		if (wcscmp(m_FX_Name, L"Polarize") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Desaturate Correction)", value);
+			float DesatCorr = ParamAdjust(value, 0.1f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Desaturate Correction)", DesatCorr);
 		}
 		else if (wcscmp(m_FX_Name, L"Mask") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Scale)", value);
+			float Scale = ParamAdjust(value, 0.95f, 0.1f);
+			sprintf_s(outParam, outParamSize, "%.2f (Scale)", Scale);
 		}
 		else if (wcscmp(m_FX_Name, L"ColorSpace") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Component 2)", value);
+			int ColorSpace_select = int(ParamAdjust(m_FX_param[0], 1.0f, 5.0f));
+			if (ColorSpace_select == 1)
+			{
+				int G = int(ParamAdjust(value, 0.0f, 255.0f));
+				sprintf_s(outParam, outParamSize, "%d (Green)", G);
+			}
+			else
+			{
+				float Component2 = ParamAdjust(value, 0.0f, 1.0f);
+				sprintf_s(outParam, outParamSize, "%.2f (Component 2)", Component2);
+			}
 		}
 		else
 		{
@@ -872,11 +914,22 @@ void  CPixelShader8::Display_FX_Param4(char* outParam, int outParamSize, float v
 	{
 		if (wcscmp(m_FX_Name, L"Mask") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Rotation)", value);
+			float Rot = ParamAdjust(value, -2.0f, 2.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Rotation)", Rot);
 		}
 		else if (wcscmp(m_FX_Name, L"ColorSpace") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Component 3)", value);
+			int ColorSpace_select = int(ParamAdjust(m_FX_param[0], 1.0f, 5.0f));
+			if (ColorSpace_select == 1)
+			{
+				int B = int(ParamAdjust(value, 0.0f, 255.0f));
+				sprintf_s(outParam, outParamSize, "%d (Blue)", B);
+			}
+			else
+			{
+				float Component3 = ParamAdjust(value, 0.0f, 1.0f);
+				sprintf_s(outParam, outParamSize, "%.2f (Component 3)", Component3);
+			}
 		}
 		else
 		{
@@ -895,12 +948,17 @@ void  CPixelShader8::Display_FX_Param5(char* outParam, int outParamSize, float v
 	{
 		if (wcscmp(m_FX_Name, L"Mask") == 0)
 		{
-			sprintf_s(outParam, outParamSize, "%.2f (Density)", value);
+			float Density = ParamAdjust(value, 0.0f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Density)", Density);
 		}
 		else if (wcscmp(m_FX_Name, L"ColorSpace") == 0)
 		{
 			int ColorSpace_select = int(ParamAdjust(m_FX_param[0], 1.0f, 5.0f));
-			if (ColorSpace_select == 5) sprintf_s(outParam, outParamSize, "%.2f (Component 4)", value);
+			if (ColorSpace_select == 5)
+			{
+				float Component4 = ParamAdjust(value, 0.0f, 1.0f);
+				sprintf_s(outParam, outParamSize, "%.2f (Component 4)", Component4);
+			}
 			else sprintf_s(outParam, outParamSize, "");
 		}
 		else

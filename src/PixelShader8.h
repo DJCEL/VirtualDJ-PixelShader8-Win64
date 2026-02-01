@@ -77,8 +77,11 @@ private:
 	};
 
 	__declspec(align(16))
-		struct PS_CONSTANTBUFFER
+	struct PS_CONSTANTBUFFER
 	{
+		int   iResolutionWidth;
+		int	  iResolutionHeight;
+		float iTime; // shader playback time (in seconds)
 		bool  FX_params_on;
 		float FX_param1;
 		float FX_param2;
@@ -136,6 +139,7 @@ private:
 	int m_Height;
 	float m_SliderValue[7];
 	WCHAR m_FX_Name[150];
+	float m_Time;
 	int m_FX_params_on;
 	float m_FX_param[5];
 	float m_alpha;
@@ -165,7 +169,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT NUMBER_FX = 14;
+	static const UINT NUMBER_FX = 15;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {
@@ -176,6 +180,7 @@ private:
 		L"HorizontalMirror",
 		L"VerticalMirror",
 		L"Rotate180",
+		L"Rotate",
 		L"PixelsHide",
 		L"CenterBlur",
 		L"ColorDistorsion",

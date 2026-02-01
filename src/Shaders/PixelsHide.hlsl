@@ -12,6 +12,9 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
+    int iResolutionWidth;
+    int iResolutionHeight;
+    float iTime;
     bool g_FX_params_on;
     float g_FX_param1;
 };
@@ -43,11 +46,11 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    int step = 2;
+    int Step = 2;
     
     if (g_FX_params_on)
     {
-        step = int(ParamAdjust(g_FX_param1, 2.0f, 8.0f));
+        Step = int(ParamAdjust(g_FX_param1, 2.0f, 8.0f));
     }
     
     PS_OUTPUT output;
@@ -57,7 +60,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float4 color = 0;
     
 	// Check if the pixel is every other pixel
-    if ((pixelCoord.x % step == 0) && (pixelCoord.y % step == 0))
+    if ((pixelCoord.x % Step == 0) && (pixelCoord.y % Step == 0))
     {
         color = g_Texture2D.Sample(g_SamplerState, texcoord);
     }
