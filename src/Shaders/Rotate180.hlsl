@@ -32,9 +32,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
     PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
-    float2 texcoord_Rot = 1 - texcoord;
+    float2 texcoord_Rot180 = float2(1 - texcoord.x, 1 - texcoord.y);
     
-    float4 color = g_Texture2D.Sample(g_SamplerState, texcoord_Rot);
+    float4 color = g_Texture2D.Sample(g_SamplerState, texcoord_Rot180);
    
     output.Color = color;
     output.Color = output.Color * input.Color;

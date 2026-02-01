@@ -165,7 +165,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT NUMBER_FX = 13;
+	static const UINT NUMBER_FX = 14;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {
@@ -174,6 +174,7 @@ private:
 		L"HighContrast",
 		L"Negative",
 		L"HorizontalMirror",
+		L"VerticalMirror",
 		L"Rotate180",
 		L"PixelsHide",
 		L"CenterBlur",

@@ -75,6 +75,9 @@
     <FxCompile Include="..\src\Shaders\ColorSpace.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\Shaders\VerticalMirror.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Shaders\CenterBlur.cso">
@@ -114,6 +117,9 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\ColorSpace.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\VerticalMirror.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>
