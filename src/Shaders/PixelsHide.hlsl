@@ -7,7 +7,14 @@
 //--------------------------------------------------------------------------------------
 Texture2D g_Texture2D : register(t0);
 SamplerState g_SamplerState : register(s0);
-
+//--------------------------------------------------------------------------------------
+// Constant Buffer
+//--------------------------------------------------------------------------------------
+cbuffer PS_CONSTANTBUFFER : register(b0)
+{
+    bool g_FX_params_on;
+    float g_FX_param1;
+};
 //--------------------------------------------------------------------------------------
 // Input structure
 //--------------------------------------------------------------------------------------
@@ -25,17 +32,30 @@ struct PS_OUTPUT
     float4 Color : SV_TARGET;
 };
 //--------------------------------------------------------------------------------------
+// Additional functions
+//--------------------------------------------------------------------------------------
+float ParamAdjust(float value, float ValMin, float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
+    int step = 2;
+    
+    if (g_FX_params_on)
+    {
+        step = int(ParamAdjust(g_FX_param1, 2.0f, 8.0f));
+    }
+    
     PS_OUTPUT output;
     float2 position = input.Position.xy;
     float2 texcoord = input.TexCoord;
     uint2 pixelCoord = uint2(position);
     float4 color = 0;
-    int step = 4;
-
+    
 	// Check if the pixel is every other pixel
     if ((pixelCoord.x % step == 0) && (pixelCoord.y % step == 0))
     {

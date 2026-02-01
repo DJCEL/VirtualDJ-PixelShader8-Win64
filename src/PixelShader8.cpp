@@ -741,6 +741,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"ColorSpace") == 0) NumberParams = 5;
 	else if (wcscmp(m_FX_Name, L"Mask") == 0) NumberParams = 5;
 	else if (wcscmp(m_FX_Name, L"CenterBlur") == 0) NumberParams = 1;
+	else if (wcscmp(m_FX_Name, L"PixelsHide") == 0) NumberParams = 1;
 	else NumberParams = 0;
 
 	return NumberParams;
