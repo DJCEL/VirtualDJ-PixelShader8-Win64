@@ -32,12 +32,26 @@ struct PS_OUTPUT
     float4 Color : SV_TARGET;
 };
 //--------------------------------------------------------------------------------------
+// Additional functions
+//--------------------------------------------------------------------------------------
+float ParamAdjust(float value, float ValMin, float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
+    float BlurAmount = 0.25;
+    
+    if (g_FX_params_on)
+    {
+        BlurAmount = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
+    }
+    
+    
     PS_OUTPUT output;
-    float fBlurAmont = 0.25;
     float Center = 0.5;
     float4 rgbaAvgValue = 0;
     float scale = 0;
@@ -45,12 +59,12 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float DENOM = 14.0;
     float2 texcoord = 0;
     float4 textureRGBA = 0;
-
+    
     input.TexCoord -= Center;
 
     for (int i = 0; i < SAMPLECOUNT; i++)
     {
-        scale = 1.0 + fBlurAmont * (i / DENOM);
+        scale = 1.0 + BlurAmount * (i / DENOM);
         texcoord = input.TexCoord * scale + Center;
         textureRGBA = g_Texture2D.Sample(g_SamplerState, texcoord);
         rgbaAvgValue += textureRGBA;

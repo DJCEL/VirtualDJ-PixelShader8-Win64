@@ -33,8 +33,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord);
     
-    float high = .6;
-    float low = .4;
+    float high = 0.6;
+    float low = 0.4;
 
     if (color.r > high)
         color.r = 1;

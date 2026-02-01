@@ -93,12 +93,15 @@ private:
 	void OnSlider(int id);
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
 	const WCHAR* GetShaderName(int type);
-	int GetShaderNumberParams();
-	void Display_FX_Param1(char* outParam, int outParamSize, float value, const WCHAR* FXName);
-	void Display_FX_Param2(char* outParam, int outParamSize, float value, const WCHAR* FXName);
-	void Display_FX_Param3(char* outParam, int outParamSize, float value, const WCHAR* FXName);
-	void Display_FX_Param4(char* outParam, int outParamSize, float value, const WCHAR* FXName);
-	void Display_FX_Param5(char* outParam, int outParamSize, float value, const WCHAR* FXName);
+	void Display_FX_Name(char* outParam, int outParamSize);
+
+	// Customize params for each shader
+	int	Get_FX_Params_Number();
+	void Display_FX_Param1(char* outParam, int outParamSize, float value);
+	void Display_FX_Param2(char* outParam, int outParamSize, float value);
+	void Display_FX_Param3(char* outParam, int outParamSize, float value);
+	void Display_FX_Param4(char* outParam, int outParamSize, float value);
+	void Display_FX_Param5(char* outParam, int outParamSize, float value);
 
 
 	HRESULT Initialize_D3D11(ID3D11Device* pDevice);
@@ -132,6 +135,7 @@ private:
 	int m_Width;
 	int m_Height;
 	float m_SliderValue[7];
+	WCHAR m_FX_Name[150];
 	int m_FX_params_on;
 	float m_FX_param[5];
 	float m_alpha;
