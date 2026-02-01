@@ -773,6 +773,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"PixelsHide") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Rotate") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Wave") == 0) NumberParams = 1;
+	else if (wcscmp(m_FX_Name, L"Ripple") == 0) NumberParams = 2;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -844,6 +845,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 			float Speed = ParamAdjust(value, 0.0f, 2.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
 		}
+		else if (wcscmp(m_FX_Name, L"Ripple") == 0)
+		{
+			float Speed = ParamAdjust(value, 0.0f, 4.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -887,6 +893,11 @@ void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float v
 				float Component1 = ParamAdjust(value, 0.0f, 1.0f);
 				sprintf_s(outParam, outParamSize, "%.2f (Component 1)", Component1);
 			}
+		}
+		else if (wcscmp(m_FX_Name, L"Ripple") == 0)
+		{
+			int numWaves = int(ParamAdjust(value, 2.0f, 30.0f));
+			sprintf_s(outParam, outParamSize, "%d (numWaves)", numWaves);
 		}
 		else
 		{

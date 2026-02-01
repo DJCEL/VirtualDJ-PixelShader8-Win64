@@ -106,6 +106,7 @@ POLARIZE_CSO            RCDATA                  ".\\Shaders\\Polarize.cso"
 MASK_CSO                RCDATA                  ".\\Shaders\\Mask.cso"
 COLORSPACE_CSO          RCDATA                  ".\\Shaders\\ColorSpace.cso"
 WAVE_CSO                RCDATA                  ".\\Shaders\\Wave.cso"
+RIPPLE_CSO              RCDATA                  ".\\Shaders\\Ripple.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////

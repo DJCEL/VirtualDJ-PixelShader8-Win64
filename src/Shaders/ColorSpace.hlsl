@@ -348,7 +348,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float adjust_C2 = 1.0f;
     float adjust_C3 = 1.0f;
     float adjust_C4 = 0.0f;
-    int ColorSpace_select = 4;
+    int ColorSpace_select = 1;
     
     if (g_FX_params_on)
     {
@@ -369,9 +369,18 @@ PS_OUTPUT ps_main(PS_INPUT input)
     if (ColorSpace_select == 1)
     {
         outRGB = RGB;
-        outRGB.r *= adjust_C1;
-        outRGB.g *= adjust_C2;
-        outRGB.b *= adjust_C3;
+        
+        if (g_FX_params_on)
+        {
+            outRGB.r *= adjust_C1;
+            outRGB.g *= adjust_C2;
+            outRGB.b *= adjust_C3;
+        }
+        else
+        {
+            float3 vDelta = float3(0.0f, 2.0f, 4.0f);
+            outRGB = 0.5f + 0.5f * cos(iTime + texcoord.xyx + vDelta);
+        }
     }
     else if (ColorSpace_select == 2)
     {
