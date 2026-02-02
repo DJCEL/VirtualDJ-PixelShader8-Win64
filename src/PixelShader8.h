@@ -1,3 +1,4 @@
+//#pragma once
 #ifndef PIXELSHADER8_H
 #define PIXELSHADER8_H
 
@@ -83,12 +84,12 @@ private:
 		int   iResolutionWidth;
 		int	  iResolutionHeight;
 		float iTime; // shader playback time (in seconds), elapsed time value.
-		bool  FX_params_on;
-		float FX_param1;
-		float FX_param2;
-		float FX_param3;
-		float FX_param4;
-		float FX_param5;
+		bool  FX_params_on; // if true, use the customized FX_paramX, otherwise the plugin uses the default ones defined in the shader
+		float FX_param1; // 1st param (slider from 0.0f to 1.0f)
+		float FX_param2; // 2nd param (slider from 0.0f to 1.0f)
+		float FX_param3; // 3rd param (slider from 0.0f to 1.0f)
+		float FX_param4; // 4th param (slider from 0.0f to 1.0f)
+		float FX_param5; // 5th param (slider from 0.0f to 1.0f)
 	};
 
 	void OnResizeVideo();
@@ -197,4 +198,4 @@ private:
 	};
 };
 
-#endif
+#endif /* PIXELSHADER8_H */
