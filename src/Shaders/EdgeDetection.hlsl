@@ -42,7 +42,8 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 float avgRGB(float3 RGB)
 {
-    return (RGB.r + RGB.g + RGB.b) / 3.;
+    float avg = (RGB.r + RGB.g + RGB.b) / 3.0f;
+    return avg;
 }
 //--------------------------------------------------------------------------------------
 // Pixel Shader
