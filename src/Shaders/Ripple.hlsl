@@ -55,21 +55,22 @@ float wave(float2 pos, float t, float Speed, int numWaves, float2 Center)
 //--------------------------------------------------------------------------------------
 float height(float2 pos, float t, float Speed, int numWaves)
 {
-    float w = 0.0f;
     float2 Center = float2(0.5f, -0.5f);
 
-    w = wave(pos, t, Speed, numWaves, Center);
-    w += wave(pos, t, Speed, numWaves, -Center);
+    float w1 = wave(pos, t, Speed, numWaves, Center);
+    float w2 = wave(pos, t, Speed, numWaves, -Center);
+    
+    float w = w1 + w2;
     return w;
 }
 //--------------------------------------------------------------------------------------
 float2 normal(float2 pos, float t, float Speed, int numWaves)
 {
-    float2 new_pos1 = pos - float2(0.01f, 0.0f);
-    float2 new_pos2 = pos - float2(0.0f, 0.01f);
+    float2 pos_new1 = pos - float2(0.01f, 0.0f);
+    float2 pos_new2 = pos - float2(0.0f, 0.01f);
     
-    float val1 = height(new_pos1, t, Speed, numWaves) - height(pos, t, Speed, numWaves);
-    float val2 = height(new_pos2, t, Speed, numWaves) - height(pos, t, Speed, numWaves);
+    float val1 = height(pos_new1, t, Speed, numWaves) - height(pos, t, Speed, numWaves);
+    float val2 = height(pos_new2, t, Speed, numWaves) - height(pos, t, Speed, numWaves);
     
     return float2(val1,val2);
 }
