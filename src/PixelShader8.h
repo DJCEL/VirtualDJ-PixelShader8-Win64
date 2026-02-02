@@ -174,7 +174,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT NUMBER_FX = 17;
+	static const UINT NUMBER_FX = 18;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {
@@ -195,6 +195,7 @@ private:
 		L"ColorSpace",
 		L"Wave",
 		L"Ripple",
+		L"EdgeDetection",
 	};
 };
 

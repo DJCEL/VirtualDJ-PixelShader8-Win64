@@ -379,7 +379,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
         else
         {
             float3 vDelta = float3(0.0f, 2.0f, 4.0f);
-            outRGB = 0.5f + 0.5f * cos(iTime + texcoord.xyx + vDelta);
+            float3 adjust = 0.5f + 0.5f * cos(iTime + texcoord.xyx + vDelta);
+            outRGB *= adjust;
         }
     }
     else if (ColorSpace_select == 2)
