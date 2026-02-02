@@ -199,4 +199,4 @@ private:
 	};
 };
 
-#endif
+#endif/* PIXELSHADER8_H */
