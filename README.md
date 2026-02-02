@@ -12,4 +12,4 @@ HLSL compilation:
 
 Examples of Pixel Shaders are in the 'Shaders' subfolder.
 
-During compilation the .cso files are saved in the 'Shaders' subfolder and they are then included in the Resources (via Plugin.rc). To add a new one, right click on the 'Plugin.rc' file and select 'View Code'.
+During compilation the .cso files are saved in the '..\src\Shaders' subfolder and they are then included in the Resources (via Plugin.rc). To add a new one, right click on the 'Plugin.rc' file and select 'View Code'.
