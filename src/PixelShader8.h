@@ -1,3 +1,5 @@
+//#pragma once
+
 #ifndef PIXELSHADER8_H
 #define PIXELSHADER8_H
 
