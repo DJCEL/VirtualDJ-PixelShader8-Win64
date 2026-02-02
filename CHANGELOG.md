@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2 (2026-02-02)
+
+* New pixels shader: 'Ripple', 'EdgeDetection'
+
 ## 2.1 (2026-02-01)
 
 * New pixels shader: 'Wave'
