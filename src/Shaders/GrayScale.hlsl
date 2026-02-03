@@ -41,6 +41,20 @@ float avgRGB(float3 RGB)
     return avg;
 }
 //--------------------------------------------------------------------------------------
+float4 grayscale_method1(float4 color)
+{
+    color.g = color.r;
+    color.b = color.r;
+    return color;
+}
+//--------------------------------------------------------------------------------------
+float4 grayscale_method2(float4 color)
+{
+    float avg = avgRGB(color.rgb);
+    color = float4(avg, avg, avg, color.a)
+    return color;
+}
+//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
@@ -48,18 +62,15 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float4 texcolor = g_Texture2D.Sample(g_SamplerState, texcoord);
     
-    texcolor.g = texcolor.r;
-    texcolor.b = texcolor.r;
-
-    // or by using average
-    // float avg = avgRGB(texcolor.rgb);
-    // texcolor = float4(avg, avg, avg, texcolor.a)
+    texcolor = grayscale_method1(texcolor);
+    //texcolor = grayscale_method2(texcolor);
 
     PS_OUTPUT output;
     output.Color = texcolor;
     output.Color = output.Color * input.Color;
     return output;
 }
+
 
 
 
