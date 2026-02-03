@@ -81,10 +81,10 @@ private:
 	__declspec(align(16))
 	struct PS_CONSTANTBUFFER
 	{
-		int   iResolutionWidth;
-		int	  iResolutionHeight;
 		float iTime; // shader playback time (in seconds), elapsed time value.
-		bool  FX_params_on; // if true, use the customized FX_paramX, otherwise the plugin uses the default ones defined in the shader
+		float FX_Width;
+		float FX_Height;
+		float FX_params_on; // if 1.0f, use the customized FX_paramX, otherwise the plugin uses the default ones defined in the shader
 		float FX_param1; // 1st param (slider from 0.0f to 1.0f)
 		float FX_param2; // 2nd param (slider from 0.0f to 1.0f)
 		float FX_param3; // 3rd param (slider from 0.0f to 1.0f)

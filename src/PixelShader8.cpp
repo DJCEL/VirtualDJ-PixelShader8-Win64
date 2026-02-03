@@ -572,6 +572,8 @@ HRESULT CPixelShader8::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevic
 
 	if (!pDevice) return E_FAIL;
 
+	// Constant buffers (cbuffer) in Direct3D (DX11/DX12) must have a ByteWidth that is a 
+	// multiple of 16 bytes, corresponding to 4-component vectors (16 bytes, 4*32-bit components). 
 	UINT SIZEOF_PS_CONSTANTBUFFER = sizeof(PS_CONSTANTBUFFER);
 	UINT CB_BYTEWIDTH = SIZEOF_PS_CONSTANTBUFFER + 0xf & 0xfffffff0;
 
@@ -613,10 +615,10 @@ HRESULT CPixelShader8::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext*
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 {
-	m_PSConstantBufferData.iResolutionWidth = m_Width;
-	m_PSConstantBufferData.iResolutionHeight = m_Height;
 	m_PSConstantBufferData.iTime = float(m_Time);
-	m_PSConstantBufferData.FX_params_on = m_FX_params_on ? true: false;
+	m_PSConstantBufferData.FX_Width = float(m_Width);
+	m_PSConstantBufferData.FX_Height = float(m_Height);
+	m_PSConstantBufferData.FX_params_on = float(m_FX_params_on);
 	m_PSConstantBufferData.FX_param1 = m_FX_param[0];
 	m_PSConstantBufferData.FX_param2 = m_FX_param[1];
 	m_PSConstantBufferData.FX_param3 = m_FX_param[2];

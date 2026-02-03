@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Shadertoy.hlsl
+// File: Shadertoy_template.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -12,10 +12,10 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    int g_FX_ResolutionWidth;
-    int g_FX_ResolutionHeight;
     float iTime;
-    bool g_FX_params_on;
+    float g_FX_Width;
+    float g_FX_Height;
+    float g_FX_params_on;
     float g_FX_param1;
     float g_FX_param2;
     float g_FX_param3;
@@ -50,7 +50,7 @@ struct PS_OUTPUT
 #define mod fmod
 #define iChannel0 g_SamplerState
 #define texture g_Texture2D.Sample
-vec3 iResolution = float3(float(g_FX_ResolutionWidth), float(g_FX_ResolutionHeight), 0.0f);
+vec3 iResolution = float3(g_FX_Width, g_FX_Height, 0.0f);
 //--------------------------------------------------------------------------------------
 // Shadertoy - mainImage()
 //--------------------------------------------------------------------------------------
