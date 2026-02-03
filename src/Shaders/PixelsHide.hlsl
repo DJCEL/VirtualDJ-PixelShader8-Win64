@@ -52,9 +52,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
     {
         Step = int(ParamAdjust(g_FX_param1, 2.0f, 8.0f));
     }
-    
-    float2 position = input.Position.xy;
+
     float2 texcoord = input.TexCoord;
+    float2 position = input.Position.xy;
     uint2 pixelCoord = uint2(position);
     float4 color = 0;
     
@@ -74,4 +74,5 @@ PS_OUTPUT ps_main(PS_INPUT input)
 	
     return output;
 }
+
 
