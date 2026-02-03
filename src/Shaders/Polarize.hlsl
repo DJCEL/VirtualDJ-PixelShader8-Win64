@@ -187,7 +187,6 @@ float hue_lerp(float h1, float h2, float v)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
     float Amount = 0.5f; // [Strength of Effect] from to 0 to 1
@@ -252,10 +251,11 @@ PS_OUTPUT ps_main(PS_INPUT input)
 #ifdef FORCEHUE
     newRGB = lerp(rgbaTex.rgb, newRGB, Amount);
 #endif
-        
-    output.Color = float4(newRGB.rgb, rgbaTex.a);
     
-    output.Color = output.Color * input.Color;
+    float4 color = float4(newRGB.rgb, rgbaTex.a);
     
+    PS_OUTPUT output;
+    output.Color = color;
+    output.Color *= input.Color;
     return output;
 }

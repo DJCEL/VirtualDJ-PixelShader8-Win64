@@ -88,7 +88,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
         numWaves = int(ParamAdjust(g_FX_param2, 2.0f, 20.0f));
     }
     
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
     float2 Center = float2(0.5, 0.5);
@@ -97,8 +96,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
     
+    PS_OUTPUT output;
     output.Color = color;
-    output.Color = output.Color * input.Color;
-    
+    output.Color *= input.Color;
     return output;
 }

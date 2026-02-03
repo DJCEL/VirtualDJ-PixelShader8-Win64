@@ -53,7 +53,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
         Angle = ParamAdjust(g_FX_param1, 0.0f, 360.0f);
     }
     
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     float2 texcoord2 = texcoord;
     float2 Center = float2(0.5, 0.5);
@@ -64,11 +63,10 @@ PS_OUTPUT ps_main(PS_INPUT input)
     texcoord2 = float2(c * texcoord2.x - s * texcoord2.y, c * texcoord2.y + s * texcoord2.x);
     texcoord2 += Center; // we move to the original point after the rotation
     
-    float4 texCol = g_Texture2D.Sample(g_SamplerState, texcoord2);
+    float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
 
-    output.Color = texCol;
-
-    output.Color = output.Color * input.Color;
-    
+    PS_OUTPUT output;
+    output.Color = color;
+    output.Color *= input.Color;
     return output;
 }

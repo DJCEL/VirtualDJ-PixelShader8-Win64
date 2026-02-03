@@ -50,7 +50,6 @@ float ParamAdjust(float value,float ValMin,float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
     float OffX = 0.003; // [OffsetX] from -0.1 to 0.1
@@ -80,9 +79,10 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float3 mix_texCol = texCol0.rgb - Density * (texCol1.rgb);
     float3 result = saturate(mix_texCol);
     
-    output.Color = float4(result, texCol0.a); // protect alpha
-
-    output.Color = output.Color * input.Color;
+    float4 color = float4(result, texCol0.a); // protect alpha
     
+    PS_OUTPUT output;
+    output.Color = color;
+    output.Color *= input.Color;
     return output;
 }

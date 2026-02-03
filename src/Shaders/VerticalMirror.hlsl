@@ -37,15 +37,14 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     
     float2 texcoord_VM = float2(texcoord.x, 1 - texcoord.y);
 
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord_VM);
    
+    PS_OUTPUT output;
     output.Color = color;
     output.Color = output.Color * input.Color;
-    
     return output;
 }

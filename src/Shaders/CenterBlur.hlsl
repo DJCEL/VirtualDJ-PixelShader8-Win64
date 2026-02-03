@@ -72,10 +72,11 @@ PS_OUTPUT ps_main(PS_INPUT input)
     }
     rgbaAvgValue /= SAMPLECOUNT;
     
-    PS_OUTPUT output;
-    output.Color = rgbaAvgValue;
-    output.Color = output.Color * input.Color;
+    float4 color = rgbaAvgValue;
     
+    PS_OUTPUT output;
+    output.Color = color;
+    output.Color *= input.Color;
     return output;
 }
 

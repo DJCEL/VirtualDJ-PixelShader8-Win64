@@ -59,7 +59,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         Toned = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
     }
     
-    PS_OUTPUT output;
+    
     float2 texcoord = input.TexCoord;
     float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord);
     float3 scnColor = LightColor * texColor.rgb;
@@ -67,9 +67,11 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float3 muted = lerp(scnColor, gray.xxx, Desat);
     float3 sepia = lerp(DarkColor, LightColor, gray);
     float3 result = lerp(muted, sepia, Toned);
-    output.Color = float4(result, 1.0f);
     
-    output.Color = output.Color * input.Color;
+    float4 color = float4(result, 1.0f);
     
+    PS_OUTPUT output;
+    output.Color = color;
+    output.Color *= input.Color;
     return output;
 }

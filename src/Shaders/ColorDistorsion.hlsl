@@ -44,7 +44,7 @@ float wave(float x, float amount)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    PS_OUTPUT output;
+   
     float amount_red = 10.0;
     float amount_green = 20.0;
     float amount_blue = 40.0;
@@ -56,8 +56,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     color.g = wave(color.g, amount_green);
     color.b = wave(color.b, amount_blue);
     
+    PS_OUTPUT output;
     output.Color = color;
-    output.Color = output.Color * input.Color;
-    
+    output.Color *= input.Color;
     return output;
 }

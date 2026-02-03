@@ -50,9 +50,7 @@ float avgRGB(float3 RGB)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    
     float2 texcoord = input.TexCoord;
-    
     float2 texcoord2 = texcoord - float2(0.01f, 0.01f);
     
     float4 texcolor = g_Texture2D.Sample(g_SamplerState, texcoord);
@@ -63,10 +61,10 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float avg = avgRGB(inv_deltacolor);
     float component = pow(avg, 5.0f);
     
-    float3 color = float3(component, component, component);
+    float4 color = float4(component, component, component, 1.0f);
     
     PS_OUTPUT output;
-    output.Color = float4(color, 1.0f);
-    output.Color = output.Color * input.Color;
+    output.Color = color;
+    output.Color *= input.Color;
     return output;
 }
