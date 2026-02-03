@@ -10,3 +10,4 @@
 vec3 iResolution = float3(float(iResolutionWidth), float(iResolutionHeight), 0.0f);
 #define fragCoord input.TexCoord * iResolution.xy
 #define fragColor output.Color
+#define iChannel0 gSamplerState
