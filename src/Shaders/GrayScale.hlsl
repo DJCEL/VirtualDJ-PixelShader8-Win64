@@ -52,7 +52,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     texcolor.b = texcolor.r;
 
     // or by using average
-    // float avg = avgRBA(texcolor.rgb);
+    // float avg = avgRGB(texcolor.rgb);
     // texcolor = float4(avg, avg, avg, texcolor.a)
 
     PS_OUTPUT output;
@@ -60,6 +60,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     output.Color = output.Color * input.Color;
     return output;
 }
+
 
 
 
