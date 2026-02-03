@@ -12,7 +12,7 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float iTime;
+    float g_FX_Time;
     float g_FX_Width;
     float g_FX_Height;
     float g_FX_params_on;

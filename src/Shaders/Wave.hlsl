@@ -12,7 +12,7 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float iTime;
+    float g_FX_Time;
     float g_FX_Width;
     float g_FX_Height;
     float g_FX_params_on;
@@ -60,8 +60,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
         
     float2 texcoord2 = texcoord;
-    texcoord2.x += sin(iTime * Speed + texcoord2.x * 10) * 0.01f;
-    texcoord2.y += cos(iTime * Speed + texcoord2.y * 10) * 0.01f;
+    texcoord2.x += sin(g_FX_Time * Speed + texcoord2.x * 10) * 0.01f;
+    texcoord2.y += cos(g_FX_Time * Speed + texcoord2.y * 10) * 0.01f;
 
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
     

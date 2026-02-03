@@ -12,7 +12,7 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float iTime;
+    float g_FX_Time;
     float g_FX_Width;
     float g_FX_Height;
     float g_FX_params_on;
@@ -51,6 +51,7 @@ struct PS_OUTPUT
 #define iChannel0 g_SamplerState
 #define texture g_Texture2D.Sample
 vec3 iResolution = float3(g_FX_Width, g_FX_Height, 0.0f);
+float iTime = g_FX_Time;
 //--------------------------------------------------------------------------------------
 // Shadertoy - mainImage()
 //--------------------------------------------------------------------------------------

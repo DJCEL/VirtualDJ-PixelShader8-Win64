@@ -81,7 +81,7 @@ private:
 	__declspec(align(16))
 	struct PS_CONSTANTBUFFER
 	{
-		float iTime; // shader playback time (in seconds), elapsed time value.
+		float FX_Time; // shader playback time (in seconds), elapsed time value.
 		float FX_Width;
 		float FX_Height;
 		float FX_params_on; // if 1.0f, use the customized FX_paramX, otherwise the plugin uses the default ones defined in the shader

@@ -12,7 +12,7 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float iTime;
+    float g_FX_Time;
     float g_FX_Width;
     float g_FX_Height;
     float g_FX_params_on;
@@ -378,7 +378,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
         else
         {
             float3 vDelta = float3(0.0f, 2.0f, 4.0f);
-            float3 adjust = 0.5f + 0.5f * cos(iTime + texcoord.xyx + vDelta);
+            float3 adjust = 0.5f + 0.5f * cos(g_FX_Time + texcoord.xyx + vDelta);
             outRGB *= adjust;
         }
     }
