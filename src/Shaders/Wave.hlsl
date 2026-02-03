@@ -53,7 +53,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
         Speed = ParamAdjust(g_FX_param1, 0.0f, 2.0f);
     }
     
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
         
     float2 texcoord2 = texcoord;
@@ -62,8 +61,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
 
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
     
+    PS_OUTPUT output;
     output.Color = color;
     output.Color = output.Color * input.Color;
-    
     return output;
 }

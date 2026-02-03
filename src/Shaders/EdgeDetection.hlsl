@@ -50,7 +50,7 @@ float avgRGB(float3 RGB)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    PS_OUTPUT output;
+    
     float2 texcoord = input.TexCoord;
     
     float2 texcoord2 = texcoord - float2(0.01f, 0.01f);
@@ -63,8 +63,10 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float avg = avgRGB(inv_deltacolor);
     float component = pow(avg, 5.0f);
     
-    output.Color = float4(component, component, component, 1.0f);
-    output.Color = output.Color * input.Color;
+    float3 color = float3(component, component, component);
     
+    PS_OUTPUT output;
+    output.Color = float4(color, 1.0f);
+    output.Color = output.Color * input.Color;
     return output;
 }

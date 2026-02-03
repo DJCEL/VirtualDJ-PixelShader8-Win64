@@ -45,7 +45,7 @@ float4 grayscale_method1(float4 color)
 {
     // luminance method : best method
     float luminance = dot(color.rgb, float3(0.299f, 0.587f, 0.114f));
-    color = float4(luminance, luminance , luminance, color.a)
+    color = float4(luminance, luminance, luminance, color.a);
     return color;
 }
 //--------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ float4 grayscale_method3(float4 color)
 {
     // average method: less accurate results
     float avg = avgRGB(color.rgb);
-    color = float4(avg, avg, avg, color.a)
+    color = float4(avg, avg, avg, color.a);
     return color;
 }
 //--------------------------------------------------------------------------------------
@@ -72,12 +72,12 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float4 texcolor = g_Texture2D.Sample(g_SamplerState, texcoord);
 
-    //texcolor = grayscale_method1(texcolor);
-    texcolor = grayscale_method2(texcolor);
-    //texcolor = grayscale_method3(texcolor);
+    //float4 color = grayscale_method1(texcolor);
+    float4 color = grayscale_method2(texcolor);
+    //float4 color = grayscale_method3(texcolor);
 
     PS_OUTPUT output;
-    output.Color = texcolor;
+    output.Color = color;
     output.Color = output.Color * input.Color;
     return output;
 }

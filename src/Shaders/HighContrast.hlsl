@@ -37,7 +37,6 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord);
     
@@ -59,8 +58,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     else if (color.b < low)
         color.b = 0;
     
+    PS_OUTPUT output;
     output.Color = color;
     output.Color = output.Color * input.Color;
-    
     return output;
 }

@@ -359,10 +359,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
         adjust_C4 = ParamAdjust(g_FX_param5, 0.0f, 1.0f);
     }
     
-    PS_OUTPUT output;
     float2 texcoord = input.TexCoord;
-    
     float4 TexColor = g_Texture2D.Sample(g_SamplerState, texcoord);
+    
     float3 RGB = TexColor.rgb;
     float3 outRGB = float3(1.0f, 1.0f, 1.0f);
     
@@ -416,10 +415,11 @@ PS_OUTPUT ps_main(PS_INPUT input)
         CMYK.w *= adjust_C4;
         outRGB = cmyk_to_rgb(CMYK);
     }
-   
-    output.Color = float4(outRGB.r, outRGB.g, outRGB.b, TexColor.a);
-
-    output.Color = output.Color * input.Color;
     
+    float3 color = float3(outRGB.r, outRGB.g, outRGB.b);
+   
+    PS_OUTPUT output;
+    output.Color = float4(color, TexColor.a);
+    output.Color = output.Color * input.Color;
     return output;
 }
