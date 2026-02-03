@@ -33,6 +33,14 @@ struct PS_OUTPUT
     float4 Color : SV_TARGET;
 };
 //--------------------------------------------------------------------------------------
+// Additional functions
+//--------------------------------------------------------------------------------------
+float avgRGB(float3 RGB)
+{
+    float avg = (RGB.r + RGB.g + RGB.b) / 3.0f;
+    return avg;
+}
+//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
@@ -43,11 +51,16 @@ PS_OUTPUT ps_main(PS_INPUT input)
     texcolor.g = texcolor.r;
     texcolor.b = texcolor.r;
 
+    // or by using average
+    // float avg = avgRBA(texcolor.rgb);
+    // texcolor = float4(avg, avg, avg, texcolor.a)
+
     PS_OUTPUT output;
     output.Color = texcolor;
     output.Color = output.Color * input.Color;
     return output;
 }
+
 
 
 
