@@ -7,6 +7,7 @@
 #define mat2 float2x2
 #define mix lerp
 #define fract frac
+#define mod fmod
 vec3 iResolution = float3(float(iResolutionWidth), float(iResolutionHeight), 0.0f);
 #define fragCoord input.TexCoord * iResolution.xy
 #define fragColor output.Color
