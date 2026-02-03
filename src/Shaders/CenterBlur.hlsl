@@ -53,8 +53,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
         BlurAmount = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
     }
     
-    
-    PS_OUTPUT output;
     float2 Center = float2(0.5, 0.5);
     float4 rgbaAvgValue = 0;
     float scale = 0;
@@ -74,8 +72,10 @@ PS_OUTPUT ps_main(PS_INPUT input)
     }
     rgbaAvgValue /= SAMPLECOUNT;
     
+    PS_OUTPUT output;
     output.Color = rgbaAvgValue;
     output.Color = output.Color * input.Color;
     
     return output;
 }
+
