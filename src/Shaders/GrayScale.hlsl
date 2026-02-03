@@ -43,6 +43,7 @@ float avgRGB(float3 RGB)
 //--------------------------------------------------------------------------------------
 float4 grayscale_method1(float4 color)
 {
+    // neutrality method
     color.g = color.r;
     color.b = color.r;
     return color;
@@ -50,6 +51,7 @@ float4 grayscale_method1(float4 color)
 //--------------------------------------------------------------------------------------
 float4 grayscale_method2(float4 color)
 {
+    // average method: less accurate results
     float avg = avgRGB(color.rgb);
     color = float4(avg, avg, avg, color.a)
     return color;
@@ -70,6 +72,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     output.Color = output.Color * input.Color;
     return output;
 }
+
 
 
 
