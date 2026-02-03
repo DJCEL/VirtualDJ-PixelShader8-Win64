@@ -59,7 +59,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
         Toned = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
     }
     
-    
     float2 texcoord = input.TexCoord;
     float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord);
     float3 scnColor = LightColor * texColor.rgb;
