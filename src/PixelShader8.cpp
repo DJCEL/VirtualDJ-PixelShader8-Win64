@@ -63,7 +63,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "2.2 (64-bit)";
+	info->Version = "2.2.1 (64-bit)";
 
 	return S_OK;
 }
@@ -806,6 +806,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"Rotate") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Wave") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Ripple") == 0) NumberParams = 2;
+	else if (wcscmp(m_FX_Name, L"Mirror4") == 0) NumberParams = 1;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -897,6 +898,19 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 		{
 			float Speed = ParamAdjust(value, 0.0f, 4.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
+		}
+		else if (wcscmp(m_FX_Name, L"Mirror4") == 0)
+		{
+			int inverted = round(ParamAdjust(value, 0.0f, 1.0f));
+			switch (inverted)
+			{
+				case 0:
+					sprintf_s(outParam, outParamSize, "Normal");
+					break;
+				case 1:
+					sprintf_s(outParam, outParamSize, "Inverted");
+					break;
+			}
 		}
 		else
 		{

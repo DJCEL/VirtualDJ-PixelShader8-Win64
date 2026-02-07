@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Shadertoy_template.hlsl
+// File: Mirror4.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -38,47 +38,86 @@ struct PS_OUTPUT
 {
     float4 Color : SV_TARGET;
 };
-//--------------------------------------
-// Shadertoy compatibility
-//--------------------------------------
-#define vec2 float2
-#define vec3 float3
-#define vec4 float4
-#define mat2 float2x2
-#define mix lerp
-#define fract frac
-#define mod(x, y) (x - y * floor(x / y))
-#define iChannel0 g_SamplerState
-#define texture g_Texture2D.Sample
-#define iResolution vec3(g_FX_Width, g_FX_Height,0.0f)
-#define iTime g_FX_Time
-void mainImage(out vec4 fragColor, in vec2 fragCoord);
+//--------------------------------------------------------------------------------------
+// Additional functions
+//--------------------------------------------------------------------------------------
+float ParamAdjust(float value, float ValMin, float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
+float mod(float x, float y)
+{
+    return (x - y * floor(x / y));
+}
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float2 texcoord = input.TexCoord;
+    int inverted = 0;
     
-    float2 fragCoord = texcoord * iResolution.xy;
-    float4 fragColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-    mainImage(fragColor, fragCoord);
+    if (g_FX_params_on)
+    {
+        inverted = round(ParamAdjust(g_FX_param1, 0.0f, 1.0f));
+    }
+    
+    float2 texcoord = input.TexCoord;
+        
+    float2 uv = texcoord;
+    uv -= float2(0.5f, 0.5f);
+
+    float2 uv2 = uv * 2.;
+
+    float doFlip = 0.0;
+    if (abs(uv2.x) > 1.0)
+    {
+        float mX = floor(uv2.x);
+        doFlip = mod(mX, 2.0f);
+    }
+    else if (uv2.x < 0.0)
+    {
+        doFlip = 1.0;
+    }
+
+    float doFlipY = 0.0;
+    if (abs(uv2.y) > 1.0)
+    {
+        float mY = floor(uv2.y);
+        doFlipY = mod(mY, 2.0f);
+    }
+    else if (uv2.y < 0.0)
+    {
+        doFlipY = 1.0;
+    }
+
+    uv2.x = mod(uv2.x, 1.0);
+    uv2.y = mod(uv2.y, 1.0);
+    
+    if (doFlip == 1.0)
+    {
+        uv2.x = 1.0 - uv2.x;
+    }
+    
+    if (doFlipY == 1.0 && inverted == 1)
+    {
+        uv2.y = 1.0 - uv2.y;
+    }
+    
+    if (doFlipY == 0.0 && inverted == 0)
+    {
+        uv2.y = 1.0 - uv2.y;
+    }
+        
+
+    float4 colBlack = float4(0.0, 0.0, 0.0, 0.0);
+    
+    float4 col = g_Texture2D.Sample(g_SamplerState, uv2);
+    
+    float4 color = lerp(col, colBlack, 0.0f);
     
     PS_OUTPUT output;
-    output.Color = fragColor;
+    output.Color = color;
     output.Color *= input.Color;
     return output;
-}
-//--------------------------------------------------------------------------------------
-// Shadertoy - mainImage()
-//--------------------------------------------------------------------------------------
-void mainImage(out vec4 fragColor, in vec2 fragCoord)
-{
-    vec2 uv = fragCoord / iResolution.xy;
-    vec3 col = texture(iChannel0, uv).xyz;
-    
-    col.g = 0;
-    col.b = 0;
-    
-    fragColor = vec4(col, 1.0f);
 }

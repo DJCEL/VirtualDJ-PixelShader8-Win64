@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1 (2026-02-07)
+
+New pixels shader: 'Mirror4'
+
 ## 2.2 (2026-02-02)
 
 * New pixels shader: 'Ripple', 'EdgeDetection'
@@ -7,14 +11,14 @@
 ## 2.1 (2026-02-01)
 
 * New pixels shader: 'Wave'
-* New parameters added to the ConstantBuffer: iResolutionWidth, iResolutionHeight and iTime
+* New parameters added to the ConstantBuffer: 'FX\_Time', 'FX\_Width' and 'FX\_Height'
 
 ## 2.0 (2026-02-01)
 
 * New pixels shaders: 'Sepia', 'Polarize', 'Mask' and 'ColorSpace'
 * New buttons: 'FX Select-' and 'FX Select+'
-* New sliders: 'FX ParamX' to customize the parameters of the pixel shader
-* New button: 'FX Params' to activate the 'FX ParamX' sliders
+* New sliders: 'FX\_ParamX' to customize the parameters of the pixel shader
+* New button: 'FX\_params\_on' to activate the 'FX ParamX' sliders
 
 ## 1.6 (2025-12-24)
 
