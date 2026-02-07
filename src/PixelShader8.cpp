@@ -471,7 +471,7 @@ HRESULT CPixelShader8::Update_Vertices_D3D11()
 HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
-	int ShaderSource = 0;
+	int ShaderSource = 0; // from resource CSO file (0), from CSO file (1) or from HLSL file (2)
 
 	const WCHAR* FXName = m_FXList[m_FX];
 	if (FXName == nullptr) return hr;
