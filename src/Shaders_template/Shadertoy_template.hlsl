@@ -60,8 +60,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec2 uv = fragCoord / iResolution.xy;
     vec3 col = texture(iChannel0, uv).xyz;
     
-    col.g = col.r;
-    col.b = col.r;
+    col.g = 0;
+    col.b = 0;
     
     fragColor = vec4(col, 1.0f);
 }
