@@ -512,6 +512,21 @@ HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 	return hr;
 }
 //-----------------------------------------------------------------------
+HRESULT CPixelShader8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName)
+{
+	HRESULT hr = S_FALSE;
+
+	void* pShaderBytecode = nullptr;
+	SIZE_T BytecodeLength = 0;
+
+	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
+	if (hr != S_OK) return S_FALSE;
+
+	hr = pDevice->CreatePixelShader(pShaderBytecode, BytecodeLength, nullptr, &pPixelShader);
+
+	return hr;
+}
+//-----------------------------------------------------------------------
 /*
 HRESULT CPixelShader8::Create_PixelShaderFromHLSLFile_D3D11(ID3D11Device* pDevice, const WCHAR* pShaderFilepath)
 {
@@ -546,21 +561,6 @@ HRESULT CPixelShader8::Create_PixelShaderFromHLSLFile_D3D11(ID3D11Device* pDevic
 	return hr;
 }
 */
-//-----------------------------------------------------------------------
-HRESULT CPixelShader8::Create_PixelShaderFromResourceCSOFile_D3D11(ID3D11Device* pDevice, const WCHAR* resourceType, const WCHAR* resourceName)
-{
-	HRESULT hr = S_FALSE;
-
-	void* pShaderBytecode = nullptr;
-	SIZE_T BytecodeLength = 0;
-
-	hr = ReadResource(resourceType, resourceName, &BytecodeLength, &pShaderBytecode);
-	if (hr != S_OK) return S_FALSE;
-	
-	hr = pDevice->CreatePixelShader(pShaderBytecode, BytecodeLength, nullptr, &pPixelShader);
-
-	return hr;
-}
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevice)
 {
