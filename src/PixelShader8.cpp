@@ -136,7 +136,7 @@ void CPixelShader8::OnSlider(int id)
 			break;
 
 		case ID_SLIDER_2:
-			m_FX = (int)(ParamAdjust(m_SliderValue[1], 0.0f, float(NUMBER_FX - 1))); // Integer from 0 to (NUMBER_FX - 1)
+			m_FX = (int)(round(ParamAdjust(m_SliderValue[1], 0.0f, float(NUMBER_FX - 1)))); // Integer from 0 to (NUMBER_FX - 1)
 			wsprintf(m_FX_Name, m_FXList[m_FX]);
 			break;
 
@@ -901,7 +901,7 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 		}
 		else if (wcscmp(m_FX_Name, L"Mirror4") == 0)
 		{
-			int inverted = round(ParamAdjust(value, 0.0f, 1.0f));
+			int inverted = (int) round(ParamAdjust(value, 0.0f, 1.0f));
 			switch (inverted)
 			{
 				case 0:

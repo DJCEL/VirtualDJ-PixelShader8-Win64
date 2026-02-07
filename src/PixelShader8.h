@@ -197,7 +197,7 @@ private:
 		L"Wave",
 		L"Ripple",
 		L"EdgeDetection",
-		L"Mirror4",
+		L"Mirror4"
 	};
 };
 

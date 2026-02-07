@@ -59,7 +59,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     if (g_FX_params_on)
     {
-        inverted = round(ParamAdjust(g_FX_param1, 0.0f, 1.0f));
+        inverted = int(round(ParamAdjust(g_FX_param1, 0.0f, 1.0f)));
     }
     
     float2 texcoord = input.TexCoord;
