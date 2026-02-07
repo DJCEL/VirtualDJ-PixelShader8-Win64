@@ -9,7 +9,6 @@
 #include <d3d11.h>
 //#include <d3dcompiler.h> // if we want to compile the shader with the code by using D3DCompileFromFile()
 
-
 #pragma comment(lib, "d3d11.lib")
 //#pragma comment(lib, "d3dcompiler.lib")
 
@@ -97,7 +96,7 @@ private:
 	float ParamAdjust(float value, float ValMin, float ValMax);
 	void OnSlider(int id);
 	HRESULT ReadResource(const WCHAR* resourceType, const WCHAR* resourceName, SIZE_T* size, LPVOID* data);
-	const WCHAR* GetShaderName(int type);
+	bool Get_DllFolderPath_and_DllFilename();
 	void Display_FX_Name(char* outParam, int outParamSize);
 	long long GetCurrentTimeMilliseconds();
 	void setShaderPlaybackTime();
@@ -136,6 +135,8 @@ private:
 	
 	PS_CONSTANTBUFFER m_PSConstantBufferData;
 
+	WCHAR m_DllFolderPath[2000]; // The DLL folder path
+	WCHAR m_DllFilename[50];	// The DLL filename
 	TLVERTEX pNewVertices[6];
 	UINT m_VertexCount;
 	bool m_DirectX_On;

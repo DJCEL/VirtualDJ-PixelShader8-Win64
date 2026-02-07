@@ -27,6 +27,8 @@ CPixelShader8::CPixelShader8()
 	wsprintf(m_FX_Name, L"");
 	m_Time = 0.0f;
 	m_TimeInit = 0;
+	wsprintf(m_DllFolderPath, L"");
+	wsprintf(m_DllFilename, L"");
 }
 //------------------------------------------------------------------------------------------
 CPixelShader8::~CPixelShader8()
@@ -37,6 +39,8 @@ CPixelShader8::~CPixelShader8()
 HRESULT VDJ_API CPixelShader8::OnLoad()
 {
 	HRESULT hr = S_FALSE;
+
+	bool bRes = Get_DllFolderPath_and_DllFilename();
 
 	hr = DeclareParameterSlider(&m_SliderValue[0], ID_SLIDER_1, "Wet/Dry", "W/D", 1.0f);
 	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
@@ -467,53 +471,45 @@ HRESULT CPixelShader8::Update_Vertices_D3D11()
 HRESULT CPixelShader8::Create_PixelShader_D3D11(ID3D11Device* pDevice)
 {
 	HRESULT hr = S_FALSE;
-	
-	const WCHAR* pShaderHLSLFilepath = GetShaderName(1);
-	const WCHAR* pShaderCSOFilepath = GetShaderName(2);
-	const WCHAR* resourceName = GetShaderName(3);
-	const WCHAR* resourceType = RT_RCDATA;
-
-	SAFE_RELEASE(pPixelShader);
-
-	hr = Create_PixelShaderFromResourceCSOFile_D3D11(pDevice, resourceType, resourceName);
-	//hr = Create_PixelShaderFromHLSLFile_D3D11(pDevice, pShaderHLSLFilepath);
-
-	return hr;
-}
-//-----------------------------------------------------------------------
-const WCHAR* CPixelShader8::GetShaderName(int type)
-{
-	static WCHAR ShaderName[150] = L"";
-	WCHAR FXNameUpper[150] = L"";
+	int ShaderSource = 0;
 
 	const WCHAR* FXName = m_FXList[m_FX];
+	if (FXName == nullptr) return hr;
 
-	if (FXName == nullptr) return L"";
+	if (ShaderSource == 0)
+	{
+		WCHAR FXNameUpper[150] = L"";
+		wcsncpy_s(FXNameUpper, FXName, _TRUNCATE);
+		CharUpperW(FXNameUpper);
 
-	wcsncpy_s(FXNameUpper, FXName, _TRUNCATE);
-	CharUpperW(FXNameUpper);
+		WCHAR resourceName[150] = L"";
+		swprintf_s(resourceName, 150, L"%s_CSO", FXNameUpper);
+		
+		const WCHAR* resourceType = RT_RCDATA;
+		hr = Create_PixelShaderFromResourceCSOFile_D3D11(pDevice, resourceType, resourceName);
+	}
+	else if (ShaderSource == 1)
+	{
+		/*
+		WCHAR pShaderCSOFilepath[2048] = L"";
+		swprintf_s(pShaderCSOFilepath, 2048, L"%s%s.cso", m_DllFolderPath, m_DllFilename);
+		//swprintf_s(pShaderCSOFilepath, 2048, L"%s%s.cso", m_DllFolderPath, FXName);
 
+		hr = Create_PixelShaderFromCSOFile_D3D11(pDevice, pShaderCSOFilepath);
+		*/
+	}
+	else if (ShaderSource == 2)
+	{
+		/*
+		WCHAR pShaderHLSLFilepath[2048] = L"";
+		swprintf_s(pShaderHLSLFilepath, 2048, L"%s%s.hlsl", m_DllFolderPath, m_DllFilename);
+		//swprintf_s(pShaderHLSLFilepath, 2048, L"%s%s.hlsl", m_DllFolderPath, FXName);
 
-	switch (type)
-	{	
-		case 1:
-			swprintf_s(ShaderName, 150, L"%s.hlsl", FXName);
-			break;
-
-		case 2:
-			swprintf_s(ShaderName, 150, L"%s.cso", FXName);
-			break;
-
-		case 3:
-			swprintf_s(ShaderName, 150, L"%s_CSO", FXNameUpper);
-			break;
-
-		default:
-			swprintf_s(ShaderName, 150, L"");
-			break;
+		hr = Create_PixelShaderFromHLSLFile_D3D11(pDevice, pShaderHLSLFilepath);
+		*/
 	}
 
-	return ShaderName;
+	return hr;
 }
 //-----------------------------------------------------------------------
 /*
@@ -724,7 +720,40 @@ HRESULT CPixelShader8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRend
 
 	return S_OK;
 }
+//-------------------------------------------------------------------------------------------
+bool CPixelShader8::Get_DllFolderPath_and_DllFilename()
+{
+	// Get the full DLL path
+	WCHAR DllFilepath[2048]{};
+	size_t maxDllFilepathLength = std::size(DllFilepath);
+	DWORD len = GetModuleFileName(hInstance, DllFilepath, (DWORD) maxDllFilepathLength);
+	if (len == 0 || len == std::size(DllFilepath))
+		return false;
 
+	// Find the last backslash
+	WCHAR* filename_tmp = wcsrchr(DllFilepath, L'\\');
+	if (!filename_tmp)
+		return false;
+
+	// Get the DLL folder path
+	size_t folderLength = (filename_tmp - DllFilepath) + 1; // include '\'
+	rsize_t maxDllFolderPathLength = std::size(m_DllFolderPath);
+
+	wcsncpy_s(m_DllFolderPath,maxDllFolderPathLength,DllFilepath,folderLength);
+
+	// Get the DLL filename (no extension)
+	filename_tmp++; // move past '\'
+
+	rsize_t maxDllFilenameLength = std::size(m_DllFilename);
+
+	wcscpy_s(m_DllFilename,maxDllFilenameLength,filename_tmp);
+
+	WCHAR* ext = wcsrchr(m_DllFilename, L'.');
+	if (ext)
+		*ext = L'\0';
+
+	return true;
+}
 //-------------------------------------------------------------------------------------------
 void  CPixelShader8::Display_FX_Name(char* outParam, int outParamSize)
 {
