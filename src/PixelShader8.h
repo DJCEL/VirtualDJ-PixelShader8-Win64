@@ -178,29 +178,30 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT NUMBER_FX = 19;
+	static const UINT NUMBER_FX = 20;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {
 		L"GrayScale",
-		L"GBR",
-		L"HighContrast",
 		L"Negative",
+		L"GBR",
+		L"ColorSpace",
+		L"Sepia",
+		L"Polarize",
+		L"HighContrast",
+		L"ColorDistorsion",
+		L"EdgeDetection",
+		L"CenterBlur",
+		L"PixelsHide",
+		L"Mask",
 		L"HorizontalMirror",
 		L"VerticalMirror",
 		L"Rotate180",
 		L"Rotate",
-		L"PixelsHide",
-		L"CenterBlur",
-		L"ColorDistorsion",
-		L"Sepia",
-		L"Polarize",
-		L"Mask",
-		L"ColorSpace",
+		L"Mirror4",
 		L"Wave",
 		L"Ripple",
-		L"EdgeDetection",
-		L"Mirror4"
+		L"Flash"
 	};
 };
 

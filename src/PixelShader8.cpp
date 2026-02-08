@@ -808,7 +808,7 @@ int CPixelShader8::Get_FX_Params_Number()
 
 	if (wcscmp(m_FX_Name, L"GrayScale") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Sepia") == 0) NumberParams = 2;
-	else if (wcscmp(m_FX_Name, L"Polarize") == 0) NumberParams = 3;
+	else if (wcscmp(m_FX_Name, L"Polarize") == 0) NumberParams = 4;
 	else if (wcscmp(m_FX_Name, L"ColorSpace") == 0) NumberParams = 5;
 	else if (wcscmp(m_FX_Name, L"Mask") == 0) NumberParams = 5;
 	else if (wcscmp(m_FX_Name, L"CenterBlur") == 0) NumberParams = 1;
@@ -817,6 +817,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"Wave") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Ripple") == 0) NumberParams = 2;
 	else if (wcscmp(m_FX_Name, L"Mirror4") == 0) NumberParams = 1;
+	else if (wcscmp(m_FX_Name, L"Flash") == 0) NumberParams = 1;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -921,6 +922,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 					sprintf_s(outParam, outParamSize, "Inverted");
 					break;
 			}
+		}
+		else if (wcscmp(m_FX_Name, L"Flash") == 0)
+		{
+			float Speed = ParamAdjust(value, 0.0f, 4.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
 		}
 		else
 		{
@@ -1042,6 +1048,22 @@ void  CPixelShader8::Display_FX_Param4(char* outParam, int outParamSize, float v
 			{
 				float Component3 = ParamAdjust(value, 0.0f, 1.0f);
 				sprintf_s(outParam, outParamSize, "%.2f (Component 3)", Component3);
+			}
+		}
+		else if (wcscmp(m_FX_Name, L"Polarize") == 0)
+		{
+			int GuideHueRGB_select = int(round(ParamAdjust(value, 1.0f, 3.0f)));
+			switch (GuideHueRGB_select)
+			{
+				case 1:
+					sprintf_s(outParam, outParamSize, "Red (Hue)");
+					break;
+				case 2:
+					sprintf_s(outParam, outParamSize, "Green (Hue)");
+					break;
+				case 3:
+					sprintf_s(outParam, outParamSize, "Blue (Hue)");
+					break;
 			}
 		}
 		else

@@ -93,6 +93,9 @@
     <FxCompile Include="..\src\Shaders\Mirror4.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\Shaders\Flash.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Shaders\CenterBlur.cso">
@@ -150,6 +153,9 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Mirror4.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Flash.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>

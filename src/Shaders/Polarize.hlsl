@@ -192,17 +192,29 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     float2 texcoord = input.TexCoord;
     
-    float Amount = 0.5f; // [Strength of Effect] from to 0 to 1
+    float Amount = 0.6f; // [Strength of Effect] from to 0 to 1
     float Concentrate = 1.44f; // [Color Concentration] from 0.1 to 4 
-    float DesatCorr = 0.12f; //  g_FX_param3 [Desaturate Correction] from to 0 to 1
-    float3 GuideHueRGB = float3(0.0, 0.0, 1.0); // color blue
-//#define FORCEHUE
-    
+    float DesatCorr = 0.12f; //  [Desaturate Correction] from to 0 to 1
+    float3 GuideHueRGB = float3(0.0, 0.0, 1.0);
+        
     if (g_FX_params_on)
     {
         Amount = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
         Concentrate = ParamAdjust(g_FX_param2, 0.1f, 4.0f);
-        DesatCorr = ParamAdjust(g_FX_param3, 0.0f, 1.0f); 
+        DesatCorr = ParamAdjust(g_FX_param3, 0.0f, 1.0f);
+        int GuideHueRGB_select = int(round(ParamAdjust(g_FX_param4, 1.0f, 3.0f)));
+        switch (GuideHueRGB_select)
+        {
+            case 1:
+                GuideHueRGB = float3(1.0, 0.0, 0.0); // red
+                break;
+            case 2:
+                GuideHueRGB = float3(0.0, 1.0, 0.0); // green
+                break;
+            case 3:
+                GuideHueRGB = float3(0.0, 0.0, 1.0); // blue
+                break;
+        }
     }
     
     float4 rgbaTex = g_Texture2D.Sample(g_SamplerState, texcoord);
@@ -218,16 +230,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float dsc = smoothstep(0, DesatCorr, hsvTex.y);
     float3 newHsv = hsvTex;
 
-#ifdef FORCEHUE
-    if (dist1 < dist2)
-    {
-        newHsv = huePole1;
-    }
-    else
-    {
-        newHsv = huePole2;
-    }
-#else
     if (Concentrate < 0.1f)
     {
         Concentrate = 0.1f;
@@ -247,14 +249,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
         newHsv.x = hue_lerp(hsvTex.x, huePole2.x, c);
         newHsv.y = lerp(hsvTex.y, huePole1.y, c);
     }
-#endif
     
     float3 newRGB = hsv_to_rgb(newHsv);
-
-#ifdef FORCEHUE
-    newRGB = lerp(rgbaTex.rgb, newRGB, Amount);
-#endif
-    
+        
     float4 color = float4(newRGB.rgb, rgbaTex.a);
     
     PS_OUTPUT output;
