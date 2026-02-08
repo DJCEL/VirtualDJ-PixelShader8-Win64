@@ -24,6 +24,7 @@ CPixelShader8::CPixelShader8()
 	m_ButtonLeft = 0;
 	m_ButtonRight = 0;
 	m_FX_params_on = 0;
+	m_FX_Beats_on = 0;
 	wsprintf(m_FX_Name, L"");
 	m_Time = 0.0f;
 	m_TimeInit = 0;
@@ -46,7 +47,8 @@ HRESULT VDJ_API CPixelShader8::OnLoad()
 	hr = DeclareParameterSlider(&m_SliderValue[1], ID_SLIDER_2, "FX Select", "FX", 0.0f);
 	hr = DeclareParameterButton(&m_ButtonLeft, ID_BUTTON_1, "FX Select-", "FX-");
 	hr = DeclareParameterButton(&m_ButtonRight, ID_BUTTON_2, "FX Select+", "FX+");
-	hr = DeclareParameterSwitch(&m_FX_params_on, ID_SWITCH_1, "FX Params", "FX_P", 0.0f);
+	hr = DeclareParameterSwitch(&m_FX_Beats_on, ID_SWITCH_1, "FX Beats", "FX_B", 0.0f);
+	hr = DeclareParameterSwitch(&m_FX_params_on, ID_SWITCH_2, "FX Params", "FX_P", 0.0f);
 	hr = DeclareParameterSlider(&m_SliderValue[2], ID_SLIDER_3, "FX Param1", "FX_P1", 0.5f);
 	hr = DeclareParameterSlider(&m_SliderValue[3], ID_SLIDER_4, "FX Param2", "FX_P2", 0.5f);
 	hr = DeclareParameterSlider(&m_SliderValue[4], ID_SLIDER_5, "FX Param3", "FX_P3", 0.5f);
@@ -611,7 +613,15 @@ HRESULT CPixelShader8::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext*
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 {
-	m_PSConstantBufferData.FX_Time = float(m_Time);
+	m_PSConstantBufferData.FX_Beats_on = float(m_FX_Beats_on);
+	if (m_FX_Beats_on)
+	{
+		m_PSConstantBufferData.FX_Time = (SongPosBeats < 0) ? 0.0f : float(SongPosBeats);
+	}
+	else
+	{
+		m_PSConstantBufferData.FX_Time = float(m_Time);
+	}
 	m_PSConstantBufferData.FX_Width = float(m_Width);
 	m_PSConstantBufferData.FX_Height = float(m_Height);
 	m_PSConstantBufferData.FX_params_on = float(m_FX_params_on);
@@ -891,7 +901,7 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 		}
 		else if (wcscmp(m_FX_Name, L"Wave") == 0)
 		{
-			float Speed = ParamAdjust(value, 0.0f, 2.0f);
+			float Speed = ParamAdjust(value, 0.0f, 8.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
 		}
 		else if (wcscmp(m_FX_Name, L"Ripple") == 0)

@@ -80,7 +80,8 @@ private:
 	__declspec(align(16))
 	struct PS_CONSTANTBUFFER
 	{
-		float FX_Time; // shader playback time (in seconds), elapsed time value.
+		float FX_Beats_on; // if 1.0f, the shader playback time is in beats, otherwise it's in seconds (elapsed time value)
+		float FX_Time; // shader playback time
 		float FX_Width;
 		float FX_Height;
 		float FX_params_on; // if 1.0f, use the customized FX_paramX, otherwise the plugin uses the default ones defined in the shader
@@ -146,6 +147,7 @@ private:
 	float m_Time;
 	float m_SliderValue[7];
 	WCHAR m_FX_Name[150];
+	int m_FX_Beats_on;
 	int m_FX_params_on;
 	float m_FX_param[5];
 	float m_alpha;
@@ -166,6 +168,7 @@ private:
 		ID_SLIDER_7,
 		ID_SLIDER_MAX,
 		ID_SWITCH_1,
+		ID_SWITCH_2,
 		ID_BUTTON_1,
 		ID_BUTTON_2,
 	} ID_Interface;

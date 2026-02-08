@@ -1,8 +1,9 @@
 # Changelog
 
-## 2.2.1 (2026-02-07)
+## 2.2.1 (2026-02-08)
 
-New pixels shader: 'Mirror4'
+* New pixels shader: 'Mirror4'
+* New button: "FX Beats" to send beats instead of time to the shader
 
 ## 2.2 (2026-02-02)
 
