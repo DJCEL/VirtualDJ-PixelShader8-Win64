@@ -126,9 +126,12 @@ RIPPLE_CSO              RCDATA                  ".\\Shaders\\Ripple.cso"
 
 EDGEDETECTION_CSO       RCDATA                  ".\\Shaders\\EdgeDetection.cso"
 
+<<<<<<< Updated upstream
 MIRROR4_CSO             RCDATA                  ".\\Shaders\\Mirror4.cso"
 
 FLASH_CSO               RCDATA                  ".\\Shaders\\Flash.cso"
+=======
+>>>>>>> Stashed changes
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////
