@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3 (2026-02-13)
+
+* Release on website
+* New pixels shader: 'Flash'
+
 ## 2.2.1 (2026-02-08)
 
 * New pixels shader: 'Mirror4'
