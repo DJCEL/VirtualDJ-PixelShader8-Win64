@@ -60,9 +60,9 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord);
 PS_OUTPUT ps_main(PS_INPUT input)
 {
     float2 texcoord = input.TexCoord;
-    
     float2 fragCoord = texcoord * iResolution.xy;
     float4 fragColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+
     mainImage(fragColor, fragCoord);
     
     PS_OUTPUT output;
