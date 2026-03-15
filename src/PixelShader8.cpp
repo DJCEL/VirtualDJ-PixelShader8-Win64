@@ -300,6 +300,17 @@ HRESULT VDJ_API CPixelShader8::OnDraw()
 	return S_OK;
 }
 //-----------------------------------------------------------------------
+HRESULT VDJ_API CPixelShader8::OnAudioSamples(float* buffer, int nb)
+{
+#ifdef USE_FFT
+	int FFT_SIZE = 512; // Size of the FFT (must be a power of 2)
+	// ComputeFFT(buffer, nb, FFT_SIZE);
+	return S_OK;
+#else
+	return E_NOTIMPL;
+#endif
+}
+//-----------------------------------------------------------------------
 void CPixelShader8::OnResizeVideo()
 {
 	m_Width = width;

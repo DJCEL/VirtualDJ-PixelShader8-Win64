@@ -30,6 +30,7 @@ public:
 	HRESULT VDJ_API OnDraw();
 	HRESULT VDJ_API OnStart();
 	HRESULT VDJ_API OnStop();
+	HRESULT VDJ_API OnAudioSamples(float* buffer, int nb);
 
 private:
 	struct D3DXPOSITION
