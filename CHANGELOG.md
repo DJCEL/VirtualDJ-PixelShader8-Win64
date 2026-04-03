@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.1 (2026-04-03)
+
+* New pixels shader: 'Thermal'
+
 ## 2.3 (2026-02-13)
 
 * Release on website

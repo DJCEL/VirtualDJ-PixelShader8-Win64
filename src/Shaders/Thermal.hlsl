@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Sepia.hlsl
+// File: Thermal.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -42,40 +42,25 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Additional functions
 //--------------------------------------------------------------------------------------
-float ParamAdjust(float value, float ValMin, float ValMax)
+float3 thermal(float3 color)
 {
-    return ValMin + value * (ValMax - ValMin);
+    float3 invColor = float3(1.0f, 1.0f, 1.0f) - color;
+    float len = pow((length(invColor * 2.2f)) / 3.0f, 2.0f);
+    float3 col = float3(len, len * pow((1.0f - color.r), 2.0f), 0.0f);
+    return float3(len * 1.5f, len * pow((1.0f - color.r), 2.0f), 0.0f) + dot(col, float3(0.0f, 1.0f, 0.0f)) / 1.5f;
 }
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float Desat = 0.5f; // [Desaturation] from 0.0f to 1.0f
-    float Toned = 0.6f; // [Toning] from 0.0f to 1.0f
-    float3 LightColor = float3(1, 0.9, 0.5); // Paper Tone
-    float3 DarkColor = float3(0.2, 0.05, 0); // Stain Tone
-    float3 grayXfer = float3(0.3, 0.59, 0.11);
-    
-    if (g_FX_params_on)
-    {
-        Desat = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
-        Toned = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
-    }
-    
     float2 texcoord = input.TexCoord;
-    float3 texColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
+    float3 inColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
     
-    float3 scnColor = LightColor * texColor;
-    float gray = dot(grayXfer, scnColor);
-    float3 muted = lerp(scnColor, gray.xxx, Desat);
-    float3 sepia = lerp(DarkColor, LightColor, gray);
-    float3 result = lerp(muted, sepia, Toned);
-    
-    float4 color = float4(result, 1.0f);
+    float4 color = float4(thermal(inColor), 1.0f);
     
     PS_OUTPUT output;
     output.Color = color;
-    output.Color *= input.Color;
+    output.Color = output.Color * input.Color;
     return output;
 }

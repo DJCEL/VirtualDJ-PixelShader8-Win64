@@ -179,7 +179,7 @@ private:
 	#endif
 
 	// Number of FX available :
-	static const UINT NUMBER_FX = 20;
+	static const UINT NUMBER_FX = 21;
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {
@@ -202,7 +202,8 @@ private:
 		L"Mirror4",
 		L"Wave",
 		L"Ripple",
-		L"Flash"
+		L"Flash",
+		L"Thermal"
 	};
 };
 
