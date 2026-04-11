@@ -33,6 +33,12 @@ public:
 	HRESULT VDJ_API OnAudioSamples(float* buffer, int nb);
 
 private:
+	// Update these values if required:
+	static const UINT NUMBER_FX = 21;
+	static const UINT SLIDERVALUE_COUNT = 7;
+	static const UINT FX_PARAM_COUNT = 5;
+	static const UINT NEWVERTICES_COUNT = 6;
+
 	struct D3DXPOSITION
 	{
 		float x;
@@ -127,30 +133,27 @@ private:
 	HRESULT GetInfoFromShaderResourceView(ID3D11ShaderResourceView* pShaderResourceView, InfoTexture2D* info);
 	HRESULT GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRenderTargetView, InfoTexture2D* info);
 
-	
 	ID3D11Device* pD3DDevice;
 	ID3D11DeviceContext* pD3DDeviceContext;
 	ID3D11RenderTargetView* pD3DRenderTargetView;
 	ID3D11Buffer* pNewVertexBuffer;
 	ID3D11PixelShader* pPixelShader;
 	ID3D11Buffer* pPSConstantBuffer;
-	
 	PS_CONSTANTBUFFER m_PSConstantBufferData;
 
 	WCHAR m_DllFolderPath[2000]; // The DLL folder path
 	WCHAR m_DllFilename[50];	// The DLL filename
-	TLVERTEX pNewVertices[6];
-	UINT m_VertexCount;
+	TLVERTEX pNewVertices[NEWVERTICES_COUNT];
 	bool m_DirectX_On;
 	int m_Width;
 	int m_Height;
 	long long m_TimeInit;
 	float m_Time;
-	float m_SliderValue[7];
+	float m_SliderValue[SLIDERVALUE_COUNT];
 	WCHAR m_FX_Name[150];
 	int m_FX_Beats_on;
 	int m_FX_params_on;
-	float m_FX_param[5];
+	float m_FX_param[FX_PARAM_COUNT];
 	float m_alpha;
 	UINT m_FX;
 	UINT m_current_FX;
@@ -178,8 +181,7 @@ private:
 	#define SAFE_RELEASE(x) { if (x!=nullptr) { x->Release(); x=nullptr; } }
 	#endif
 
-	// Number of FX available :
-	static const UINT NUMBER_FX = 21;
+	
 
 	// Names of FX available :
 	const WCHAR* m_FXList[NUMBER_FX] = {

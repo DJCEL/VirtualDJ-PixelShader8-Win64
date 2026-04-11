@@ -10,14 +10,13 @@ CPixelShader8::CPixelShader8()
 	pNewVertexBuffer = nullptr;
 	pPixelShader = nullptr;
 	pPSConstantBuffer = nullptr;
-	ZeroMemory(pNewVertices, 6 * sizeof(TVertex8));
-	ZeroMemory(m_SliderValue, 6 * sizeof(float));
-	ZeroMemory(m_FX_param, 5 * sizeof(float));
+	ZeroMemory(pNewVertices, NEWVERTICES_COUNT * sizeof(TVertex8));
+	ZeroMemory(m_SliderValue, SLIDERVALUE_COUNT * sizeof(float));
+	ZeroMemory(m_FX_param, FX_PARAM_COUNT * sizeof(float));
 	ZeroMemory(&m_PSConstantBufferData, sizeof(PS_CONSTANTBUFFER));
 	m_DirectX_On = false;
 	m_Width = 0;
 	m_Height = 0;
-	m_VertexCount = 0;
 	m_alpha = 1.0f;
 	m_FX = 0;
 	m_current_FX = 0;
@@ -65,7 +64,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "2.3.1 (64-bit)";
+	info->Version = "2.3.2 (64-bit)";
 
 	return S_OK;
 }
@@ -297,6 +296,9 @@ HRESULT VDJ_API CPixelShader8::OnDraw()
 	hr = Rendering_D3D11(pD3DDevice, pD3DDeviceContext, pD3DRenderTargetView, pTexture, vertices);
 	if (hr != S_OK) return S_FALSE;
 
+	SAFE_RELEASE(pD3DRenderTargetView);
+	SAFE_RELEASE(pD3DDeviceContext);
+
 	return S_OK;
 }
 //-----------------------------------------------------------------------
@@ -402,7 +404,7 @@ HRESULT CPixelShader8::Rendering_D3D11(ID3D11Device* pDevice, ID3D11DeviceContex
 		pDeviceContext->IASetVertexBuffers(0, 1, &pNewVertexBuffer, &m_VertexStride, &m_VertexOffset);
 	}
 	
-	pDeviceContext->Draw(m_VertexCount, 0);
+	pDeviceContext->Draw(NEWVERTICES_COUNT, 0);
 
 
 	return S_OK;
@@ -414,14 +416,11 @@ HRESULT CPixelShader8::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 
 	if (!pDevice) return E_FAIL;
 
-	// Set the number of vertices in the vertex array.
-	m_VertexCount = 6; // = ARRAYSIZE(pNewVertices);
-	
 	// Fill in a buffer description.
 	D3D11_BUFFER_DESC VertexBufferDesc;
 	ZeroMemory(&VertexBufferDesc, sizeof(VertexBufferDesc));
 	VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;   // CPU_Access=Write_Only & GPU_Access=Read_Only
-	VertexBufferDesc.ByteWidth = sizeof(TLVERTEX) * m_VertexCount;
+	VertexBufferDesc.ByteWidth = sizeof(TLVERTEX) * NEWVERTICES_COUNT;
 	VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER; // Use as vertex buffer  // or D3D11_BIND_INDEX_BUFFER
 	VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // Allow CPU to write in buffer
 	VertexBufferDesc.MiscFlags = 0;
@@ -448,7 +447,7 @@ HRESULT CPixelShader8::Update_VertexBufferDynamic_D3D11(ID3D11DeviceContext* ctx
 
 	hr = Update_Vertices_D3D11();
 
-	memcpy(MappedSubResource.pData, pNewVertices, m_VertexCount * sizeof(TLVERTEX));
+	memcpy(MappedSubResource.pData, pNewVertices, NEWVERTICES_COUNT * sizeof(TLVERTEX));
 
 	ctx->Unmap(pNewVertexBuffer, NULL);
 
@@ -584,7 +583,7 @@ HRESULT CPixelShader8::Create_PSConstantBufferDynamic_D3D11(ID3D11Device* pDevic
 	// Constant buffers (cbuffer) in Direct3D (DX11/DX12) must have a ByteWidth that is a 
 	// multiple of 16 bytes, corresponding to 4-component vectors (16 bytes, 4*32-bit components). 
 	UINT SIZEOF_PS_CONSTANTBUFFER = sizeof(PS_CONSTANTBUFFER);
-	UINT CB_BYTEWIDTH = SIZEOF_PS_CONSTANTBUFFER + 0xF & 0xFFFFFFF0;
+	UINT CB_BYTEWIDTH = (SIZEOF_PS_CONSTANTBUFFER + 0xF) & 0xFFFFFFF0;
 
 	D3D11_BUFFER_DESC ConstantBufferDesc = {};
 	ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;  // CPU_Access=Write_Only & GPU_Access=Read_Only
@@ -744,6 +743,8 @@ HRESULT CPixelShader8::GetInfoFromRenderTargetView(ID3D11RenderTargetView* pRend
 //-------------------------------------------------------------------------------------------
 bool CPixelShader8::Get_DllFolderPath_and_DllFilename()
 {
+	if (!hInstance) return false;
+
 	// Get the full DLL path
 	WCHAR DllFilepath[2048]{};
 	size_t maxDllFilepathLength = std::size(DllFilepath);
