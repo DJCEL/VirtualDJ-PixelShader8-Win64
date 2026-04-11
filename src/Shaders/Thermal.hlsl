@@ -52,11 +52,15 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
+    float coeff1 = 1.5f;
+    if (g_FX_params_on)
+    {
+        coeff1 = ParamAdjust(g_FX_param1, 0.5f, 5.0f);
+    }
+    
     float2 texcoord = input.TexCoord;
     float3 texColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
      
-    float coeff1 = 1.5f;
-    
     float3 invertColor = 1.0f - texColor;
     float val1_tmp = length(invertColor * 2.2f) / 3.0f;
     float r_0 = invertColor.r;
