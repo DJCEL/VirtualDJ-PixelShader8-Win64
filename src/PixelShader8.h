@@ -194,6 +194,7 @@ private:
 		L"Polarize",
 		L"HighContrast",
 		L"ColorDistorsion",
+		L"Thermal",
 		L"EdgeDetection",
 		L"CenterBlur",
 		L"PixelsHide",
@@ -205,9 +206,8 @@ private:
 		L"Mirror4",
 		L"Wave",
 		L"Ripple",
-		L"Flash",
-		L"Thermal",
-		L"RaveTunnel"
+		L"RaveTunnel",
+		L"Flash"
 	};
 };
 

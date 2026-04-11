@@ -60,6 +60,15 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
     
+    float Speed = 1.0f;
+   
+    if (g_FX_params_on)
+    {
+        Speed = ParamAdjust(g_FX_param1, 0.0f, 5.0f);
+    }
+    
+    float time_adjusted = time * Speed;
+    
     float2 texcoord = input.TexCoord;
     
     float2 center = float2(0.5f, 0.5f);
@@ -68,9 +77,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float angle = atan2(p.y, p.x);
     
     // Create multi-layered wave patterns for more complex visuals
-    float wave1 = sin(dist * 20.0 - time * 6.0 + angle * 5.0);
-    float wave2 = sin(dist * 15.0 - time * 4.0 + angle * 3.0) * 0.5;
-    float wave3 = cos(dist * 25.0 - time * 8.0 + angle * 7.0) * 0.3;
+    float wave1 = sin(dist * 20.0 - time_adjusted * 6.0 + angle * 5.0);
+    float wave2 = sin(dist * 15.0 - time_adjusted * 4.0 + angle * 3.0) * 0.5;
+    float wave3 = cos(dist * 25.0 - time_adjusted * 8.0 + angle * 7.0) * 0.3;
     float pattern = wave1 + wave2 + wave3;
     
     // Smooth the pattern for better visual quality
@@ -88,7 +97,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     // Add perpendicular offset for richer distortion
     float2 perpDir = float2(-waveDir.y, waveDir.x);
-    texcoord2 += perpDir * sin(time * 3.0 + angle * 4.0) * 0.08;
+    texcoord2 += perpDir * sin(time_adjusted * 3.0 + angle * 4.0) * 0.08;
     
     // Sample texture with enhanced distortion
     float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord2);
