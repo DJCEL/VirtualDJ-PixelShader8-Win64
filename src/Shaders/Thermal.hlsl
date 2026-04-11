@@ -43,7 +43,10 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Additional functions
 //--------------------------------------------------------------------------------------
-
+float ParamAdjust(float value, float ValMin, float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
@@ -52,10 +55,16 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float3 inColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
     
-    float3 invertColor = float3(1.0f, 1.0f, 1.0f) - inColor;
-    float len = pow((length(invertColor * 2.2f)) / 3.0f, 2.0f);
-    float3 col = float3(len, len * pow((1.0f - inColor.r), 2.0f), 0.0f);
-    float3 thermalColor= float3(len * 1.5f, len * pow((1.0f - inColor.r), 2.0f), 0.0f) + dot(col, float3(0.0f, 1.0f, 0.0f)) / 1.5f;
+    float3 invertColor = 1.0f - inColor;
+    float val1_tmp = length(invertColor * 2.2f) / 3.0f;
+    float val2_tmp = 1.0f - inColor.r;
+    float val1 = pow(val1_tmp, 2.0f);
+    float val2 = pow(val2_tmp, 2.0f);
+    float val3 = val1 * val2;
+    float3 col1 = float3(val1 * 1.5f, val3, 0.0f);
+    float3 col2 = float3(val1, val3, 0.0f);
+    float3 col3 = float3(0.0f, 1.0f, 0.0f);
+    float3 thermalColor = col1 + dot(col2, col3) / 1.5f;
     
     float4 color = float4(thermalColor, 1.0f);
     
