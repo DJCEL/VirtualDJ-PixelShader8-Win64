@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Thermal.hlsl
+// File: RaveTunnel.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -29,9 +29,9 @@ cbuffer PS_CONSTANTBUFFER : register(b0)
 //--------------------------------------------------------------------------------------
 struct PS_INPUT
 {
-	float4 Position : SV_Position;
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
+    float4 Position : SV_Position;
+    float4 Color : COLOR0;
+    float2 TexCoord : TEXCOORD0;
 };
 //--------------------------------------------------------------------------------------
 // Output structure
@@ -52,30 +52,21 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float coeff1 = 1.5f;
-    if (g_FX_params_on)
-    {
-        coeff1 = ParamAdjust(g_FX_param1, 0.5f, 5.0f);
-    }
+    float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
     
     float2 texcoord = input.TexCoord;
-    float3 texColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
-     
-    float3 invertColor = 1.0f - texColor;
-    float r_0 = invertColor.r;
-    float r_1_tmp = length(invertColor * 2.2f) / 3.0f;
-    float r_1 = pow(r_1_tmp, 2.0f);
-    float r_2 = pow(r_0, 2.0f);
-    float r_3 = r_1 * coeff1;
-    float g = r_1 * r_2;
-    float3 col1 = float3(r_3, g, 0.0f);
-    float3 col2_tmp1 = float3(r_1, g, 0.0f);
-    float3 col2_tmp2 = float3(0.0f, 1.0f, 0.0f);
-    float3 col2 = dot(col2_tmp1, col2_tmp2) / coeff1;
-    float3 thermalColor = col1 + col2;
+    float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord);
     
-    float4 color = float4(thermalColor, 1.0f);
+    float2 center = float2(0.5f, 0.5f);
+    float2 p = texcoord - center;
+    float dist = length(p);
+    float angle = atan2(p.y, p.x);
+    float pattern = sin(dist * 20.0 - time * 6.0 + angle * 5.0);
+    float v = abs(pattern);
+    float4 mask = float4(v, v, v, 1.0f); 
     
+    float4 color = texColor * mask;
+      
     PS_OUTPUT output;
     output.Color = color;
     output.Color = output.Color * input.Color;
