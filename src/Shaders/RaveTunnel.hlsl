@@ -99,7 +99,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 perpDir = float2(-waveDir.y, waveDir.x);
     texcoord2 += perpDir * sin(time_adjusted * 3.0 + angle * 4.0) * 0.08;
     
-    // Sample texture with enhanced distortion
     float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord2);
     
     // Add color vibrance and enhance saturation
