@@ -64,7 +64,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float3 col1 = float3(val1 * 1.5f, val3, 0.0f);
     float3 col2 = float3(val1, val3, 0.0f);
     float3 col3 = float3(0.0f, 1.0f, 0.0f);
-    float3 thermalColor = col1 + dot(col2, col3) / 1.5f;
+    float3 col4 = dot(col2, col3) / 1.5f;
+    float3 thermalColor = col1 + col4;
     
     float4 color = float4(thermalColor, 1.0f);
     
