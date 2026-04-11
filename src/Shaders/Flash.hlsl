@@ -12,10 +12,11 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float g_FX_Beats_on;
     float g_FX_Time;
+    float g_FX_SongPosBeats;
     float g_FX_Width;
     float g_FX_Height;
+    float g_FX_Beats_on;
     float g_FX_params_on;
     float g_FX_param1;
     float g_FX_param2;
@@ -51,6 +52,8 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
+    float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
+    
     float Speed = 2.0f;
     
     if (g_FX_params_on)
@@ -61,8 +64,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float2 CoordMiddle = float2(0.5f, 0.5f);
     
-    float speed_1 = sin(Speed * g_FX_Time);
-    float speed_2 = sin(Speed * g_FX_Time * 10.0f);
+    float speed_1 = sin(Speed * time);
+    float speed_2 = sin(Speed * time * 10.0f);
     
     float x1 = pow(speed_1 / 2.0f, 2.0f) * 4.0f;
     float x2 = (speed_2 + 1.0f) / 2.0f;

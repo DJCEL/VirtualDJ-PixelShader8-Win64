@@ -623,17 +623,11 @@ HRESULT CPixelShader8::Update_PSConstantBufferDynamic_D3D11(ID3D11DeviceContext*
 //-----------------------------------------------------------------------
 HRESULT CPixelShader8::Update_PSConstantBufferData_D3D11()
 {
-	m_PSConstantBufferData.FX_Beats_on = float(m_FX_Beats_on);
-	if (m_FX_Beats_on)
-	{
-		m_PSConstantBufferData.FX_Time = (SongPosBeats < 0) ? 0.0f : float(SongPosBeats);
-	}
-	else
-	{
-		m_PSConstantBufferData.FX_Time = float(m_Time);
-	}
+	m_PSConstantBufferData.FX_Time = float(m_Time);
+	m_PSConstantBufferData.FX_SongPosBeats = (SongPosBeats < 0) ? 0.0f : float(SongPosBeats);
 	m_PSConstantBufferData.FX_Width = float(m_Width);
 	m_PSConstantBufferData.FX_Height = float(m_Height);
+	m_PSConstantBufferData.FX_Beats_on = float(m_FX_Beats_on);
 	m_PSConstantBufferData.FX_params_on = float(m_FX_params_on);
 	m_PSConstantBufferData.FX_param1 = m_FX_param[0];
 	m_PSConstantBufferData.FX_param2 = m_FX_param[1];

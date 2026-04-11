@@ -12,10 +12,11 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float g_FX_Beats_on;
     float g_FX_Time;
+    float g_FX_SongPosBeats;
     float g_FX_Width;
     float g_FX_Height;
+    float g_FX_Beats_on;
     float g_FX_params_on;
     float g_FX_param1;
     float g_FX_param2;
@@ -51,18 +52,20 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float Speed = 1.0f;
+    float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
     
+    float Speed = 1.0f;
+   
     if (g_FX_params_on)
     {
         Speed = ParamAdjust(g_FX_param1, 0.0f, 8.0f);
     }
-    
+
     float2 texcoord = input.TexCoord;
         
     float2 texcoord2 = texcoord;
-    texcoord2.x += sin(g_FX_Time * Speed + texcoord2.x * 10) * 0.01f;
-    texcoord2.y += cos(g_FX_Time * Speed + texcoord2.y * 10) * 0.01f;
+    texcoord2.x += sin(time * Speed + texcoord2.x * 10) * 0.01f;
+    texcoord2.y += cos(time * Speed + texcoord2.y * 10) * 0.01f;
 
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
     

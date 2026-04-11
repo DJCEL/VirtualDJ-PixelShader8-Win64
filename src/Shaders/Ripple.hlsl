@@ -12,10 +12,11 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float g_FX_Beats_on;
     float g_FX_Time;
+    float g_FX_SongPosBeats;
     float g_FX_Width;
     float g_FX_Height;
+    float g_FX_Beats_on;
     float g_FX_params_on;
     float g_FX_param1;
     float g_FX_param2;
@@ -83,6 +84,8 @@ float2 normal(float2 pos, float t, float Speed, int numWaves)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
+    float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
+    
     float Speed = 2.5f;
     int numWaves = 10;
     
@@ -96,7 +99,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     float2 Center = float2(0.5, 0.5);
     float2 pos = 2.0f * (texcoord - Center);
-    float2 texcoord2 = texcoord + normal(pos, g_FX_Time, Speed, numWaves);
+    float2 texcoord2 = texcoord + normal(pos, time, Speed, numWaves);
     
     float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
     

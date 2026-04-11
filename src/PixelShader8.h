@@ -87,10 +87,11 @@ private:
 	__declspec(align(16))
 	struct PS_CONSTANTBUFFER
 	{
-		float FX_Beats_on; // if 1.0f, the shader playback time is in beats, otherwise it's in seconds (elapsed time value)
-		float FX_Time; // shader playback time
+		float FX_Time; // shader playback time in seconds (elapsed time value)
+		float FX_SongPosBeats;
 		float FX_Width;
 		float FX_Height;
+		float FX_Beats_on; // if 1.0f, use the plugin uses FX_SongPosBeats, otherwise it uses FX_Time
 		float FX_params_on; // if 1.0f, use the customized FX_paramX, otherwise the plugin uses the default ones defined in the shader
 		float FX_param1; // 1st param (slider from 0.0f to 1.0f)
 		float FX_param2; // 2nd param (slider from 0.0f to 1.0f)

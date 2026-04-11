@@ -12,10 +12,11 @@ SamplerState g_SamplerState : register(s0);
 //--------------------------------------------------------------------------------------
 cbuffer PS_CONSTANTBUFFER : register(b0)
 {
-    float g_FX_Beats_on;
     float g_FX_Time;
+    float g_FX_SongPosBeats;
     float g_FX_Width;
     float g_FX_Height;
+    float g_FX_Beats_on;
     float g_FX_params_on;
     float g_FX_param1;
     float g_FX_param2;
