@@ -418,13 +418,12 @@ HRESULT CPixelShader8::Create_VertexBufferDynamic_D3D11(ID3D11Device* pDevice)
 
 	if (!pDevice) return E_FAIL;
 
-	// Fill in a buffer description.
 	D3D11_BUFFER_DESC VertexBufferDesc;
 	ZeroMemory(&VertexBufferDesc, sizeof(VertexBufferDesc));
-	VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;   // CPU_Access=Write_Only & GPU_Access=Read_Only
+	VertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	VertexBufferDesc.ByteWidth = sizeof(TLVERTEX) * NEWVERTICES_COUNT;
-	VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER; // Use as vertex buffer  // or D3D11_BIND_INDEX_BUFFER
-	VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // Allow CPU to write in buffer
+	VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	VertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	VertexBufferDesc.MiscFlags = 0;
 
 	hr = pDevice->CreateBuffer(&VertexBufferDesc, NULL, &pNewVertexBuffer);
