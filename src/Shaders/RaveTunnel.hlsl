@@ -55,7 +55,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
     
     float2 texcoord = input.TexCoord;
-    float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord);
     
     float2 center = float2(0.5f, 0.5f);
     float2 p = texcoord - center;
@@ -63,7 +62,12 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float angle = atan2(p.y, p.x);
     float pattern = sin(dist * 20.0 - time * 6.0 + angle * 5.0);
     float v = abs(pattern);
-    float4 mask = float4(v, v, v, 1.0f); 
+    float4 mask = float4(v, v, v, 1.0f);
+   
+    float2 texcoord2 = texcoord;
+    float waveOffset = pattern * 0.1;
+    texcoord2 += normalize(p) * waveOffset;
+    float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord2);
     
     float4 color = texColor * mask;
       
