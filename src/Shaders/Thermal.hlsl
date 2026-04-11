@@ -53,19 +53,22 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 PS_OUTPUT ps_main(PS_INPUT input)
 {
     float2 texcoord = input.TexCoord;
-    float3 inColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
+    float3 texColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
+     
+    float coeff1 = 1.5f;
     
-    float3 invertColor = 1.0f - inColor;
+    float3 invertColor = 1.0f - texColor;
     float val1_tmp = length(invertColor * 2.2f) / 3.0f;
-    float val2_tmp = 1.0f - inColor.r;
-    float val1 = pow(val1_tmp, 2.0f);
-    float val2 = pow(val2_tmp, 2.0f);
-    float val3 = val1 * val2;
-    float3 col1 = float3(val1 * 1.5f, val3, 0.0f);
-    float3 col2 = float3(val1, val3, 0.0f);
-    float3 col3 = float3(0.0f, 1.0f, 0.0f);
-    float3 col4 = dot(col2, col3) / 1.5f;
-    float3 thermalColor = col1 + col4;
+    float r_0 = invertColor.r;
+    float r_1 = pow(val1_tmp, 2.0f);
+    float r_2 = pow(r_0, 2.0f);
+    float r_3 = r_1 * coeff1;
+    float g = r_1 * r_2;
+    float3 col1 = float3(r_3, g, 0.0f);
+    float3 col2_tmp1 = float3(r_1, g, 0.0f);
+    float3 col2_tmp2 = float3(0.0f, 1.0f, 0.0f);
+    float3 col2 = dot(col2_tmp1, col2_tmp2) / coeff1;
+    float3 thermalColor = col1 + col2;
     
     float4 color = float4(thermalColor, 1.0f);
     
