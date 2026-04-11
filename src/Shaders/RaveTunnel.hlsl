@@ -48,12 +48,6 @@ float ParamAdjust(float value, float ValMin, float ValMax)
     return ValMin + value * (ValMax - ValMin);
 }
 //--------------------------------------------------------------------------------------
-float smoothWave(float x)
-{
-    // Improved Perlin-like noise function for smoother waves
-    return smoothstep(-1.0, 1.0, sin(x));
-}
-//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
@@ -66,9 +60,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     {
         Speed = ParamAdjust(g_FX_param1, 0.0f, 5.0f);
     }
-    
-    float time_adjusted = time * Speed;
-    
+        
     float2 texcoord = input.TexCoord;
     
     float2 center = float2(0.5f, 0.5f);
@@ -77,9 +69,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float angle = atan2(p.y, p.x);
     
     // Create multi-layered wave patterns for more complex visuals
-    float wave1 = sin(dist * 20.0 - time_adjusted * 6.0 + angle * 5.0);
-    float wave2 = sin(dist * 15.0 - time_adjusted * 4.0 + angle * 3.0) * 0.5;
-    float wave3 = cos(dist * 25.0 - time_adjusted * 8.0 + angle * 7.0) * 0.3;
+    float wave1 = sin(dist * 20.0 - time * Speed * 6.0 + angle * 5.0);
+    float wave2 = sin(dist * 15.0 - time * Speed * 4.0 + angle * 3.0) * 0.5;
+    float wave3 = cos(dist * 25.0 - time * Speed * 8.0 + angle * 7.0) * 0.3;
     float pattern = wave1 + wave2 + wave3;
     
     // Smooth the pattern for better visual quality
@@ -93,11 +85,12 @@ PS_OUTPUT ps_main(PS_INPUT input)
     // Apply directional wave offset to texture
     float waveOffset = pattern * 0.15;
     float2 waveDir = normalize(p);
-    float2 texcoord2 = texcoord + waveDir * waveOffset;
+    float2 texcoord2 = texcoord;
+    texcoord2 += waveDir * waveOffset;
     
     // Add perpendicular offset for richer distortion
     float2 perpDir = float2(-waveDir.y, waveDir.x);
-    texcoord2 += perpDir * sin(time_adjusted * 3.0 + angle * 4.0) * 0.08;
+    texcoord2 += perpDir * sin(time * Speed * 3.0 + angle * 4.0) * 0.08;
     
     float4 texColor = g_Texture2D.Sample(g_SamplerState, texcoord2);
     
