@@ -52,8 +52,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texcoord = input.TexCoord;
     float3 inColor = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
     
-    float3 invColor = 1.0f - inColor;
-    float len = pow((length(invColor * 2.2f)) / 3.0f, 2.0f);
+    float3 invertColor = float3(1.0f, 1.0f, 1.0f) - inColor;
+    float len = pow((length(invertColor * 2.2f)) / 3.0f, 2.0f);
     float3 col = float3(len, len * pow((1.0f - inColor.r), 2.0f), 0.0f);
     float3 thermalColor= float3(len * 1.5f, len * pow((1.0f - inColor.r), 2.0f), 0.0f) + dot(col, float3(0.0f, 1.0f, 0.0f)) / 1.5f;
     
