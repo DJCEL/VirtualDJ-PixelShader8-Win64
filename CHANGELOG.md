@@ -2,6 +2,7 @@
 
 ## 2.3.2 (2026-04-11)
 
+* New pixels shader: 'RavelTunnel'
 * Some fixes in the code
 
 ## 2.3.1 (2026-04-03)
