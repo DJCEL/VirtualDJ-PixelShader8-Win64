@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Rotate.hlsl
+// File: Frozen.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -29,9 +29,9 @@ cbuffer PS_CONSTANTBUFFER : register(b0)
 //--------------------------------------------------------------------------------------
 struct PS_INPUT
 {
-	float4 Position : SV_Position;
-	float4 Color : COLOR0;
-	float2 TexCoord : TEXCOORD0;
+    float4 Position : SV_Position;
+    float4 Color : COLOR0;
+    float2 TexCoord : TEXCOORD0;
 };
 //--------------------------------------------------------------------------------------
 // Output structure
@@ -43,36 +43,47 @@ struct PS_OUTPUT
 //--------------------------------------------------------------------------------------
 // Additional functions
 //--------------------------------------------------------------------------------------
-float ParamAdjust(float value,float ValMin,float ValMax)
+float ParamAdjust(float value, float ValMin, float ValMax)
 {
     return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
+float randf(float2 texcoord, float rnd_scale)
+{
+    float2 vf1 = float2(92.0, 80.0);
+    float2 vf2 = float2(41.0, 62.0);
+    
+    float x = dot(texcoord, vf1);
+    float y = dot(texcoord, vf2);
+    float res = sin(x) + cos(y) * rnd_scale;
+    return frac(res);
 }
 //--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float Angle = 90.0f; // [Rotation] from 0 to 360
-
+    float scale = 5.1;
+    float factor = 0.05;
+    
     if (g_FX_params_on)
     {
-        Angle = ParamAdjust(g_FX_param1, 0.0f, 360.0f);
+        scale = ParamAdjust(g_FX_param1, 1.0f, 10.0f);
+        factor = ParamAdjust(g_FX_param2, 0.0f, 0.10f);
     }
-    
+ 
     float2 texcoord = input.TexCoord;
-    float2 Center = float2(0.5, 0.5);
-    float r = radians(Angle);
-    float c = cos(r);
-    float s = sin(r);
     float2 texcoord2 = texcoord;
-    texcoord2 -= Center; // we move to the center point before the rotation
-    texcoord2 = float2(c * texcoord2.x - s * texcoord2.y, c * texcoord2.y + s * texcoord2.x);
-    texcoord2 += Center; // we move to the original point after the rotation
     
-    float4 color = g_Texture2D.Sample(g_SamplerState, texcoord2);
-
+    float2 rnd = float2(randf(texcoord.xy, scale), randf(texcoord.yx, scale));
+    texcoord2 += rnd * factor;
+    
+    float3 col = g_Texture2D.Sample(g_SamplerState, texcoord2).rgb;
+    
+    float4 color = float4(col, 1.0);
+      
     PS_OUTPUT output;
     output.Color = color;
-    output.Color *= input.Color;
+    output.Color = output.Color * input.Color;
     return output;
 }

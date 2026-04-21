@@ -133,6 +133,7 @@ FLASH_CSO               RCDATA                  ".\\Shaders\\Flash.cso"
 THERMAL_CSO             RCDATA                  ".\\Shaders\\Thermal.cso"
 
 RAVETUNNEL_CSO          RCDATA                  ".\\Shaders\\RaveTunnel.cso"
+FROZEN_CSO              RCDATA                  ".\\Shaders\\Frozen.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////
