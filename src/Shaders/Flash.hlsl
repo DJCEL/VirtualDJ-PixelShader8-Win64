@@ -77,18 +77,19 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     const int samples = 25;
     float q = 0;
-    float2 uv = float2(0.0f, 0.0f);
+    float2 texcoord2 = float2(0.0f, 0.0f);
     float4 colTex = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 color = float4(0.0f, 0.0f, 0.0f, 0.0f);
     
     for (int i = 0; i <= samples; i++)
     {
         q = float(i) / float(samples);
-        uv = texcoord + (CoordMiddle - texcoord) * timeQ * q;
-        colTex = g_Texture2D.Sample(g_SamplerState, uv);
-        color = color + colTex / float(samples);
+        texcoord2 = texcoord + (CoordMiddle - texcoord) * timeQ * q;
+        colTex = g_Texture2D.Sample(g_SamplerState, texcoord2);
+        color += colTex / float(samples);
     }
-    color = color + alpha / 2.0f;
+
+    color += alpha / 2.0f;
         
     PS_OUTPUT output;
     output.Color = color;
