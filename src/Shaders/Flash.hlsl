@@ -62,7 +62,8 @@ PS_OUTPUT ps_main(PS_INPUT input)
     }
     
     float2 texcoord = input.TexCoord;
-    float2 CoordMiddle = float2(0.5f, 0.5f);
+    float2 Middle = float2(0.5f, 0.5f);
+    float2 texcoord2 = texcoord - Middle;
     
     float speed_1 = sin(Speed * time);
     float speed_2 = sin(Speed * time * 10.0f);
@@ -77,15 +78,15 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     const int samples = 25;
     float q = 0;
-    float2 texcoord2 = float2(0.0f, 0.0f);
+    float2 texcoord3 = float2(0.0f, 0.0f);
     float4 colTex = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 color = float4(0.0f, 0.0f, 0.0f, 0.0f);
     
     for (int i = 0; i <= samples; i++)
     {
         q = float(i) / float(samples);
-        texcoord2 = texcoord + (CoordMiddle - texcoord) * timeQ * q;
-        colTex = g_Texture2D.Sample(g_SamplerState, texcoord2);
+        texcoord3 = texcoord - texcoord2 * timeQ * q;
+        colTex = g_Texture2D.Sample(g_SamplerState, texcoord3);
         color += colTex / float(samples);
     }
 
