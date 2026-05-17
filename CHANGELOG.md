@@ -3,6 +3,7 @@
 ## 2.3.3 (2026-05-17)
 
 * New pixels shader: 'Frozen', 'Thermal2'
+* Release on website
 
 ## 2.3.2 (2026-04-11)
 
