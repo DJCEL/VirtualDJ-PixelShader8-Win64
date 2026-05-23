@@ -2,7 +2,7 @@
 
 ## 2.4 (2026-05-23)
 
-* New pixels shader: 'Patterns'
+* New pixels shader: 'Pattern1', 'Pattern2'
 
 ## 2.3.3 (2026-05-17)
 

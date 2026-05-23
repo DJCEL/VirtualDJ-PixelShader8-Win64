@@ -111,6 +111,9 @@
     <FxCompile Include="..\src\Shaders\Pattern1.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\Shaders\Pattern2.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Shaders\CenterBlur.cso">
@@ -186,6 +189,9 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Pattern1.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Pattern2.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>

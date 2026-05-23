@@ -138,6 +138,7 @@ FROZEN_CSO              RCDATA                  ".\\Shaders\\Frozen.cso"
 
 THERMAL2_CSO            RCDATA                  ".\\Shaders\\Thermal2.cso"
 PATTERN1_CSO            RCDATA                  ".\\Shaders\\Pattern1.cso"
+PATTERN2_CSO            RCDATA                  ".\\Shaders\\Pattern2.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////

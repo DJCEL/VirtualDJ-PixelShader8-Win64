@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Pattern1.hlsl
+// File: Pattern2.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -48,9 +48,14 @@ float ParamAdjust(float value, float ValMin, float ValMax)
     return ValMin + value * (ValMax - ValMin);
 }
 //--------------------------------------------------------------------------------------
-float wrap(float x)
+float random(in float x)
 {
-    return abs(fmod(x, 2.0f) - 1.0f);
+    return frac(sin(x) * 43758.5453);
+}
+//--------------------------------------------------------------------------------------
+float random(in float2 st)
+{
+    return frac(sin(dot(st.xy, float2(12.9898, 78.233))) * 43758.5453);
 }
 //--------------------------------------------------------------------------------------
 // Pixel Shader
@@ -59,20 +64,20 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     float time = (g_FX_Beats_on == 1.0f) ? g_FX_SongPosBeats : g_FX_Time;
     
-    float size = 0.1f;
-    
-    if (g_FX_params_on)
-    {
-        size = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
-    }
-    
-    
     float2 texcoord = input.TexCoord;
-    texcoord.x = fmod(texcoord.x, size);
-    texcoord.x = abs(texcoord.x - size / 2.0f);
-    texcoord.x = wrap(texcoord.x + time / 6.0f);
+    float4 texcolor = g_Texture2D.Sample(g_SamplerState, texcoord);
     
-    float4 color = g_Texture2D.Sample(g_SamplerState, texcoord);
+    float3 colormask = float3(0.0, 0.0, 0.0);
+    float2 st = texcoord;
+    st.x *= g_FX_Width / g_FX_Height;
+    float2 blocks_st = floor(st * 6.0);
+    float t = time * .8 + random(blocks_st);
+    float time_i = floor(t);
+    float time_f = frac(t);
+    colormask.rgb += step(0.9, random(blocks_st + time_i)) * (1.0 - time_f);
+    float4 mask = float4(colormask.r, colormask.g, colormask.b, 1.0f);
+    
+    float4 color = texcolor * mask;
     
     PS_OUTPUT output;
     output.Color = color;
