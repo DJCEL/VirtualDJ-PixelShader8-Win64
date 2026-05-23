@@ -829,7 +829,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"RaveTunnel") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Frozen") == 0) NumberParams = 2;
 	else if (wcscmp(m_FX_Name, L"Thermal2") == 0) NumberParams = 1;
-	else if (wcscmp(m_FX_Name, L"Patterns") == 0) NumberParams = 2;
+	else if (wcscmp(m_FX_Name, L"Pattern1") == 0) NumberParams = 2;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -960,7 +960,7 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 			float Strength = ParamAdjust(value, 0.20f, 200.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Strength)", Strength);
 		}
-		else if (wcscmp(m_FX_Name, L"Patterns") == 0)
+		else if (wcscmp(m_FX_Name, L"Pattern1") == 0)
 		{
 			float Speed = ParamAdjust(value, 0.0f, 8.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
@@ -1019,7 +1019,7 @@ void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float v
 			float Factor = ParamAdjust(value, 0.0f, 0.10f);
 			sprintf_s(outParam, outParamSize, "%.2f (Factor)", Factor);
 		}
-		else if (wcscmp(m_FX_Name, L"Patterns") == 0)
+		else if (wcscmp(m_FX_Name, L"Pattern1") == 0)
 		{
 			float Size = ParamAdjust(value, 0.0f, 1.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Size)", Size);

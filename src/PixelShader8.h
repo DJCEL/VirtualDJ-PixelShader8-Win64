@@ -210,7 +210,7 @@ private:
 		L"Ripple",
 		L"RaveTunnel",
 		L"Flash",
-		L"Patterns",
+		L"Pattern1",
 	};
 };
 

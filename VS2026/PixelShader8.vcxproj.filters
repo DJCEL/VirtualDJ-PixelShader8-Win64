@@ -108,7 +108,7 @@
     <FxCompile Include="..\src\Shaders\Thermal2.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\src\Shaders\Patterns.hlsl">
+    <FxCompile Include="..\src\Shaders\Pattern1.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
@@ -185,7 +185,7 @@
     <None Include="..\src\Shaders\Thermal2.cso">
       <Filter>src\Shaders</Filter>
     </None>
-    <None Include="..\src\Shaders\Patterns.cso">
+    <None Include="..\src\Shaders\Pattern1.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>
