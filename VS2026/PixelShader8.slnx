@@ -1,7 +1,6 @@
 <Solution>
   <Configurations>
     <Platform Name="x64" />
-    <Platform Name="x86" />
   </Configurations>
   <Project Path="PixelShader8.vcxproj" Id="fb523a13-deac-4bd4-8aeb-2e2df9ad43a3" />
 </Solution>
