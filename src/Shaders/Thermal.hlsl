@@ -53,7 +53,7 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 PS_OUTPUT ps_main(PS_INPUT input)
 {
     float coeff1 = 1.5f;
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         coeff1 = ParamAdjust(g_FX_param1, 0.5f, 5.0f);
     }

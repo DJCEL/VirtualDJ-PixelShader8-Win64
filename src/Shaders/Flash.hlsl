@@ -52,11 +52,11 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
+    float time = (g_FX_Beats_on == 1.0f) ? g_FX_SongPosBeats : g_FX_Time;
     
     float Speed = 2.0f;
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         Speed = ParamAdjust(g_FX_param1, 0.0f, 4.0f);
     }

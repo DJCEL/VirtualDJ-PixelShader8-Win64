@@ -54,7 +54,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     float BlurAmount = 0.25;
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         BlurAmount = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
     }

@@ -84,7 +84,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     int method = 1;
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         method = int(ParamAdjust(g_FX_param1, 1.0f, 3.0f));
     }

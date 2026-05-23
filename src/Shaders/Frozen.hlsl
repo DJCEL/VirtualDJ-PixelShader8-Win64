@@ -66,7 +66,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float scale = 5.1;
     float factor = 0.05;
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         scale = ParamAdjust(g_FX_param1, 1.0f, 10.0f);
         factor = ParamAdjust(g_FX_param2, 0.0f, 0.10f);

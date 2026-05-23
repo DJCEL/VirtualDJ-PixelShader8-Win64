@@ -59,7 +59,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     int inverted = 0;
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         inverted = int(round(ParamAdjust(g_FX_param1, 0.0f, 1.0f)));
     }

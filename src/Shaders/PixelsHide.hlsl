@@ -54,7 +54,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     int Step = 2;
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         Step = int(ParamAdjust(g_FX_param1, 2.0f, 8.0f));
     }

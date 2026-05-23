@@ -84,12 +84,12 @@ float2 normal(float2 pos, float t, float Speed, int numWaves)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float time = g_FX_Beats_on ? g_FX_SongPosBeats : g_FX_Time;
+    float time = (g_FX_Beats_on == 1.0f) ? g_FX_SongPosBeats : g_FX_Time;
     
     float Speed = 2.5f;
     int numWaves = 10;
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         Speed = ParamAdjust(g_FX_param1, 0.0f, 4.0f);
         numWaves = int(ParamAdjust(g_FX_param2, 2.0f, 20.0f));

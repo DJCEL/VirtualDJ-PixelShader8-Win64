@@ -60,7 +60,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float Rot = 0.0f; // [Rotation] from -2 to 2
     float Density = 1.0f; // [Density] from 0 to 1
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         OffX = ParamAdjust(g_FX_param1, -0.1f, 0.1f);
         OffY = ParamAdjust(g_FX_param2, -0.1f, 0.1f);

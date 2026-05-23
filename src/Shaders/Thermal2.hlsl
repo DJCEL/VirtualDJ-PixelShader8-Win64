@@ -82,7 +82,7 @@ float3 heatMap(float greyValue)
 PS_OUTPUT ps_main(PS_INPUT input)
 {
     float strength = 100.0f;
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         strength = ParamAdjust(g_FX_param1, 0.20f, 200.0f);
     }

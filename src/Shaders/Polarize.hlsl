@@ -198,7 +198,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float DesatCorr = 0.12f; //  [Desaturate Correction] from to 0 to 1
     float3 GuideHueRGB = float3(0.0, 0.0, 1.0);
         
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         Amount = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
         Concentrate = ParamAdjust(g_FX_param2, 0.1f, 4.0f);

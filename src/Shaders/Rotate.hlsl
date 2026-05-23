@@ -54,7 +54,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     float Angle = 90.0f; // [Rotation] from 0 to 360
 
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         Angle = ParamAdjust(g_FX_param1, 0.0f, 360.0f);
     }

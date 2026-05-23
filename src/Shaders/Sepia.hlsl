@@ -58,7 +58,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float3 DarkColor = float3(0.2, 0.05, 0); // Stain Tone
     float3 grayXfer = float3(0.3, 0.59, 0.11);
     
-    if (g_FX_params_on)
+    if (g_FX_params_on == 1.0f)
     {
         Desat = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
         Toned = ParamAdjust(g_FX_param2, 0.0f, 1.0f);
