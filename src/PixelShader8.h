@@ -34,7 +34,7 @@ public:
 
 private:
 	// Update these values if required:
-	static const UINT NUMBER_FX = 24;
+	static const UINT NUMBER_FX = 25;
 	static const UINT SLIDERVALUE_COUNT = 7;
 	static const UINT FX_PARAM_COUNT = 5;
 	static const UINT NEWVERTICES_COUNT = 6;
@@ -209,7 +209,8 @@ private:
 		L"Wave",
 		L"Ripple",
 		L"RaveTunnel",
-		L"Flash"
+		L"Flash",
+		L"Patterns",
 	};
 };
 

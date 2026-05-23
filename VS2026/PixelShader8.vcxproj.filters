@@ -108,6 +108,9 @@
     <FxCompile Include="..\src\Shaders\Thermal2.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\Shaders\Patterns.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Shaders\CenterBlur.cso">
@@ -180,6 +183,9 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Thermal2.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Patterns.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>
