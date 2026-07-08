@@ -48,11 +48,6 @@ float ParamAdjust(float value, float ValMin, float ValMax)
     return ValMin + value * (ValMax - ValMin);
 }
 //--------------------------------------------------------------------------------------
-float random(in float x)
-{
-    return frac(sin(x) * 43758.5453);
-}
-//--------------------------------------------------------------------------------------
 float random(in float2 st)
 {
     return frac(sin(dot(st.xy, float2(12.9898, 78.233))) * 43758.5453);
@@ -64,17 +59,42 @@ PS_OUTPUT ps_main(PS_INPUT input)
 {
     float time = (g_FX_Beats_on == 1.0f) ? g_FX_SongPosBeats : g_FX_Time;
     
+    float speed = 0.8f;
+    float size_grid = 6.0f;
+    float delay_grid = 0.9f;
+    int colormask_id = 1;
+    
+    if (g_FX_params_on)
+    {
+        speed = ParamAdjust(g_FX_param1, 0.0f, 5.0f);
+        size_grid = ParamAdjust(g_FX_param2, 0.0f, 20.0f);
+        delay_grid = ParamAdjust(g_FX_param3, 0.0f, 0.95f);
+        colormask_id = int(round(ParamAdjust(g_FX_param4, 1.0f, 2.0f)));
+    }
+    
     float2 texcoord = input.TexCoord;
     float4 texcolor = g_Texture2D.Sample(g_SamplerState, texcoord);
+    float3 colormask = 0;
     
-    float3 colormask = float3(0.0, 0.0, 0.0);
+    switch (colormask_id)
+    {
+        case 1:
+            colormask = float3(1.0, 1.0, 1.0);
+            break;
+        
+        case 2:
+            colormask = float3(0.0, 0.0, 0.0);
+            break;
+    }
+    
     float2 st = texcoord;
     st.x *= g_FX_Width / g_FX_Height;
-    float2 blocks_st = floor(st * 6.0);
-    float t = time * .8 + random(blocks_st);
+    float2 blocks_st = floor(st * size_grid);
+    float t = time * speed + random(blocks_st);
+    
     float time_i = floor(t);
     float time_f = frac(t);
-    colormask.rgb += step(0.9, random(blocks_st + time_i)) * (1.0 - time_f);
+    colormask.rgb += step(delay_grid, random(blocks_st + time_i)) * (1.0 - time_f);
     float4 mask = float4(colormask.r, colormask.g, colormask.b, 1.0f);
     
     float4 color = texcolor * mask;

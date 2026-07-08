@@ -52,7 +52,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,4,0,0
+ FILEVERSION 2,4,1,0
  PRODUCTVERSION 8,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -70,7 +70,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "http://www.virtualdj.com/blog/djcel"
             VALUE "FileDescription", "VirtualDJ Video Effect"
-            VALUE "FileVersion", "2.4.0.0"
+            VALUE "FileVersion", "2.4.1.0"
             VALUE "InternalName", "PixelShader8"
             VALUE "LegalCopyright", "Copyright (C) 2026 djcel"
             VALUE "OriginalFilename", "PixelShader8"
@@ -137,7 +137,9 @@ RAVETUNNEL_CSO          RCDATA                  ".\\Shaders\\RaveTunnel.cso"
 FROZEN_CSO              RCDATA                  ".\\Shaders\\Frozen.cso"
 
 THERMAL2_CSO            RCDATA                  ".\\Shaders\\Thermal2.cso"
+
 PATTERN1_CSO            RCDATA                  ".\\Shaders\\Pattern1.cso"
+
 PATTERN2_CSO            RCDATA                  ".\\Shaders\\Pattern2.cso"
 
 #endif    // Anglais (États-Unis) resources

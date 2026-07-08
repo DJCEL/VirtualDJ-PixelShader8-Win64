@@ -86,7 +86,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     
     if (g_FX_params_on == 1.0f)
     {
-        method = int(ParamAdjust(g_FX_param1, 1.0f, 3.0f));
+        method = int(round(ParamAdjust(g_FX_param1, 1.0f, 3.0f)));
     }
     
     float2 texcoord = input.TexCoord;

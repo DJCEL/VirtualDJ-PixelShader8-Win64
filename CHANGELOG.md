@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.1 (2026-07-08)
+
+* Some fixes for  'Pattern2'
+
 ## 2.4 (2026-05-23)
 
 * New pixels shader: 'Pattern1', 'Pattern2'

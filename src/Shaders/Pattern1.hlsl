@@ -66,7 +66,6 @@ PS_OUTPUT ps_main(PS_INPUT input)
         size = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
     }
     
-    
     float2 texcoord = input.TexCoord;
     texcoord.x = fmod(texcoord.x, size);
     texcoord.x = abs(texcoord.x - size / 2.0f);
