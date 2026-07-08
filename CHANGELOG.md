@@ -2,6 +2,7 @@
 
 ## 2.4.1 (2026-07-08)
 
+* New pixels shader: 'SpatialDistorsion'
 * Some fixes for  'Pattern2'
 
 ## 2.4 (2026-05-23)

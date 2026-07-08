@@ -142,6 +142,8 @@ PATTERN1_CSO            RCDATA                  ".\\Shaders\\Pattern1.cso"
 
 PATTERN2_CSO            RCDATA                  ".\\Shaders\\Pattern2.cso"
 
+SPATIALDISTORSION_CSO   RCDATA                  ".\\Shaders\\SpatialDistorsion.cso"
+
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////
 

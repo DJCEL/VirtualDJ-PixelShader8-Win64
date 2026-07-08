@@ -831,6 +831,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"Thermal2") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Pattern1") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Pattern2") == 0) NumberParams = 4;
+	else if (wcscmp(m_FX_Name, L"SpatialDistorsion") == 0) NumberParams = 3;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -971,6 +972,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 			float Speed = ParamAdjust(value, 0.0f, 5.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
 		}
+		else if (wcscmp(m_FX_Name, L"SpatialDistorsion") == 0)
+		{
+			float Speed = ParamAdjust(value, 0.0f, 20.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1030,6 +1036,11 @@ void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float v
 			float size_grid = ParamAdjust(value, 0.0f, 20.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (size_grid)", size_grid);
 		}
+		else if (wcscmp(m_FX_Name, L"SpatialDistorsion") == 0)
+		{
+			float Distorsion = ParamAdjust(value, 5.0f, 100.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Distorsion)", Distorsion);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1073,6 +1084,11 @@ void  CPixelShader8::Display_FX_Param3(char* outParam, int outParamSize, float v
 		{
 			float delay_grid = ParamAdjust(value, 0.0f, 0.95f);
 			sprintf_s(outParam, outParamSize, "%.2f (delay_grid)", delay_grid);
+		}
+		else if (wcscmp(m_FX_Name, L"SpatialDistorsion") == 0)
+		{
+			float Depth = ParamAdjust(value, 0.01f, 0.5f);
+			sprintf_s(outParam, outParamSize, "%.2f (Depth)", Depth);
 		}
 		else
 		{
