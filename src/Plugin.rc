@@ -91,58 +91,33 @@ END
 //
 
 CENTERBLUR_CSO          RCDATA                  ".\\Shaders\\CenterBlur.cso"
-
 GBR_CSO                 RCDATA                  ".\\Shaders\\GBR.cso"
-
 GRAYSCALE_CSO           RCDATA                  ".\\Shaders\\GrayScale.cso"
-
 HIGHCONTRAST_CSO        RCDATA                  ".\\Shaders\\HighContrast.cso"
-
 HORIZONTALMIRROR_CSO    RCDATA                  ".\\Shaders\\HorizontalMirror.cso"
-
 VERTICALMIRROR_CSO      RCDATA                  ".\\Shaders\\VerticalMirror.cso"
-
 NEGATIVE_CSO            RCDATA                  ".\\Shaders\\Negative.cso"
-
 PIXELSHIDE_CSO          RCDATA                  ".\\Shaders\\PixelsHide.cso"
-
 ROTATE180_CSO           RCDATA                  ".\\Shaders\\Rotate180.cso"
-
 ROTATE_CSO              RCDATA                  ".\\Shaders\\Rotate.cso"
-
 COLORDISTORSION_CSO     RCDATA                  ".\\Shaders\\ColorDistorsion.cso"
-
 SEPIA_CSO               RCDATA                  ".\\Shaders\\Sepia.cso"
-
 POLARIZE_CSO            RCDATA                  ".\\Shaders\\Polarize.cso"
-
 MASK_CSO                RCDATA                  ".\\Shaders\\Mask.cso"
-
 COLORSPACE_CSO          RCDATA                  ".\\Shaders\\ColorSpace.cso"
-
 WAVE_CSO                RCDATA                  ".\\Shaders\\Wave.cso"
-
 RIPPLE_CSO              RCDATA                  ".\\Shaders\\Ripple.cso"
-
 EDGEDETECTION_CSO       RCDATA                  ".\\Shaders\\EdgeDetection.cso"
-
 MIRROR4_CSO             RCDATA                  ".\\Shaders\\Mirror4.cso"
-
 FLASH_CSO               RCDATA                  ".\\Shaders\\Flash.cso"
-
 THERMAL_CSO             RCDATA                  ".\\Shaders\\Thermal.cso"
-
 RAVETUNNEL_CSO          RCDATA                  ".\\Shaders\\RaveTunnel.cso"
-
 FROZEN_CSO              RCDATA                  ".\\Shaders\\Frozen.cso"
-
 THERMAL2_CSO            RCDATA                  ".\\Shaders\\Thermal2.cso"
-
 PATTERN1_CSO            RCDATA                  ".\\Shaders\\Pattern1.cso"
-
 PATTERN2_CSO            RCDATA                  ".\\Shaders\\Pattern2.cso"
-
 SPATIALDISTORSION_CSO   RCDATA                  ".\\Shaders\\SpatialDistorsion.cso"
+DISPLACEMENT_CSO        RCDATA                  ".\\Shaders\\Displacement.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////

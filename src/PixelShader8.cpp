@@ -832,6 +832,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"Pattern1") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Pattern2") == 0) NumberParams = 4;
 	else if (wcscmp(m_FX_Name, L"SpatialDistorsion") == 0) NumberParams = 3;
+	else if (wcscmp(m_FX_Name, L"Displacement") == 0) NumberParams = 3;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -977,6 +978,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 			float Speed = ParamAdjust(value, 0.0f, 20.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
 		}
+		else if (wcscmp(m_FX_Name, L"Displacement") == 0)
+		{
+			float Speed = ParamAdjust(value, 0.0f, 30.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1041,6 +1047,11 @@ void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float v
 			float Distorsion = ParamAdjust(value, 5.0f, 100.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Distorsion)", Distorsion);
 		}
+		else if (wcscmp(m_FX_Name, L"Displacement") == 0)
+		{
+			int Steps = int(round(ParamAdjust(value, 2.0f, 40.0f)));
+			sprintf_s(outParam, outParamSize, "%d (Steps)", Steps);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1089,6 +1100,22 @@ void  CPixelShader8::Display_FX_Param3(char* outParam, int outParamSize, float v
 		{
 			float Depth = ParamAdjust(value, 0.01f, 0.5f);
 			sprintf_s(outParam, outParamSize, "%.2f (Depth)", Depth);
+		}
+		else if (wcscmp(m_FX_Name, L"Displacement") == 0)
+		{
+			int Direction = int(round(ParamAdjust(value, 1.0f, 3.0f)));
+			switch (Direction)
+			{
+				case 1:
+					sprintf_s(outParam, outParamSize, "V (Direction)");
+					break;
+				case 2:
+					sprintf_s(outParam, outParamSize, "H (Direction)");
+					break;
+				case 3:
+					sprintf_s(outParam, outParamSize, "V+H (Direction)");
+					break;
+			}
 		}
 		else
 		{

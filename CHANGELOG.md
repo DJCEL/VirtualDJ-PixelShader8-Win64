@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.2 (2026-07-11)
+
+* New pixels shader: 'Displacement'
+
 ## 2.4.1 (2026-07-08)
 
 * Release on website
