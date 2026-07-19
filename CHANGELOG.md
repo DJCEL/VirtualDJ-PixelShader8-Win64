@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.3 (2026-07-19)
+
+* New pixels shader: 'Radar'
+
 ## 2.4.2 (2026-07-11)
 
 * New pixels shader: 'Displacement'

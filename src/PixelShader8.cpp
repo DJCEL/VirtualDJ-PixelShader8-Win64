@@ -64,7 +64,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "2.4.2 (64-bit)";
+	info->Version = "2.4.3 (64-bit)";
 
 	return S_OK;
 }
@@ -833,6 +833,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"Pattern2") == 0) NumberParams = 4;
 	else if (wcscmp(m_FX_Name, L"SpatialDistorsion") == 0) NumberParams = 3;
 	else if (wcscmp(m_FX_Name, L"Displacement") == 0) NumberParams = 3;
+	else if (wcscmp(m_FX_Name, L"Radar") == 0) NumberParams = 5;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -983,6 +984,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 			float Speed = ParamAdjust(value, 0.0f, 30.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
 		}
+		else if (wcscmp(m_FX_Name, L"Radar") == 0)
+		{
+			float Speed = ParamAdjust(value, 0.0f, 10.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1052,6 +1058,11 @@ void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float v
 			int Steps = int(round(ParamAdjust(value, 2.0f, 40.0f)));
 			sprintf_s(outParam, outParamSize, "%d (Steps)", Steps);
 		}
+		else if (wcscmp(m_FX_Name, L"Radar") == 0)
+		{
+			float Radius = ParamAdjust(value, 0.0f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Radius)", Radius);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1117,6 +1128,19 @@ void  CPixelShader8::Display_FX_Param3(char* outParam, int outParamSize, float v
 					break;
 			}
 		}
+		else if (wcscmp(m_FX_Name, L"Radar") == 0)
+		{
+			int Grid_on = int(round(ParamAdjust(value, 0.0f, 1.0f)));
+			switch (Grid_on)
+			{
+			case 0:
+				sprintf_s(outParam, outParamSize, "Off (Grid)");
+				break;
+			case 1:
+				sprintf_s(outParam, outParamSize, "On (Grid)");
+				break;
+			}
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1180,6 +1204,19 @@ void  CPixelShader8::Display_FX_Param4(char* outParam, int outParamSize, float v
 				break;
 			}
 		}
+		else if (wcscmp(m_FX_Name, L"Radar") == 0)
+		{
+			int Inverted = int(round(ParamAdjust(value, 0.0f, 1.0f)));
+			switch (Inverted)
+			{
+			case 0:
+				sprintf_s(outParam, outParamSize, "Off (Inverted)");
+				break;
+			case 1:
+				sprintf_s(outParam, outParamSize, "On (Inverted)");
+				break;
+			}
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1209,6 +1246,19 @@ void  CPixelShader8::Display_FX_Param5(char* outParam, int outParamSize, float v
 				sprintf_s(outParam, outParamSize, "%.2f (Component 4)", Component4);
 			}
 			else sprintf_s(outParam, outParamSize, "");
+		}
+		else if (wcscmp(m_FX_Name, L"Radar") == 0)
+		{
+			int colorRadarId = int(round(ParamAdjust(value, 1.0f, 2.0f)));
+			switch (colorRadarId)
+			{
+				case 1:
+					sprintf_s(outParam, outParamSize, "White (colorRadar)");
+					break;
+				case 2:
+					sprintf_s(outParam, outParamSize, "Green (colorRadar)");
+					break;
+			}
 		}
 		else
 		{

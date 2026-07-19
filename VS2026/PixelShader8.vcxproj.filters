@@ -120,6 +120,9 @@
     <FxCompile Include="..\src\Shaders\Displacement.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\Shaders\Radar.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Shaders\CenterBlur.cso">
@@ -204,6 +207,9 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Displacement.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Radar.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>
