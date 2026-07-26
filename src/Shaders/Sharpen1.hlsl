@@ -41,10 +41,25 @@ struct PS_OUTPUT
     float4 Color : SV_TARGET;
 };
 //--------------------------------------------------------------------------------------
+// Additional functions
+//--------------------------------------------------------------------------------------
+float ParamAdjust(float value, float ValMin, float ValMax)
+{
+    return ValMin + value * (ValMax - ValMin);
+}
+//--------------------------------------------------------------------------------------
 // Pixel Shader
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
+    float Amount = 1.0f;
+
+    if (g_FX_params_on == 1.0f)
+    {
+        Amount = ParamAdjust(g_FX_param1, 0.0f, 1.0f);
+    }
+    
+    
     float2 texcoord = input.TexCoord;
     
     float2 u_textureSize = float2(g_FX_Width, g_FX_Height);
@@ -71,7 +86,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float kernel[KERNEL_SIZE] =
     {
         -1.0, -1.0, -1.0,
-        -1.0, 9.0, -1.0,
+        -1.0, 8.0 + Amount, -1.0,
         -1.0, -1.0, -1.0
     };
 
