@@ -85,9 +85,15 @@ PS_OUTPUT ps_main(PS_INPUT input)
     // Sharpen kernel weights
     float kernel[KERNEL_SIZE] =
     {
-        -1.0, -1.0, -1.0,
-        -1.0, 8.0 + Amount, -1.0,
-        -1.0, -1.0, -1.0
+        -1.0, // top-left
+        -1.0, // top-center
+        -1.0, // top-right
+        -1.0, // center-left
+        8.0 + Amount, // center
+        -1.0, // center-right
+        -1.0, // bottom-left
+        -1.0, // bottom-center
+        -1.0 // bottom-right
     };
 
     float3 texcolor = float3(0.0f, 0.0f, 0.0f);
