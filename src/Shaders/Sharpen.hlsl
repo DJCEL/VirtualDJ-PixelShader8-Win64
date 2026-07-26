@@ -62,7 +62,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 u_textureSize = float2(g_FX_Width, g_FX_Height);
     float2 texel = 1.0f / u_textureSize;
     
-    const int KERNEL_SIZE = 9;
+    const int KERNEL_SIZE = 9; // 3x3 kernel
     
     // 3x3 kernel offsets for neighboring pixels
     float2 offsets[KERNEL_SIZE] =
@@ -86,11 +86,12 @@ PS_OUTPUT ps_main(PS_INPUT input)
         -1.0, -1.0, -1.0
     };
 
+    float4 texcolor = float4(0.0f, 0.0f, 0.0f, 0.0f);
     float4 sampleSum = float4(0.0f, 0.0f, 0.0f, 0.0f);
     for (int i = 0; i < KERNEL_SIZE; i++)
     {
-        float4 color = g_Texture2D.Sample(g_SamplerState, texcoord + offsets[i]);
-        sampleSum += color * kernel[i];
+        texcolor = g_Texture2D.Sample(g_SamplerState, texcoord + offsets[i]);
+        sampleSum += texcolor * kernel[i];
     }
 
     float4 color = float4(sampleSum.rgb, 1.0f);
