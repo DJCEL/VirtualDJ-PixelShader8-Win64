@@ -64,7 +64,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "2.4.3 (64-bit)";
+	info->Version = "2.4.4 (64-bit)";
 
 	return S_OK;
 }
@@ -834,6 +834,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"SpatialDistorsion") == 0) NumberParams = 3;
 	else if (wcscmp(m_FX_Name, L"Displacement") == 0) NumberParams = 3;
 	else if (wcscmp(m_FX_Name, L"Radar") == 0) NumberParams = 5;
+	else if (wcscmp(m_FX_Name, L"Sharpen") == 0) NumberParams = 1;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -989,6 +990,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 			float Speed = ParamAdjust(value, 0.0f, 10.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Speed)", Speed);
 		}
+		else if (wcscmp(m_FX_Name, L"Sharpen") == 0)
+		{
+			float Sharpness = ParamAdjust(value, 0.0f, 3.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Sharpness)", Sharpness);
+			}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
