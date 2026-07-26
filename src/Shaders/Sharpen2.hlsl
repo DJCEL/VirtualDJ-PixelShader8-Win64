@@ -65,12 +65,13 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float2 texel = 1.0f / u_textureSize;
     
     // Unsharp Mask
-    float2 offset_left = float2(-texel.x, 0);
-    float2 offset_right = float2(texel.x, 0);
-    float2 offset_top = float2(0, -texel.y);
-    float2 offset_bottom = float2(0, texel.y);
+    float2 offset_center = float2(0.0f, 0.0f);
+    float2 offset_left = float2(-texel.x, 0.0f);
+    float2 offset_right = float2(texel.x, 0.0f);
+    float2 offset_top = float2(0.0f, -texel.y);
+    float2 offset_bottom = float2(0.0f, texel.y);
     
-    float3 center = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
+    float3 center = g_Texture2D.Sample(g_SamplerState, texcoord + offset_center).rgb;
     float3 left = g_Texture2D.Sample(g_SamplerState, texcoord + offset_left).rgb;
     float3 right = g_Texture2D.Sample(g_SamplerState, texcoord + offset_right).rgb;
     float3 top = g_Texture2D.Sample(g_SamplerState, texcoord + offset_top).rgb;
