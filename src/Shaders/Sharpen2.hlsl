@@ -76,8 +76,9 @@ PS_OUTPUT ps_main(PS_INPUT input)
     float3 right = g_Texture2D.Sample(g_SamplerState, texcoord + offset_right).rgb;
     float3 top = g_Texture2D.Sample(g_SamplerState, texcoord + offset_top).rgb;
     float3 bottom = g_Texture2D.Sample(g_SamplerState, texcoord + offset_bottom).rgb;
-
-    float3 blur = (center + left + right + top + bottom) / 5.0f;
+    float3 sampleSum = center + left + right + top + bottom;
+    
+    float3 blur = sampleSum / 5.0f;
 
     float3 sharpened = center + Amount * (center - blur);
     sharpened = saturate(sharpened);
