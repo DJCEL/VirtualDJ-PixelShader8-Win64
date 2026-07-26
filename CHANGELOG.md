@@ -2,6 +2,7 @@
 
 ## 2.4.4 (2026-07-26)
 
+* Release on website
 * New pixels shader: 'Sharpen1','Sharpen2'
 
 ## 2.4.3 (2026-07-19)
