@@ -1,5 +1,5 @@
 ////////////////////////////////
-// File: Sharpen.hlsl
+// File: Sharpen1.hlsl
 ////////////////////////////////
 
 //--------------------------------------------------------------------------------------
@@ -52,50 +52,36 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float sharpness = 1.0f;
+    float Amount = 3.0f;
+
     if (g_FX_params_on == 1.0f)
     {
-        sharpness = ParamAdjust(g_FX_param1, 0.0f, 3.0f);
+        Amount = ParamAdjust(g_FX_param1, 0.0f, 20.0f);
     }
-    
+        
     float2 texcoord = input.TexCoord;
+    
     float2 u_textureSize = float2(g_FX_Width, g_FX_Height);
     float2 texel = 1.0f / u_textureSize;
     
-    const int KERNEL_SIZE = 9; // 3x3 kernel
+    // Unsharp Mask
+    float2 offset_left = float2(-texel.x, 0);
+    float2 offset_right = float2(texel.x, 0);
+    float2 offset_top = float2(0, -texel.y);
+    float2 offset_bottom = float2(0, texel.y);
     
-    // 3x3 kernel offsets for neighboring pixels
-    float2 offsets[KERNEL_SIZE] =
-    {
-        float2(-texel.x, texel.y), // top-left
-        float2(0.0f, texel.y), // top-center
-        float2(texel.x, texel.y), // top-right
-        float2(-texel.x, 0.0f), // center-left
-        float2(0.0f, 0.0f), // center
-        float2(texel.x, 0.0f), // center-right
-        float2(-texel.x, -texel.y), // bottom-left
-        float2(0.0f, -texel.y), // bottom-center
-        float2(texel.x, -texel.y) // bottom-right
-    };
+    float3 center = g_Texture2D.Sample(g_SamplerState, texcoord).rgb;
+    float3 left = g_Texture2D.Sample(g_SamplerState, texcoord + offset_left).rgb;
+    float3 right = g_Texture2D.Sample(g_SamplerState, texcoord + offset_right).rgb;
+    float3 top = g_Texture2D.Sample(g_SamplerState, texcoord + offset_top).rgb;
+    float3 bottom = g_Texture2D.Sample(g_SamplerState, texcoord + offset_bottom).rgb;
 
-    // Sharpen kernel weights
-    float kernel[KERNEL_SIZE] =
-    {
-        -1.0, -1.0, -1.0,
-        -1.0, 8.0 + sharpness, -1.0,
-        -1.0, -1.0, -1.0
-    };
+    float3 blur = (center + left + right + top + bottom) / 5.0;
 
-    float4 texcolor = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    float4 sampleSum = float4(0.0f, 0.0f, 0.0f, 0.0f);
-    for (int i = 0; i < KERNEL_SIZE; i++)
-    {
-        texcolor = g_Texture2D.Sample(g_SamplerState, texcoord + offsets[i]);
-        sampleSum += texcolor * kernel[i];
-    }
-
-    float4 color = float4(sampleSum.rgb, 1.0f);
+    float3 sharpened = center + Amount * (center - blur);
+    sharpened = saturate(sharpened);
     
+    float4 color = float4(sharpened, 1.0f);
     
     PS_OUTPUT output;
     output.Color = color;

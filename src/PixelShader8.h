@@ -34,7 +34,7 @@ public:
 
 private:
 	// Update these values if required:
-	static const UINT NUMBER_FX = 30;
+	static const UINT NUMBER_FX = 31;
 	static const UINT SLIDERVALUE_COUNT = 7;
 	static const UINT FX_PARAM_COUNT = 5;
 	static const UINT NEWVERTICES_COUNT = 6;
@@ -215,7 +215,8 @@ private:
 		L"SpatialDistorsion",
 		L"Displacement",
 		L"Radar",
-		L"Sharpen"
+		L"Sharpen1",
+		L"Sharpen2"
 	};
 };
 

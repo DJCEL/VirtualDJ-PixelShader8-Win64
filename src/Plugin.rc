@@ -147,7 +147,8 @@ SPATIALDISTORSION_CSO   RCDATA                  ".\\Shaders\\SpatialDistorsion.c
 DISPLACEMENT_CSO        RCDATA                  ".\\Shaders\\Displacement.cso"
 
 RADAR_CSO               RCDATA                  ".\\Shaders\\Radar.cso"
-SHARPEN_CSO             RCDATA                  ".\\Shaders\\Sharpen.cso"
+SHARPEN1_CSO             RCDATA                  ".\\Shaders\\Sharpen1.cso"
+SHARPEN2_CSO             RCDATA                  ".\\Shaders\\Sharpen2.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////

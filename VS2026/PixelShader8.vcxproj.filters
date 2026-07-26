@@ -123,7 +123,10 @@
     <FxCompile Include="..\src\Shaders\Radar.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="..\src\Shaders\Sharpen.hlsl">
+    <FxCompile Include="..\src\Shaders\Sharpen1.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\Shaders\Sharpen2.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
@@ -213,6 +216,12 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Radar.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Sharpen1.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Sharpen2.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>
