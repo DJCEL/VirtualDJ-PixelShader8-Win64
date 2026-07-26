@@ -83,7 +83,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     };
 
     // Sharpen kernel weights
-    float kernel[KERNEL_SIZE] =
+    float kernel_weight[KERNEL_SIZE] =
     {
         -1.0f, // top-left
         -1.0f, // top-center
@@ -101,7 +101,7 @@ PS_OUTPUT ps_main(PS_INPUT input)
     for (int i = 0; i < KERNEL_SIZE; i++)
     {
         texcolor = g_Texture2D.Sample(g_SamplerState, texcoord + offsets[i]).rgb;
-        sampleSum += texcolor * kernel[i];
+        sampleSum += texcolor * kernel_weight[i];
     }
     
     float4 color = float4(sampleSum, 1.0f);
