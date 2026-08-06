@@ -64,7 +64,7 @@ HRESULT VDJ_API CPixelShader8::OnGetPluginInfo(TVdjPluginInfo8 *info)
 	info->PluginName = "PixelShader8";
 	info->Description = "Use of pixel shader.";
 	info->Flags = 0x00; // VDJFLAG_VIDEO_OVERLAY // VDJFLAG_VIDEO_OUTPUTRESOLUTION | VDJFLAG_VIDEO_OUTPUTASPECTRATIO;
-	info->Version = "2.4.4 (64-bit)";
+	info->Version = "2.4.5 (64-bit)";
 
 	return S_OK;
 }
@@ -93,18 +93,16 @@ HRESULT VDJ_API CPixelShader8::OnParameter(int id)
 void CPixelShader8::OnButton(int id)
 {
 	float min_step = 0.0f;
-	float new_pos = 0.0f;
+	if (NUMBER_FX > 1)
+		min_step = 1.0f / float(NUMBER_FX - 1);
 
 	switch (id)
 	{
 		case ID_BUTTON_1:
 			if (m_ButtonLeft == 1)
 			{
-				if (NUMBER_FX <= 1) min_step = 0.0f;
-				else min_step = 1.0f / float(NUMBER_FX-1);
-				new_pos = m_SliderValue[1] - min_step;
-				if (new_pos < 0.0f) m_SliderValue[1] = 0;
-				else m_SliderValue[1] = new_pos;
+				if ((m_SliderValue[1] - min_step) < 0.0f) m_SliderValue[1] = 1.0f;
+				else m_SliderValue[1] -= min_step;
 				OnParameter(ID_SLIDER_2);
 			}
 			break;
@@ -112,11 +110,8 @@ void CPixelShader8::OnButton(int id)
 		case ID_BUTTON_2:
 			if (m_ButtonRight == 1)
 			{
-				if (NUMBER_FX <= 1) min_step = 0.0f;
-				else min_step = 1.0f / float(NUMBER_FX - 1);
-				new_pos = m_SliderValue[1] + min_step;
-				if (new_pos > 1.0f) m_SliderValue[1] = 1.0f;
-				else m_SliderValue[1] = new_pos;
+				if ((m_SliderValue[1] + min_step) > 1.0f) m_SliderValue[1] = 0.0f;
+				else m_SliderValue[1] += min_step;
 				OnParameter(ID_SLIDER_2);
 			}
 			break;

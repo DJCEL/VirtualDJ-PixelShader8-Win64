@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.5(2026-08-06)
+* buttons now make the dial wrap round (LOCODOG's idea)
+
 ## 2.4.4 (2026-07-26)
 
 * Release on website
