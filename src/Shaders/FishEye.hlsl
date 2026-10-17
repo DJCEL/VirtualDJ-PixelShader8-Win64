@@ -52,8 +52,8 @@ float ParamAdjust(float value, float ValMin, float ValMax)
 //--------------------------------------------------------------------------------------
 PS_OUTPUT ps_main(PS_INPUT input)
 {
-    float Distortion = 1.0f; // force du fisheye (0 à 5)
-    float MaxRadius = 0.50f; // rayon de la lentille (1 = demi-diagonale de l'écran)
+    float Distortion = 1.0f;
+    float MaxRadius = 0.50f;
     
 
     if (g_FX_params_on == 1.0f)
