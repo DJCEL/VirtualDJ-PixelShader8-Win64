@@ -52,7 +52,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,4,5,0
+ FILEVERSION 2,4,6,0
  PRODUCTVERSION 8,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -70,7 +70,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "http://www.virtualdj.com/blog/djcel"
             VALUE "FileDescription", "VirtualDJ Video Effect"
-            VALUE "FileVersion", "2.4.5.0"
+            VALUE "FileVersion", "2.4.6.0"
             VALUE "InternalName", "PixelShader8"
             VALUE "LegalCopyright", "Copyright (C) 2026 djcel"
             VALUE "OriginalFilename", "PixelShader8"
@@ -147,8 +147,13 @@ SPATIALDISTORSION_CSO   RCDATA                  ".\\Shaders\\SpatialDistorsion.c
 DISPLACEMENT_CSO        RCDATA                  ".\\Shaders\\Displacement.cso"
 
 RADAR_CSO               RCDATA                  ".\\Shaders\\Radar.cso"
-SHARPEN1_CSO             RCDATA                  ".\\Shaders\\Sharpen1.cso"
-SHARPEN2_CSO             RCDATA                  ".\\Shaders\\Sharpen2.cso"
+
+SHARPEN1_CSO            RCDATA                  ".\\Shaders\\Sharpen1.cso"
+
+SHARPEN2_CSO            RCDATA                  ".\\Shaders\\Sharpen2.cso"
+
+PIXELATE_CSO            RCDATA                  ".\\Shaders\\Pixelate.cso"
+FISHEYE_CSO             RCDATA                  ".\\Shaders\\FishEye.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////

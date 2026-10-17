@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.4.6 (2026-10-17)
+* New pixels shader: "Pixelate", "FishEye"
+
 ## 2.4.5 (2026-08-06)
 * buttons now make the dial wrap round (LOCODOG's idea)
 

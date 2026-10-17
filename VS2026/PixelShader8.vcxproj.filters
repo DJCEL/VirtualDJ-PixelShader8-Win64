@@ -129,6 +129,12 @@
     <FxCompile Include="..\src\Shaders\Sharpen2.hlsl">
       <Filter>src\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\src\Shaders\Pixelate.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\src\Shaders\FishEye.hlsl">
+      <Filter>src\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\Shaders\CenterBlur.cso">
@@ -222,6 +228,12 @@
       <Filter>src\Shaders</Filter>
     </None>
     <None Include="..\src\Shaders\Sharpen2.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\Pixelate.cso">
+      <Filter>src\Shaders</Filter>
+    </None>
+    <None Include="..\src\Shaders\FishEye.cso">
       <Filter>src\Shaders</Filter>
     </None>
   </ItemGroup>
