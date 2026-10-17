@@ -2,6 +2,7 @@
 
 ## 2.4.6 (2026-10-17)
 * New pixels shader: "Pixelate", "FishEye"
+* Fix jump of FX Select -/+ at the min/max
 
 ## 2.4.5 (2026-08-06)
 * buttons now make the dial wrap round (LOCODOG's idea)
