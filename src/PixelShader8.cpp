@@ -101,7 +101,8 @@ void CPixelShader8::OnButton(int id)
 		case ID_BUTTON_1:
 			if (m_ButtonLeft == 1)
 			{
-				if ((m_SliderValue[1] - min_step) < 0.0f) m_SliderValue[1] = 1.0f;
+				if ((m_SliderValue[1] - min_step) < 0.0f && m_SliderValue[1] == 0.0f) m_SliderValue[1] = 1.0f;
+				else if ((m_SliderValue[1] - min_step) < 0.0f && m_SliderValue[1] < 0.0f) m_SliderValue[1] = 0.0f;
 				else m_SliderValue[1] -= min_step;
 				OnParameter(ID_SLIDER_2);
 			}
@@ -110,7 +111,8 @@ void CPixelShader8::OnButton(int id)
 		case ID_BUTTON_2:
 			if (m_ButtonRight == 1)
 			{
-				if ((m_SliderValue[1] + min_step) > 1.0f) m_SliderValue[1] = 0.0f;
+				if ((m_SliderValue[1] + min_step) > 1.0f && m_SliderValue[1] == 1.0f) m_SliderValue[1] = 0.0f;
+				else if ((m_SliderValue[1] + min_step) > 1.0f && m_SliderValue[1] < 1.0f) m_SliderValue[1] = 1.0f;
 				else m_SliderValue[1] += min_step;
 				OnParameter(ID_SLIDER_2);
 			}
