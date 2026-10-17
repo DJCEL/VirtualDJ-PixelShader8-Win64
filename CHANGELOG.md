@@ -1,7 +1,7 @@
 # Changelog
 
-## 2.4.6 (2026-10-17)
-* New pixels shader: "Pixelate", "FishEye"
+## 2.4.6 (2026-10-18)
+* New pixels shader: "Pixelate", "FishEye", "Solarize"
 * Fix jump of FX Select -/+ at the min/max
 
 ## 2.4.5 (2026-08-06)

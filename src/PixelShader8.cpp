@@ -835,6 +835,7 @@ int CPixelShader8::Get_FX_Params_Number()
 	else if (wcscmp(m_FX_Name, L"Sharpen2") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"Pixelate") == 0) NumberParams = 1;
 	else if (wcscmp(m_FX_Name, L"FishEye") == 0) NumberParams = 2;
+	else if (wcscmp(m_FX_Name, L"Solarize") == 0) NumberParams = 5;
 	else NumberParams = 0;
 
 	return NumberParams;
@@ -1010,6 +1011,11 @@ void  CPixelShader8::Display_FX_Param1(char* outParam, int outParamSize, float v
 			float Distortion = ParamAdjust(value, 0.0f, 5.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (Distortion)", Distortion);
 		}
+		else if (wcscmp(m_FX_Name, L"Solarize") == 0)
+		{
+			float Threshold = ParamAdjust(value, 0.0f, 1.0f);
+			sprintf_s(outParam, outParamSize, "%.2f (Threshold)", Threshold);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1089,6 +1095,11 @@ void  CPixelShader8::Display_FX_Param2(char* outParam, int outParamSize, float v
 			float MaxRadius = ParamAdjust(value, 0.0f, 1.0f);
 			sprintf_s(outParam, outParamSize, "%.2f (MaxRadius)", MaxRadius);
 		}
+		else if (wcscmp(m_FX_Name, L"Solarize") == 0)
+		{
+			float Softness = ParamAdjust(value, 0.0f, 0.5f);
+			sprintf_s(outParam, outParamSize, "%.2f (Softness)", Softness);
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1159,11 +1170,24 @@ void  CPixelShader8::Display_FX_Param3(char* outParam, int outParamSize, float v
 			int Grid_on = int(round(ParamAdjust(value, 0.0f, 1.0f)));
 			switch (Grid_on)
 			{
+				case 0:
+					sprintf_s(outParam, outParamSize, "Off (Grid)");
+					break;
+				case 1:
+					sprintf_s(outParam, outParamSize, "On (Grid)");
+					break;
+			}
+		}
+		else if (wcscmp(m_FX_Name, L"Solarize") == 0)
+		{
+			int UseLuma = int(round(ParamAdjust(value, 0.0f, 1.0f)));
+			switch (UseLuma)
+			{
 			case 0:
-				sprintf_s(outParam, outParamSize, "Off (Grid)");
+				sprintf_s(outParam, outParamSize, "Off (seLuma)");
 				break;
 			case 1:
-				sprintf_s(outParam, outParamSize, "On (Grid)");
+				sprintf_s(outParam, outParamSize, "On (seLuma)");
 				break;
 			}
 		}
@@ -1243,6 +1267,19 @@ void  CPixelShader8::Display_FX_Param4(char* outParam, int outParamSize, float v
 				break;
 			}
 		}
+		else if (wcscmp(m_FX_Name, L"Solarize") == 0)
+		{
+			int InvBelow = int(round(ParamAdjust(value, 0.0f, 1.0f)));
+			switch (InvBelow)
+			{
+			case 0:
+				sprintf_s(outParam, outParamSize, "Off (InvBelow)");
+				break;
+			case 1:
+				sprintf_s(outParam, outParamSize, "On (InvBelow)");
+				break;
+			}
+		}
 		else
 		{
 			sprintf_s(outParam, outParamSize, "%.2f", value);
@@ -1285,6 +1322,11 @@ void  CPixelShader8::Display_FX_Param5(char* outParam, int outParamSize, float v
 					sprintf_s(outParam, outParamSize, "Green (colorRadar)");
 					break;
 			}
+		}
+		else if (wcscmp(m_FX_Name, L"Solarize") == 0)
+		{
+			float Sweep = ParamAdjust(value, 0.0f, 0.5f);
+			sprintf_s(outParam, outParamSize, "%.2f (Sweep)", Sweep);
 		}
 		else
 		{

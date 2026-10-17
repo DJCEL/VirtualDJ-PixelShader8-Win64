@@ -154,6 +154,7 @@ SHARPEN2_CSO            RCDATA                  ".\\Shaders\\Sharpen2.cso"
 
 PIXELATE_CSO            RCDATA                  ".\\Shaders\\Pixelate.cso"
 FISHEYE_CSO             RCDATA                  ".\\Shaders\\FishEye.cso"
+SOLARIZE_CSO            RCDATA                  ".\\Shaders\\Solarize.cso"
 
 #endif    // Anglais (États-Unis) resources
 /////////////////////////////////////////////////////////////////////////////
